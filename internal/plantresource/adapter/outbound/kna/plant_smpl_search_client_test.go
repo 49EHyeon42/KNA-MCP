@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -202,10 +201,7 @@ func TestPlantSmplSearchReturnsResponseErrors(t *testing.T) {
 }
 
 func TestPlantSmplSearchLive(t *testing.T) {
-	serviceKey := os.Getenv("DATA_GO_KR_SERVICE_KEY")
-	if serviceKey == "" {
-		t.Skip("DATA_GO_KR_SERVICE_KEY is not set")
-	}
+	serviceKey := requireLiveServiceKey(t)
 
 	client, err := NewClient(serviceKey)
 	if err != nil {
