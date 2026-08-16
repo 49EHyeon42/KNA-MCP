@@ -19,15 +19,16 @@ func main() {
 
 	server := mcpstdio.NewServer()
 	plantresourcemcp.AddTools(server, plantresourcemcp.UseCases{
-		PlantPilbkSearch:   service.NewPlantPilbkSearchService(client),
-		PlantPilbkInfo:     service.NewPlantPilbkInfoService(client),
-		PlantSmplSearch:    service.NewPlantSmplSearchService(client),
-		PlantSmplUnitList:  service.NewPlantSmplUnitListService(client),
-		PlantSeedSearch:    service.NewPlantSeedSearchService(client),
-		PlantSeedUnitList:  service.NewPlantSeedUnitListService(client),
-		PlantSeedGrmntList: service.NewPlantSeedGrmntListService(client),
-		PlantFolkSearch:    service.NewPlantFolkSearchService(client),
-		PlantFolkAreaList:  service.NewPlantFolkAreaListService(client),
+		PlantPilbkSearch:     service.NewPlantPilbkSearchService(client),
+		PlantPilbkInfo:       service.NewPlantPilbkInfoService(client),
+		PlantSmplSearch:      service.NewPlantSmplSearchService(client),
+		PlantSmplUnitList:    service.NewPlantSmplUnitListService(client),
+		PlantSeedSearch:      service.NewPlantSeedSearchService(client),
+		PlantSeedUnitList:    service.NewPlantSeedUnitListService(client),
+		PlantSeedGrmntList:   service.NewPlantSeedGrmntListService(client),
+		PlantFolkSearch:      service.NewPlantFolkSearchService(client),
+		PlantFolkAreaList:    service.NewPlantFolkAreaListService(client),
+		PlantNaturalizedList: service.NewPlantNaturalizedListService(client),
 	})
 
 	if err := mcpstdio.Run(context.Background(), server); err != nil {

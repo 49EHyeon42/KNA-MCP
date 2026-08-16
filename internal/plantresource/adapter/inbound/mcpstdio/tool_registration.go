@@ -8,15 +8,16 @@ import (
 
 // UseCases contains the plant resource use cases exposed as MCP tools.
 type UseCases struct {
-	PlantPilbkSearch   inbound.PlantPilbkSearchUseCase
-	PlantPilbkInfo     inbound.PlantPilbkInfoUseCase
-	PlantSmplSearch    inbound.PlantSmplSearchUseCase
-	PlantSmplUnitList  inbound.PlantSmplUnitListUseCase
-	PlantSeedSearch    inbound.PlantSeedSearchUseCase
-	PlantSeedUnitList  inbound.PlantSeedUnitListUseCase
-	PlantSeedGrmntList inbound.PlantSeedGrmntListUseCase
-	PlantFolkSearch    inbound.PlantFolkSearchUseCase
-	PlantFolkAreaList  inbound.PlantFolkAreaListUseCase
+	PlantPilbkSearch     inbound.PlantPilbkSearchUseCase
+	PlantPilbkInfo       inbound.PlantPilbkInfoUseCase
+	PlantSmplSearch      inbound.PlantSmplSearchUseCase
+	PlantSmplUnitList    inbound.PlantSmplUnitListUseCase
+	PlantSeedSearch      inbound.PlantSeedSearchUseCase
+	PlantSeedUnitList    inbound.PlantSeedUnitListUseCase
+	PlantSeedGrmntList   inbound.PlantSeedGrmntListUseCase
+	PlantFolkSearch      inbound.PlantFolkSearchUseCase
+	PlantFolkAreaList    inbound.PlantFolkAreaListUseCase
+	PlantNaturalizedList inbound.PlantNaturalizedListUseCase
 }
 
 // AddTools adds the plant resource tools to an MCP server.
@@ -47,5 +48,8 @@ func AddTools(server *mcp.Server, useCases UseCases) {
 	}
 	if useCases.PlantFolkAreaList != nil {
 		addPlantFolkAreaListTool(server, useCases.PlantFolkAreaList)
+	}
+	if useCases.PlantNaturalizedList != nil {
+		addPlantNaturalizedListTool(server, useCases.PlantNaturalizedList)
 	}
 }
