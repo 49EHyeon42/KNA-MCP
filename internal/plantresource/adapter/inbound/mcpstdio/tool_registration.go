@@ -12,6 +12,7 @@ type UseCases struct {
 	PlantPilbkInfo    inbound.PlantPilbkInfoUseCase
 	PlantSmplSearch   inbound.PlantSmplSearchUseCase
 	PlantSmplUnitList inbound.PlantSmplUnitListUseCase
+	PlantSeedSearch   inbound.PlantSeedSearchUseCase
 }
 
 // AddTools adds the plant resource tools to an MCP server.
@@ -27,5 +28,8 @@ func AddTools(server *mcp.Server, useCases UseCases) {
 	}
 	if useCases.PlantSmplUnitList != nil {
 		addPlantSmplUnitListTool(server, useCases.PlantSmplUnitList)
+	}
+	if useCases.PlantSeedSearch != nil {
+		addPlantSeedSearchTool(server, useCases.PlantSeedSearch)
 	}
 }
