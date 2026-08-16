@@ -13,34 +13,34 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application"
 )
 
-type plantSampleSearchUseCaseStub struct {
-	query  application.PlantSampleSearchQuery
-	result application.PlantSampleSearchResult
+type plantSmplSearchUseCaseStub struct {
+	query  application.PlantSmplSearchQuery
+	result application.PlantSmplSearchResult
 	err    error
 }
 
-func (s *plantSampleSearchUseCaseStub) PlantSampleSearch(_ context.Context, query application.PlantSampleSearchQuery) (application.PlantSampleSearchResult, error) {
+func (s *plantSmplSearchUseCaseStub) PlantSmplSearch(_ context.Context, query application.PlantSmplSearchQuery) (application.PlantSmplSearchResult, error) {
 	s.query = query
 	return s.result, s.err
 }
 
-func TestPlantSampleSearchTool(t *testing.T) {
+func TestPlantSmplSearchTool(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	useCase := &plantSampleSearchUseCaseStub{result: application.PlantSampleSearchResult{
-		Items: []application.PlantSampleSearchItem{{
-			Count:            123,
-			PlantGeneralName: "plant general name",
-			PlantSpeciesID:   "plant species ID",
+	useCase := &plantSmplSearchUseCaseStub{result: application.PlantSmplSearchResult{
+		Items: []application.PlantSmplSearchItem{{
+			Cnt:          123,
+			PlantGnrlNm:  "plant general name",
+			PlantSpecsID: "plant species ID",
 		}},
-		NumberOfRows: 10,
-		PageNumber:   2,
-		TotalCount:   21,
+		NumOfRows:  10,
+		PageNo:     2,
+		TotalCount: 21,
 	}}
 	clientTransport, serverTransport := mcp.NewInMemoryTransports()
 	server := mcpserver.NewServer()
-	AddTools(server, UseCases{PlantSampleSearch: useCase})
+	AddTools(server, UseCases{PlantSmplSearch: useCase})
 	serverSession, err := server.Connect(ctx, serverTransport, nil)
 	if err != nil {
 		t.Fatal(err)
@@ -55,7 +55,7 @@ func TestPlantSampleSearchTool(t *testing.T) {
 	defer clientSession.Close()
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name: plantResourcePlantSampleSearchToolName,
+		Name: plantResourcePlantSmplSearchToolName,
 		Arguments: map[string]any{
 			"pageNumber":        2,
 			"numberOfRows":      10,
@@ -69,10 +69,10 @@ func TestPlantSampleSearchTool(t *testing.T) {
 		t.Fatalf("tool error: %#v", result.Content)
 	}
 
-	wantQuery := application.PlantSampleSearchQuery{
-		PageNumber:        2,
-		NumberOfRows:      10,
-		RequestSearchWord: "test-search-word",
+	wantQuery := application.PlantSmplSearchQuery{
+		PageNo:       2,
+		NumOfRows:    10,
+		ReqSearchWrd: "test-search-word",
 	}
 	if !reflect.DeepEqual(useCase.query, wantQuery) {
 		t.Errorf("query = %#v, want %#v", useCase.query, wantQuery)
@@ -96,7 +96,7 @@ func TestPlantSampleSearchTool(t *testing.T) {
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name:      plantResourcePlantSampleSearchToolName,
+		Name:      plantResourcePlantSmplSearchToolName,
 		Arguments: map[string]any{"pageNumber": 1, "numberOfRows": 1},
 	})
 	if err != nil {

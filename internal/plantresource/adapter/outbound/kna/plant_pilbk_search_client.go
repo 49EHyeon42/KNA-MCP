@@ -29,7 +29,7 @@ var plantPilbkSearchResultMessages = map[string]string{
 	"33": "UNSIGNED_CALL_ERROR",
 }
 
-var _ outbound.PlantPictorialBookSearchPort = (*Client)(nil)
+var _ outbound.PlantPilbkSearchPort = (*Client)(nil)
 
 type plantPilbkSearchBody struct {
 	Items      []plantPilbkSearchItem `xml:"items>item"`
@@ -77,36 +77,36 @@ func (e *PlantPilbkSearchError) Error() string {
 	return fmt.Sprintf("plantPilbkSearch: API error %s: %s", e.Code, e.Message)
 }
 
-// PlantPictorialBookSearch searches the Korea National Arboretum plant pictorial book.
-func (c *Client) PlantPictorialBookSearch(ctx context.Context, query application.PlantPictorialBookSearchQuery) (application.PlantPictorialBookSearchResult, error) {
+// PlantPilbkSearch searches the Korea National Arboretum plant pictorial book.
+func (c *Client) PlantPilbkSearch(ctx context.Context, query application.PlantPilbkSearchQuery) (application.PlantPilbkSearchResult, error) {
 	endpoint, err := url.JoinPath(c.baseURL, plantPilbkSearchPath)
 	if err != nil {
-		return application.PlantPictorialBookSearchResult{}, fmt.Errorf("plantPilbkSearch: build URL: %w", err)
+		return application.PlantPilbkSearchResult{}, fmt.Errorf("plantPilbkSearch: build URL: %w", err)
 	}
 
 	requestURL, err := url.Parse(endpoint)
 	if err != nil {
-		return application.PlantPictorialBookSearchResult{}, fmt.Errorf("plantPilbkSearch: parse URL: %w", err)
+		return application.PlantPilbkSearchResult{}, fmt.Errorf("plantPilbkSearch: parse URL: %w", err)
 	}
 
 	values := requestURL.Query()
 	values.Set("serviceKey", c.serviceKey)
-	values.Set("pageNo", strconv.Itoa(query.PageNumber))
-	values.Set("numOfRows", strconv.Itoa(query.NumberOfRows))
-	setQueryValue(values, "reqSearchWrd", query.RequestSearchWord)
+	values.Set("pageNo", strconv.Itoa(query.PageNo))
+	values.Set("numOfRows", strconv.Itoa(query.NumOfRows))
+	setQueryValue(values, "reqSearchWrd", query.ReqSearchWrd)
 	setQueryValue(values, "dateFrom", query.DateFrom)
 	setQueryValue(values, "dateTo", query.DateTo)
 	requestURL.RawQuery = values.Encode()
 
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL.String(), nil)
 	if err != nil {
-		return application.PlantPictorialBookSearchResult{}, fmt.Errorf("plantPilbkSearch: create request: %w", err)
+		return application.PlantPilbkSearchResult{}, fmt.Errorf("plantPilbkSearch: create request: %w", err)
 	}
 	request.Header.Set("Accept", "application/xml")
 
 	response, err := c.do(request)
 	if err != nil {
-		return application.PlantPictorialBookSearchResult{}, fmt.Errorf("plantPilbkSearch: request: %w", err)
+		return application.PlantPilbkSearchResult{}, fmt.Errorf("plantPilbkSearch: request: %w", err)
 	}
 	defer response.Body.Close()
 
@@ -117,27 +117,27 @@ func (c *Client) PlantPictorialBookSearch(ctx context.Context, query application
 		if payload.GatewayHeader.ReturnAuthMsg != "" {
 			message += ": " + payload.GatewayHeader.ReturnAuthMsg
 		}
-		return application.PlantPictorialBookSearchResult{}, &PlantPilbkSearchError{
+		return application.PlantPilbkSearchResult{}, &PlantPilbkSearchError{
 			HTTPStatus: response.StatusCode,
 			Code:       payload.GatewayHeader.ReturnReasonCode,
 			Message:    message,
 		}
 	}
 	if response.StatusCode != http.StatusOK {
-		return application.PlantPictorialBookSearchResult{}, fmt.Errorf("plantPilbkSearch: unexpected HTTP status %s", response.Status)
+		return application.PlantPilbkSearchResult{}, fmt.Errorf("plantPilbkSearch: unexpected HTTP status %s", response.Status)
 	}
 	if decodeErr != nil {
-		return application.PlantPictorialBookSearchResult{}, fmt.Errorf("plantPilbkSearch: decode response: %w", decodeErr)
+		return application.PlantPilbkSearchResult{}, fmt.Errorf("plantPilbkSearch: decode response: %w", decodeErr)
 	}
 	if payload.Header.ResultCode == "" {
-		return application.PlantPictorialBookSearchResult{}, errors.New("plantPilbkSearch: response missing resultCode")
+		return application.PlantPilbkSearchResult{}, errors.New("plantPilbkSearch: response missing resultCode")
 	}
 	if payload.Header.ResultCode != plantPilbkSearchSuccessCode {
 		message := payload.Header.ResultMsg
 		if message == "" {
 			message = plantPilbkSearchResultMessages[payload.Header.ResultCode]
 		}
-		return application.PlantPictorialBookSearchResult{}, &PlantPilbkSearchError{
+		return application.PlantPilbkSearchResult{}, &PlantPilbkSearchError{
 			HTTPStatus: response.StatusCode,
 			Code:       payload.Header.ResultCode,
 			Message:    message,
@@ -147,28 +147,28 @@ func (c *Client) PlantPictorialBookSearch(ctx context.Context, query application
 	return payload.Body.result(), nil
 }
 
-func (body plantPilbkSearchBody) result() application.PlantPictorialBookSearchResult {
-	items := make([]application.PlantPictorialBookSearchItem, len(body.Items))
+func (body plantPilbkSearchBody) result() application.PlantPilbkSearchResult {
+	items := make([]application.PlantPilbkSearchItem, len(body.Items))
 	for i, item := range body.Items {
-		items[i] = application.PlantPictorialBookSearchItem{
-			APGFamilyKoreanName:        item.APGFamilyKorNm,
-			APGFamilyName:              item.APGFamilyNm,
-			FamilyKoreanName:           item.FamilyKorNm,
-			FamilyName:                 item.FamilyNm,
-			GenusKoreanName:            item.GenusKorNm,
-			GenusName:                  item.GenusNm,
-			LastUpdateDateTime:         item.LastUpdtDtm,
-			NotRecommendedGeneralName:  item.NotRcmmGnrlNm,
-			PlantGeneralName:           item.PlantGnrlNm,
-			PlantPictorialBookNumber:   item.PlantPilbkNo,
-			PlantSpeciesScientificName: item.PlantSpecsScnm,
+		items[i] = application.PlantPilbkSearchItem{
+			APGFamilyKorNm: item.APGFamilyKorNm,
+			APGFamilyNm:    item.APGFamilyNm,
+			FamilyKorNm:    item.FamilyKorNm,
+			FamilyNm:       item.FamilyNm,
+			GenusKorNm:     item.GenusKorNm,
+			GenusNm:        item.GenusNm,
+			LastUpdtDtm:    item.LastUpdtDtm,
+			NotRcmmGnrlNm:  item.NotRcmmGnrlNm,
+			PlantGnrlNm:    item.PlantGnrlNm,
+			PlantPilbkNo:   item.PlantPilbkNo,
+			PlantSpecsScnm: item.PlantSpecsScnm,
 		}
 	}
 
-	return application.PlantPictorialBookSearchResult{
-		Items:        items,
-		NumberOfRows: body.NumOfRows,
-		PageNumber:   body.PageNo,
-		TotalCount:   body.TotalCount,
+	return application.PlantPilbkSearchResult{
+		Items:      items,
+		NumOfRows:  body.NumOfRows,
+		PageNo:     body.PageNo,
+		TotalCount: body.TotalCount,
 	}
 }

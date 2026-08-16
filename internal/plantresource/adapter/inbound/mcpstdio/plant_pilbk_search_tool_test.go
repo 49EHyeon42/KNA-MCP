@@ -13,30 +13,30 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application"
 )
 
-type plantPictorialBookSearchUseCaseStub struct {
-	query  application.PlantPictorialBookSearchQuery
-	result application.PlantPictorialBookSearchResult
+type plantPilbkSearchUseCaseStub struct {
+	query  application.PlantPilbkSearchQuery
+	result application.PlantPilbkSearchResult
 	err    error
 }
 
-func (s *plantPictorialBookSearchUseCaseStub) PlantPictorialBookSearch(_ context.Context, query application.PlantPictorialBookSearchQuery) (application.PlantPictorialBookSearchResult, error) {
+func (s *plantPilbkSearchUseCaseStub) PlantPilbkSearch(_ context.Context, query application.PlantPilbkSearchQuery) (application.PlantPilbkSearchResult, error) {
 	s.query = query
 	return s.result, s.err
 }
 
-func TestPlantPictorialBookSearchTool(t *testing.T) {
+func TestPlantPilbkSearchTool(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	useCase := &plantPictorialBookSearchUseCaseStub{result: application.PlantPictorialBookSearchResult{
-		Items:        []application.PlantPictorialBookSearchItem{{PlantGeneralName: "plant general name"}},
-		NumberOfRows: 10,
-		PageNumber:   2,
-		TotalCount:   21,
+	useCase := &plantPilbkSearchUseCaseStub{result: application.PlantPilbkSearchResult{
+		Items:      []application.PlantPilbkSearchItem{{PlantGnrlNm: "plant general name"}},
+		NumOfRows:  10,
+		PageNo:     2,
+		TotalCount: 21,
 	}}
 	clientTransport, serverTransport := mcp.NewInMemoryTransports()
 	server := mcpserver.NewServer()
-	AddTools(server, UseCases{PlantPictorialBookSearch: useCase})
+	AddTools(server, UseCases{PlantPilbkSearch: useCase})
 	serverSession, err := server.Connect(ctx, serverTransport, nil)
 	if err != nil {
 		t.Fatal(err)
@@ -51,7 +51,7 @@ func TestPlantPictorialBookSearchTool(t *testing.T) {
 	defer clientSession.Close()
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name: plantResourcePlantPictorialBookSearchToolName,
+		Name: plantResourcePlantPilbkSearchToolName,
 		Arguments: map[string]any{
 			"pageNumber":        2,
 			"numberOfRows":      10,
@@ -65,10 +65,10 @@ func TestPlantPictorialBookSearchTool(t *testing.T) {
 		t.Fatalf("tool error: %#v", result.Content)
 	}
 
-	wantQuery := application.PlantPictorialBookSearchQuery{
-		PageNumber:        2,
-		NumberOfRows:      10,
-		RequestSearchWord: "test-search-word",
+	wantQuery := application.PlantPilbkSearchQuery{
+		PageNo:       2,
+		NumOfRows:    10,
+		ReqSearchWrd: "test-search-word",
 	}
 	if !reflect.DeepEqual(useCase.query, wantQuery) {
 		t.Errorf("query = %#v, want %#v", useCase.query, wantQuery)
@@ -92,7 +92,7 @@ func TestPlantPictorialBookSearchTool(t *testing.T) {
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name:      plantResourcePlantPictorialBookSearchToolName,
+		Name:      plantResourcePlantPilbkSearchToolName,
 		Arguments: map[string]any{"pageNumber": 1, "numberOfRows": 1},
 	})
 	if err != nil {

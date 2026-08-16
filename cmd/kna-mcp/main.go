@@ -19,9 +19,9 @@ func main() {
 
 	server := mcpstdio.NewServer()
 	plantresourcemcp.AddTools(server, plantresourcemcp.UseCases{
-		PlantPictorialBookSearch:      service.NewPlantPictorialBookSearchService(client),
-		PlantPictorialBookInformation: service.NewPlantPictorialBookInformationService(client),
-		PlantSampleSearch:             service.NewPlantSampleSearchService(client),
+		PlantPilbkSearch: service.NewPlantPilbkSearchService(client),
+		PlantPilbkInfo:   service.NewPlantPilbkInfoService(client),
+		PlantSmplSearch:  service.NewPlantSmplSearchService(client),
 	})
 
 	if err := mcpstdio.Run(context.Background(), server); err != nil {

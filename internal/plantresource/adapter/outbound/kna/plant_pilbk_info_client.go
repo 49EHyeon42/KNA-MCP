@@ -28,7 +28,7 @@ var plantPilbkInfoResultMessages = map[string]string{
 	"33": "UNSIGNED_CALL_ERROR",
 }
 
-var _ outbound.PlantPictorialBookInformationPort = (*Client)(nil)
+var _ outbound.PlantPilbkInfoPort = (*Client)(nil)
 
 type plantPilbkInfoItem struct {
 	APGFamilyKorNm string `xml:"apgFamilyKorNm"`
@@ -90,32 +90,32 @@ func (e *PlantPilbkInfoError) Error() string {
 	return fmt.Sprintf("plantPilbkInfo: API error %s: %s", e.Code, e.Message)
 }
 
-// PlantPictorialBookInformation gets Korea National Arboretum plant pictorial book information.
-func (c *Client) PlantPictorialBookInformation(ctx context.Context, query application.PlantPictorialBookInformationQuery) (application.PlantPictorialBookInformationResult, error) {
+// PlantPilbkInfo gets Korea National Arboretum plant pictorial book information.
+func (c *Client) PlantPilbkInfo(ctx context.Context, query application.PlantPilbkInfoQuery) (application.PlantPilbkInfoResult, error) {
 	endpoint, err := url.JoinPath(c.baseURL, plantPilbkInfoPath)
 	if err != nil {
-		return application.PlantPictorialBookInformationResult{}, fmt.Errorf("plantPilbkInfo: build URL: %w", err)
+		return application.PlantPilbkInfoResult{}, fmt.Errorf("plantPilbkInfo: build URL: %w", err)
 	}
 
 	requestURL, err := url.Parse(endpoint)
 	if err != nil {
-		return application.PlantPictorialBookInformationResult{}, fmt.Errorf("plantPilbkInfo: parse URL: %w", err)
+		return application.PlantPilbkInfoResult{}, fmt.Errorf("plantPilbkInfo: parse URL: %w", err)
 	}
 
 	values := requestURL.Query()
 	values.Set("serviceKey", c.serviceKey)
-	values.Set("reqPlantPilbkNo", query.RequestPlantPictorialBookNumber)
+	values.Set("reqPlantPilbkNo", query.ReqPlantPilbkNo)
 	requestURL.RawQuery = values.Encode()
 
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL.String(), nil)
 	if err != nil {
-		return application.PlantPictorialBookInformationResult{}, fmt.Errorf("plantPilbkInfo: create request: %w", err)
+		return application.PlantPilbkInfoResult{}, fmt.Errorf("plantPilbkInfo: create request: %w", err)
 	}
 	request.Header.Set("Accept", "application/xml")
 
 	response, err := c.do(request)
 	if err != nil {
-		return application.PlantPictorialBookInformationResult{}, fmt.Errorf("plantPilbkInfo: request: %w", err)
+		return application.PlantPilbkInfoResult{}, fmt.Errorf("plantPilbkInfo: request: %w", err)
 	}
 	defer response.Body.Close()
 
@@ -126,27 +126,27 @@ func (c *Client) PlantPictorialBookInformation(ctx context.Context, query applic
 		if payload.GatewayHeader.ReturnAuthMsg != "" {
 			message += ": " + payload.GatewayHeader.ReturnAuthMsg
 		}
-		return application.PlantPictorialBookInformationResult{}, &PlantPilbkInfoError{
+		return application.PlantPilbkInfoResult{}, &PlantPilbkInfoError{
 			HTTPStatus: response.StatusCode,
 			Code:       payload.GatewayHeader.ReturnReasonCode,
 			Message:    message,
 		}
 	}
 	if response.StatusCode != http.StatusOK {
-		return application.PlantPictorialBookInformationResult{}, fmt.Errorf("plantPilbkInfo: unexpected HTTP status %s", response.Status)
+		return application.PlantPilbkInfoResult{}, fmt.Errorf("plantPilbkInfo: unexpected HTTP status %s", response.Status)
 	}
 	if decodeErr != nil {
-		return application.PlantPictorialBookInformationResult{}, fmt.Errorf("plantPilbkInfo: decode response: %w", decodeErr)
+		return application.PlantPilbkInfoResult{}, fmt.Errorf("plantPilbkInfo: decode response: %w", decodeErr)
 	}
 	if payload.Header.ResultCode == "" {
-		return application.PlantPictorialBookInformationResult{}, errors.New("plantPilbkInfo: response missing resultCode")
+		return application.PlantPilbkInfoResult{}, errors.New("plantPilbkInfo: response missing resultCode")
 	}
 	if payload.Header.ResultCode != plantPilbkInfoSuccessCode {
 		message := payload.Header.ResultMsg
 		if message == "" {
 			message = plantPilbkInfoResultMessages[payload.Header.ResultCode]
 		}
-		return application.PlantPictorialBookInformationResult{}, &PlantPilbkInfoError{
+		return application.PlantPilbkInfoResult{}, &PlantPilbkInfoError{
 			HTTPStatus: response.StatusCode,
 			Code:       payload.Header.ResultCode,
 			Message:    message,
@@ -156,37 +156,37 @@ func (c *Client) PlantPictorialBookInformation(ctx context.Context, query applic
 	return payload.Body.Item.result(), nil
 }
 
-func (item plantPilbkInfoItem) result() application.PlantPictorialBookInformationResult {
-	return application.PlantPictorialBookInformationResult{
-		APGFamilyKoreanName:           item.APGFamilyKorNm,
-		APGFamilyName:                 item.APGFamilyNm,
-		BfofMethod:                    item.BfofMthod,
-		BreedingMethodDescription:     item.BrdMthdDesc,
-		BugInformation:                item.BugInfo,
-		Distribution:                  item.Dstrb,
-		EnglishName:                   item.EngNm,
-		FamilyKoreanName:              item.FamilyKorNm,
-		FamilyName:                    item.FamilyNm,
-		FarmSpecialFeatureDescription: item.FarmSpftDesc,
-		GenusKoreanName:               item.GenusKorNm,
-		GenusName:                     item.GenusNm,
-		GrowthEnvironmentDescription:  item.GrwEvrntDesc,
-		InductionDescription:          item.InductionDesc,
-		LastUpdateDateTime:            item.LastUpdtDtm,
-		NotRecommendedGeneralName:     item.NotRcmmGnrlNm,
-		Note:                          item.Note,
-		OriginPlaceName:               item.OrplcNm,
-		OverseasDistribution:          item.OsDstrb,
-		PlantGeneralName:              item.PlantGnrlNm,
-		PlantPictorialBookNumber:      item.PlantPilbkNo,
-		PlantSpeciesScientificName:    item.PlantSpecsScnm,
-		ProtectionPlanDescription:     item.PrtcPlnDesc,
-		RearingGubun:                  item.RrngGubun,
-		RearingType:                   item.RrngType,
-		Shape:                         item.Shpe,
-		SimilarPlantDescription:       item.SmlrPlntDesc,
-		SpecialFeature:                item.Spft,
-		UseMethodDescription:          item.UseMthdDesc,
-		WoodDescription:               item.WoodDesc,
+func (item plantPilbkInfoItem) result() application.PlantPilbkInfoResult {
+	return application.PlantPilbkInfoResult{
+		APGFamilyKorNm: item.APGFamilyKorNm,
+		APGFamilyNm:    item.APGFamilyNm,
+		BfofMthod:      item.BfofMthod,
+		BrdMthdDesc:    item.BrdMthdDesc,
+		BugInfo:        item.BugInfo,
+		Dstrb:          item.Dstrb,
+		EngNm:          item.EngNm,
+		FamilyKorNm:    item.FamilyKorNm,
+		FamilyNm:       item.FamilyNm,
+		FarmSpftDesc:   item.FarmSpftDesc,
+		GenusKorNm:     item.GenusKorNm,
+		GenusNm:        item.GenusNm,
+		GrwEvrntDesc:   item.GrwEvrntDesc,
+		InductionDesc:  item.InductionDesc,
+		LastUpdtDtm:    item.LastUpdtDtm,
+		NotRcmmGnrlNm:  item.NotRcmmGnrlNm,
+		Note:           item.Note,
+		OrplcNm:        item.OrplcNm,
+		OsDstrb:        item.OsDstrb,
+		PlantGnrlNm:    item.PlantGnrlNm,
+		PlantPilbkNo:   item.PlantPilbkNo,
+		PlantSpecsScnm: item.PlantSpecsScnm,
+		PrtcPlnDesc:    item.PrtcPlnDesc,
+		RrngGubun:      item.RrngGubun,
+		RrngType:       item.RrngType,
+		Shpe:           item.Shpe,
+		SmlrPlntDesc:   item.SmlrPlntDesc,
+		Spft:           item.Spft,
+		UseMthdDesc:    item.UseMthdDesc,
+		WoodDesc:       item.WoodDesc,
 	}
 }

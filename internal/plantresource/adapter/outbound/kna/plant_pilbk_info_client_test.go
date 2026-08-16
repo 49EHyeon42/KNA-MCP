@@ -16,7 +16,7 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application"
 )
 
-func TestPlantPictorialBookInformation(t *testing.T) {
+func TestPlantPilbkInfo(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
 		if request.URL.Path != plantPilbkInfoPath {
 			t.Errorf("path = %q, want %q", request.URL.Path, plantPilbkInfoPath)
@@ -39,18 +39,18 @@ func TestPlantPictorialBookInformation(t *testing.T) {
   <header><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header>
   <body><item>
     <apgFamilyKorNm>apg family Korean name</apgFamilyKorNm><apgFamilyNm>apg family name</apgFamilyNm>
-    <bfofMthod>bfof method</bfofMthod><brdMthdDesc>breeding method description</brdMthdDesc>
+    <bfofMthod>pest control method</bfofMthod><brdMthdDesc>breeding method description</brdMthdDesc>
     <bugInfo>bug information</bugInfo><dstrb>distribution</dstrb><engNm>English name</engNm>
     <familyKorNm>family Korean name</familyKorNm><familyNm>family name</familyNm>
-    <farmSpftDesc>farm special feature description</farmSpftDesc><genusKorNm>genus Korean name</genusKorNm>
+    <farmSpftDesc>farm feature description</farmSpftDesc><genusKorNm>genus Korean name</genusKorNm>
     <genusNm>genus name</genusNm><grwEvrntDesc>growth environment description</grwEvrntDesc>
     <inductionDesc>induction description</inductionDesc><lastUpdtDtm>last update date time</lastUpdtDtm>
     <notRcmmGnrlNm>not recommended general name</notRcmmGnrlNm><note>note</note>
     <orplcNm>origin place name</orplcNm><osDstrb>overseas distribution</osDstrb>
     <plantGnrlNm>plant general name</plantGnrlNm><plantPilbkNo>plant pictorial book number</plantPilbkNo>
     <plantSpecsScnm>plant species scientific name</plantSpecsScnm><prtcPlnDesc>protection plan description</prtcPlnDesc>
-    <rrngGubun>rearing gubun</rrngGubun><rrngType>rearing type</rrngType><shpe>shape</shpe>
-    <smlrPlntDesc>similar plant description</smlrPlntDesc><spft>special feature</spft>
+    <rrngGubun>growth classification</rrngGubun><rrngType>growth type</rrngType><shpe>shape</shpe>
+    <smlrPlntDesc>similar plant description</smlrPlntDesc><spft>feature</spft>
     <useMthdDesc>use method description</useMthdDesc><woodDesc>wood description</woodDesc>
   </item></body>
 </response>`)
@@ -63,51 +63,51 @@ func TestPlantPictorialBookInformation(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	got, err := client.PlantPictorialBookInformation(context.Background(), application.PlantPictorialBookInformationQuery{
-		RequestPlantPictorialBookNumber: "test-book-number",
+	got, err := client.PlantPilbkInfo(context.Background(), application.PlantPilbkInfoQuery{
+		ReqPlantPilbkNo: "test-book-number",
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	want := application.PlantPictorialBookInformationResult{
-		APGFamilyKoreanName:           "apg family Korean name",
-		APGFamilyName:                 "apg family name",
-		BfofMethod:                    "bfof method",
-		BreedingMethodDescription:     "breeding method description",
-		BugInformation:                "bug information",
-		Distribution:                  "distribution",
-		EnglishName:                   "English name",
-		FamilyKoreanName:              "family Korean name",
-		FamilyName:                    "family name",
-		FarmSpecialFeatureDescription: "farm special feature description",
-		GenusKoreanName:               "genus Korean name",
-		GenusName:                     "genus name",
-		GrowthEnvironmentDescription:  "growth environment description",
-		InductionDescription:          "induction description",
-		LastUpdateDateTime:            "last update date time",
-		NotRecommendedGeneralName:     "not recommended general name",
-		Note:                          "note",
-		OriginPlaceName:               "origin place name",
-		OverseasDistribution:          "overseas distribution",
-		PlantGeneralName:              "plant general name",
-		PlantPictorialBookNumber:      "plant pictorial book number",
-		PlantSpeciesScientificName:    "plant species scientific name",
-		ProtectionPlanDescription:     "protection plan description",
-		RearingGubun:                  "rearing gubun",
-		RearingType:                   "rearing type",
-		Shape:                         "shape",
-		SimilarPlantDescription:       "similar plant description",
-		SpecialFeature:                "special feature",
-		UseMethodDescription:          "use method description",
-		WoodDescription:               "wood description",
+	want := application.PlantPilbkInfoResult{
+		APGFamilyKorNm: "apg family Korean name",
+		APGFamilyNm:    "apg family name",
+		BfofMthod:      "pest control method",
+		BrdMthdDesc:    "breeding method description",
+		BugInfo:        "bug information",
+		Dstrb:          "distribution",
+		EngNm:          "English name",
+		FamilyKorNm:    "family Korean name",
+		FamilyNm:       "family name",
+		FarmSpftDesc:   "farm feature description",
+		GenusKorNm:     "genus Korean name",
+		GenusNm:        "genus name",
+		GrwEvrntDesc:   "growth environment description",
+		InductionDesc:  "induction description",
+		LastUpdtDtm:    "last update date time",
+		NotRcmmGnrlNm:  "not recommended general name",
+		Note:           "note",
+		OrplcNm:        "origin place name",
+		OsDstrb:        "overseas distribution",
+		PlantGnrlNm:    "plant general name",
+		PlantPilbkNo:   "plant pictorial book number",
+		PlantSpecsScnm: "plant species scientific name",
+		PrtcPlnDesc:    "protection plan description",
+		RrngGubun:      "growth classification",
+		RrngType:       "growth type",
+		Shpe:           "shape",
+		SmlrPlntDesc:   "similar plant description",
+		Spft:           "feature",
+		UseMthdDesc:    "use method description",
+		WoodDesc:       "wood description",
 	}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("result = %#v, want %#v", got, want)
 	}
 }
 
-func TestPlantPictorialBookInformationReturnsEmptyResult(t *testing.T) {
+func TestPlantPilbkInfoReturnsEmptyResult(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
 		_, _ = io.WriteString(response, `<response><header><resultCode>00</resultCode></header><body/></response>`)
 	}))
@@ -119,16 +119,16 @@ func TestPlantPictorialBookInformationReturnsEmptyResult(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	result, err := client.PlantPictorialBookInformation(context.Background(), application.PlantPictorialBookInformationQuery{RequestPlantPictorialBookNumber: "unknown"})
+	result, err := client.PlantPilbkInfo(context.Background(), application.PlantPilbkInfoQuery{ReqPlantPilbkNo: "unknown"})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if result != (application.PlantPictorialBookInformationResult{}) {
+	if result != (application.PlantPilbkInfoResult{}) {
 		t.Errorf("result = %#v, want empty result", result)
 	}
 }
 
-func TestPlantPictorialBookInformationReturnsDocumentedAPIErrors(t *testing.T) {
+func TestPlantPilbkInfoReturnsDocumentedAPIErrors(t *testing.T) {
 	tests := []struct {
 		code    string
 		message string
@@ -155,7 +155,7 @@ func TestPlantPictorialBookInformationReturnsDocumentedAPIErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.PlantPictorialBookInformation(context.Background(), application.PlantPictorialBookInformationQuery{RequestPlantPictorialBookNumber: "test-book-number"})
+			_, err = client.PlantPilbkInfo(context.Background(), application.PlantPilbkInfoQuery{ReqPlantPilbkNo: "test-book-number"})
 			var apiError *PlantPilbkInfoError
 			if !errors.As(err, &apiError) {
 				t.Fatalf("error = %v, want *PlantPilbkInfoError", err)
@@ -167,7 +167,7 @@ func TestPlantPictorialBookInformationReturnsDocumentedAPIErrors(t *testing.T) {
 	}
 }
 
-func TestPlantPictorialBookInformationReturnsGatewayError(t *testing.T) {
+func TestPlantPilbkInfoReturnsGatewayError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
 		response.WriteHeader(http.StatusForbidden)
 		_, _ = io.WriteString(response, `<OpenAPI_ServiceResponse><cmmMsgHeader><errMsg>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</errMsg><returnAuthMsg>unregistered service key</returnAuthMsg><returnReasonCode>30</returnReasonCode></cmmMsgHeader></OpenAPI_ServiceResponse>`)
@@ -180,7 +180,7 @@ func TestPlantPictorialBookInformationReturnsGatewayError(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	_, err = client.PlantPictorialBookInformation(context.Background(), application.PlantPictorialBookInformationQuery{RequestPlantPictorialBookNumber: "test-book-number"})
+	_, err = client.PlantPilbkInfo(context.Background(), application.PlantPilbkInfoQuery{ReqPlantPilbkNo: "test-book-number"})
 	var apiError *PlantPilbkInfoError
 	if !errors.As(err, &apiError) {
 		t.Fatalf("error = %v, want *PlantPilbkInfoError", err)
@@ -190,7 +190,7 @@ func TestPlantPictorialBookInformationReturnsGatewayError(t *testing.T) {
 	}
 }
 
-func TestPlantPictorialBookInformationReturnsResponseErrors(t *testing.T) {
+func TestPlantPilbkInfoReturnsResponseErrors(t *testing.T) {
 	tests := []struct {
 		name       string
 		statusCode int
@@ -216,7 +216,7 @@ func TestPlantPictorialBookInformationReturnsResponseErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.PlantPictorialBookInformation(context.Background(), application.PlantPictorialBookInformationQuery{RequestPlantPictorialBookNumber: "test-book-number"})
+			_, err = client.PlantPilbkInfo(context.Background(), application.PlantPilbkInfoQuery{ReqPlantPilbkNo: "test-book-number"})
 			if err == nil || !strings.Contains(err.Error(), test.wantError) {
 				t.Errorf("error = %v, want containing %q", err, test.wantError)
 			}
@@ -224,7 +224,7 @@ func TestPlantPictorialBookInformationReturnsResponseErrors(t *testing.T) {
 	}
 }
 
-func TestPlantPictorialBookInformationLive(t *testing.T) {
+func TestPlantPilbkInfoLive(t *testing.T) {
 	serviceKey := os.Getenv("DATA_GO_KR_SERVICE_KEY")
 	if serviceKey == "" {
 		t.Skip("DATA_GO_KR_SERVICE_KEY is not set")
@@ -240,21 +240,21 @@ func TestPlantPictorialBookInformationLive(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 			defer cancel()
 
-			result, err := client.PlantPictorialBookInformation(ctx, application.PlantPictorialBookInformationQuery{RequestPlantPictorialBookNumber: number})
+			result, err := client.PlantPilbkInfo(ctx, application.PlantPilbkInfoQuery{ReqPlantPilbkNo: number})
 			if err != nil {
 				t.Fatal(err)
 			}
-			if result.PlantPictorialBookNumber != number || result.PlantGeneralName == "" {
+			if result.PlantPilbkNo != number || result.PlantGnrlNm == "" {
 				t.Errorf("result = %#v", result)
 			}
 		})
 	}
 
-	result, err := client.PlantPictorialBookInformation(context.Background(), application.PlantPictorialBookInformationQuery{RequestPlantPictorialBookNumber: "999999999"})
+	result, err := client.PlantPilbkInfo(context.Background(), application.PlantPilbkInfoQuery{ReqPlantPilbkNo: "999999999"})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if result != (application.PlantPictorialBookInformationResult{}) {
+	if result != (application.PlantPilbkInfoResult{}) {
 		t.Errorf("unknown result = %#v, want empty result", result)
 	}
 }

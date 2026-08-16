@@ -16,7 +16,7 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application"
 )
 
-func TestPlantPictorialBookSearch(t *testing.T) {
+func TestPlantPilbkSearch(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
 		if request.URL.Path != plantPilbkSearchPath {
 			t.Errorf("path = %q, want %q", request.URL.Path, plantPilbkSearchPath)
@@ -62,41 +62,41 @@ func TestPlantPictorialBookSearch(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	got, err := client.PlantPictorialBookSearch(context.Background(), application.PlantPictorialBookSearchQuery{
-		PageNumber:        1,
-		NumberOfRows:      2,
-		RequestSearchWord: "test-search-word",
-		DateFrom:          "test-date-from",
-		DateTo:            "test-date-to",
+	got, err := client.PlantPilbkSearch(context.Background(), application.PlantPilbkSearchQuery{
+		PageNo:       1,
+		NumOfRows:    2,
+		ReqSearchWrd: "test-search-word",
+		DateFrom:     "test-date-from",
+		DateTo:       "test-date-to",
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	want := application.PlantPictorialBookSearchResult{
-		Items: []application.PlantPictorialBookSearchItem{{
-			APGFamilyKoreanName:        "apg family Korean name",
-			APGFamilyName:              "apg family name",
-			FamilyKoreanName:           "family Korean name",
-			FamilyName:                 "family name",
-			GenusKoreanName:            "genus Korean name",
-			GenusName:                  "genus name",
-			LastUpdateDateTime:         "last update date time",
-			NotRecommendedGeneralName:  "not recommended general name",
-			PlantGeneralName:           "plant general name",
-			PlantPictorialBookNumber:   "plant pictorial book number",
-			PlantSpeciesScientificName: "plant species scientific name",
+	want := application.PlantPilbkSearchResult{
+		Items: []application.PlantPilbkSearchItem{{
+			APGFamilyKorNm: "apg family Korean name",
+			APGFamilyNm:    "apg family name",
+			FamilyKorNm:    "family Korean name",
+			FamilyNm:       "family name",
+			GenusKorNm:     "genus Korean name",
+			GenusNm:        "genus name",
+			LastUpdtDtm:    "last update date time",
+			NotRcmmGnrlNm:  "not recommended general name",
+			PlantGnrlNm:    "plant general name",
+			PlantPilbkNo:   "plant pictorial book number",
+			PlantSpecsScnm: "plant species scientific name",
 		}},
-		NumberOfRows: 2,
-		PageNumber:   1,
-		TotalCount:   7,
+		NumOfRows:  2,
+		PageNo:     1,
+		TotalCount: 7,
 	}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("result = %#v, want %#v", got, want)
 	}
 }
 
-func TestPlantPictorialBookSearchReturnsEmptyItems(t *testing.T) {
+func TestPlantPilbkSearchReturnsEmptyItems(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
 		_, _ = io.WriteString(response, `<response><header><resultCode>00</resultCode></header><body><items/><numOfRows>2</numOfRows><pageNo>1</pageNo><totalCount>0</totalCount></body></response>`)
 	}))
@@ -108,7 +108,7 @@ func TestPlantPictorialBookSearchReturnsEmptyItems(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	result, err := client.PlantPictorialBookSearch(context.Background(), application.PlantPictorialBookSearchQuery{PageNumber: 1, NumberOfRows: 2})
+	result, err := client.PlantPilbkSearch(context.Background(), application.PlantPilbkSearchQuery{PageNo: 1, NumOfRows: 2})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -117,7 +117,7 @@ func TestPlantPictorialBookSearchReturnsEmptyItems(t *testing.T) {
 	}
 }
 
-func TestPlantPictorialBookSearchReturnsDocumentedAPIErrors(t *testing.T) {
+func TestPlantPilbkSearchReturnsDocumentedAPIErrors(t *testing.T) {
 	tests := []struct {
 		code    string
 		message string
@@ -144,7 +144,7 @@ func TestPlantPictorialBookSearchReturnsDocumentedAPIErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.PlantPictorialBookSearch(context.Background(), application.PlantPictorialBookSearchQuery{PageNumber: 1, NumberOfRows: 1})
+			_, err = client.PlantPilbkSearch(context.Background(), application.PlantPilbkSearchQuery{PageNo: 1, NumOfRows: 1})
 			var apiError *PlantPilbkSearchError
 			if !errors.As(err, &apiError) {
 				t.Fatalf("error = %v, want *PlantPilbkSearchError", err)
@@ -156,7 +156,7 @@ func TestPlantPictorialBookSearchReturnsDocumentedAPIErrors(t *testing.T) {
 	}
 }
 
-func TestPlantPictorialBookSearchReturnsGatewayError(t *testing.T) {
+func TestPlantPilbkSearchReturnsGatewayError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
 		response.WriteHeader(http.StatusForbidden)
 		_, _ = io.WriteString(response, `<OpenAPI_ServiceResponse><cmmMsgHeader><errMsg>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</errMsg><returnAuthMsg>등록되지 않은 서비스키</returnAuthMsg><returnReasonCode>30</returnReasonCode></cmmMsgHeader></OpenAPI_ServiceResponse>`)
@@ -169,7 +169,7 @@ func TestPlantPictorialBookSearchReturnsGatewayError(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	_, err = client.PlantPictorialBookSearch(context.Background(), application.PlantPictorialBookSearchQuery{PageNumber: 1, NumberOfRows: 1})
+	_, err = client.PlantPilbkSearch(context.Background(), application.PlantPilbkSearchQuery{PageNo: 1, NumOfRows: 1})
 	var apiError *PlantPilbkSearchError
 	if !errors.As(err, &apiError) {
 		t.Fatalf("error = %v, want *PlantPilbkSearchError", err)
@@ -179,7 +179,7 @@ func TestPlantPictorialBookSearchReturnsGatewayError(t *testing.T) {
 	}
 }
 
-func TestPlantPictorialBookSearchReturnsResponseErrors(t *testing.T) {
+func TestPlantPilbkSearchReturnsResponseErrors(t *testing.T) {
 	tests := []struct {
 		name       string
 		statusCode int
@@ -205,7 +205,7 @@ func TestPlantPictorialBookSearchReturnsResponseErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.PlantPictorialBookSearch(context.Background(), application.PlantPictorialBookSearchQuery{PageNumber: 1, NumberOfRows: 1})
+			_, err = client.PlantPilbkSearch(context.Background(), application.PlantPilbkSearchQuery{PageNo: 1, NumOfRows: 1})
 			if err == nil || !strings.Contains(err.Error(), test.wantError) {
 				t.Errorf("error = %v, want containing %q", err, test.wantError)
 			}
@@ -213,7 +213,7 @@ func TestPlantPictorialBookSearchReturnsResponseErrors(t *testing.T) {
 	}
 }
 
-func TestPlantPictorialBookSearchLive(t *testing.T) {
+func TestPlantPilbkSearchLive(t *testing.T) {
 	serviceKey := os.Getenv("DATA_GO_KR_SERVICE_KEY")
 	if serviceKey == "" {
 		t.Skip("DATA_GO_KR_SERVICE_KEY is not set")
@@ -237,10 +237,10 @@ func TestPlantPictorialBookSearchLive(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 			defer cancel()
 
-			result, err := client.PlantPictorialBookSearch(ctx, application.PlantPictorialBookSearchQuery{
-				PageNumber:        test.pageNumber,
-				NumberOfRows:      test.numberOfRows,
-				RequestSearchWord: test.requestSearchWord,
+			result, err := client.PlantPilbkSearch(ctx, application.PlantPilbkSearchQuery{
+				PageNo:       test.pageNumber,
+				NumOfRows:    test.numberOfRows,
+				ReqSearchWrd: test.requestSearchWord,
 			})
 			if err != nil {
 				t.Fatal(err)
@@ -255,10 +255,10 @@ func TestPlantPictorialBookSearchLive(t *testing.T) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
 
-		result, err := client.PlantPictorialBookSearch(ctx, application.PlantPictorialBookSearchQuery{
-			PageNumber:        1,
-			NumberOfRows:      1,
-			RequestSearchWord: "kna-mcp-no-result-20260816",
+		result, err := client.PlantPilbkSearch(ctx, application.PlantPilbkSearchQuery{
+			PageNo:       1,
+			NumOfRows:    1,
+			ReqSearchWrd: "kna-mcp-no-result-20260816",
 		})
 		if err != nil {
 			t.Fatal(err)
