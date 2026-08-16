@@ -5,9 +5,9 @@ import (
 	"log"
 	"os"
 
-	"kna-mcp/internal/adapter/inbound/mcpstdio"
-	"kna-mcp/internal/adapter/outbound/kna"
-	"kna-mcp/internal/application/service"
+	"github.com/49EHyeon42/KNA-MCP/internal/adapter/inbound/mcpstdio"
+	"github.com/49EHyeon42/KNA-MCP/internal/adapter/outbound/kna"
+	"github.com/49EHyeon42/KNA-MCP/internal/application/service"
 )
 
 func main() {

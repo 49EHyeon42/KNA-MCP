@@ -5,8 +5,8 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"kna-mcp/internal/application"
-	"kna-mcp/internal/application/port/inbound"
+	"github.com/49EHyeon42/KNA-MCP/internal/application"
+	"github.com/49EHyeon42/KNA-MCP/internal/application/port/inbound"
 )
 
 const plantResourcePlantSpecimenSearchToolName = "plant_resource_plant_specimen_search"

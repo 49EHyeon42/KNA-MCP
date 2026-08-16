@@ -8,7 +8,7 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"kna-mcp/internal/application"
+	"github.com/49EHyeon42/KNA-MCP/internal/application"
 )
 
 type plantPictorialBookSearchUseCaseStub struct {

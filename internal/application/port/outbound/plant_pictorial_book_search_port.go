@@ -3,7 +3,7 @@ package outbound
 import (
 	"context"
 
-	"kna-mcp/internal/application"
+	"github.com/49EHyeon42/KNA-MCP/internal/application"
 )
 
 // PlantPictorialBookSearchPort defines the outbound port for plant pictorial book searches.

@@ -5,7 +5,7 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"kna-mcp/internal/application/port/inbound"
+	"github.com/49EHyeon42/KNA-MCP/internal/application/port/inbound"
 )
 
 // UseCases contains the application use cases exposed as MCP tools.

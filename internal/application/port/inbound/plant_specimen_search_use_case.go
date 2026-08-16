@@ -3,7 +3,7 @@ package inbound
 import (
 	"context"
 
-	"kna-mcp/internal/application"
+	"github.com/49EHyeon42/KNA-MCP/internal/application"
 )
 
 // PlantSpecimenSearchUseCase defines the plant specimen search use case.

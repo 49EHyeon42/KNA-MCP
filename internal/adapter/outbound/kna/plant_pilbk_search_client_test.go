@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"kna-mcp/internal/application"
+	"github.com/49EHyeon42/KNA-MCP/internal/application"
 )
 
 func TestPlantPictorialBookSearch(t *testing.T) {

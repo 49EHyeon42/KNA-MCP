@@ -1,4 +1,4 @@
-module kna-mcp
+module github.com/49EHyeon42/KNA-MCP
 
 go 1.25.13
 

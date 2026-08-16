@@ -3,7 +3,7 @@ package inbound
 import (
 	"context"
 
-	"kna-mcp/internal/application"
+	"github.com/49EHyeon42/KNA-MCP/internal/application"
 )
 
 // PlantPictorialBookSearchUseCase defines the plant pictorial book search use case.

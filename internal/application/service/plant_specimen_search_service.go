@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"kna-mcp/internal/application"
-	"kna-mcp/internal/application/port/inbound"
-	"kna-mcp/internal/application/port/outbound"
+	"github.com/49EHyeon42/KNA-MCP/internal/application"
+	"github.com/49EHyeon42/KNA-MCP/internal/application/port/inbound"
+	"github.com/49EHyeon42/KNA-MCP/internal/application/port/outbound"
 )
 
 var _ inbound.PlantSpecimenSearchUseCase = (*PlantSpecimenSearchService)(nil)

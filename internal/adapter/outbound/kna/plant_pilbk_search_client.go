@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"strconv"
 
-	"kna-mcp/internal/application"
-	"kna-mcp/internal/application/port/outbound"
+	"github.com/49EHyeon42/KNA-MCP/internal/application"
+	"github.com/49EHyeon42/KNA-MCP/internal/application/port/outbound"
 )
 
 const (
