@@ -10,8 +10,9 @@ import (
 
 // UseCases contains the application use cases exposed as MCP tools.
 type UseCases struct {
-	PlantPictorialBookSearch inbound.PlantPictorialBookSearchUseCase
-	PlantSpecimenSearch      inbound.PlantSpecimenSearchUseCase
+	PlantPictorialBookSearch      inbound.PlantPictorialBookSearchUseCase
+	PlantPictorialBookInformation inbound.PlantPictorialBookInformationUseCase
+	PlantSpecimenSearch           inbound.PlantSpecimenSearchUseCase
 }
 
 // Run serves MCP over standard input and output.
@@ -23,6 +24,9 @@ func newServer(useCases UseCases) *mcp.Server {
 	server := mcp.NewServer(&mcp.Implementation{Name: "kna-mcp", Version: "0.1.0"}, nil)
 	if useCases.PlantPictorialBookSearch != nil {
 		addPlantPictorialBookSearchTool(server, useCases.PlantPictorialBookSearch)
+	}
+	if useCases.PlantPictorialBookInformation != nil {
+		addPlantPictorialBookInformationTool(server, useCases.PlantPictorialBookInformation)
 	}
 	if useCases.PlantSpecimenSearch != nil {
 		addPlantSpecimenSearchTool(server, useCases.PlantSpecimenSearch)
