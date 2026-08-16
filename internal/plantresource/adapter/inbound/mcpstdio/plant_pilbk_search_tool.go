@@ -9,34 +9,34 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantPilbkSearchToolName = "plant_resource_plant_pictorial_book_search"
+const plantResourcePlantPilbkSearchToolName = "plant_resource_plant_pilbk_search"
 
 type plantPilbkSearchInput struct {
-	PageNo       int    `json:"pageNumber" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows    int    `json:"numberOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSearchWrd string `json:"requestSearchWord,omitempty" jsonschema:"식물 검색어"`
+	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
+	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
+	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"식물 검색어"`
 	// dateFrom and dateTo are disabled because the upstream API returns ORA-00908.
 }
 
 type plantPilbkSearchOutput struct {
 	Items      []plantPilbkSearchItem `json:"items"`
-	NumOfRows  int                    `json:"numberOfRows"`
-	PageNo     int                    `json:"pageNumber"`
+	NumOfRows  int                    `json:"numOfRows"`
+	PageNo     int                    `json:"pageNo"`
 	TotalCount int                    `json:"totalCount"`
 }
 
 type plantPilbkSearchItem struct {
-	APGFamilyKorNm string `json:"apgFamilyKoreanName"`
-	APGFamilyNm    string `json:"apgFamilyName"`
-	FamilyKorNm    string `json:"familyKoreanName"`
-	FamilyNm       string `json:"familyName"`
-	GenusKorNm     string `json:"genusKoreanName"`
-	GenusNm        string `json:"genusName"`
-	LastUpdtDtm    string `json:"lastUpdateDateTime"`
-	NotRcmmGnrlNm  string `json:"notRecommendedGeneralName"`
-	PlantGnrlNm    string `json:"plantGeneralName"`
-	PlantPilbkNo   string `json:"plantPictorialBookNumber"`
-	PlantSpecsScnm string `json:"plantSpeciesScientificName"`
+	APGFamilyKorNm string `json:"apgFamilyKorNm"`
+	APGFamilyNm    string `json:"apgFamilyNm"`
+	FamilyKorNm    string `json:"familyKorNm"`
+	FamilyNm       string `json:"familyNm"`
+	GenusKorNm     string `json:"genusKorNm"`
+	GenusNm        string `json:"genusNm"`
+	LastUpdtDtm    string `json:"lastUpdtDtm"`
+	NotRcmmGnrlNm  string `json:"notRcmmGnrlNm"`
+	PlantGnrlNm    string `json:"plantGnrlNm"`
+	PlantPilbkNo   string `json:"plantPilbkNo"`
+	PlantSpecsScnm string `json:"plantSpecsScnm"`
 }
 
 type plantPilbkSearchHandler struct {

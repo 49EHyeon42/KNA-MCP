@@ -9,43 +9,43 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantSmplUnitListToolName = "plant_resource_plant_specimen_detail_list"
+const plantResourcePlantSmplUnitListToolName = "plant_resource_plant_smpl_unit_list"
 
 type plantSmplUnitListInput struct {
-	PageNo          int    `json:"pageNumber" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows       int    `json:"numberOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqPlantSpecsID string `json:"requestPlantSpeciesId" jsonschema:"식물표본 목록 검색 결과의 식물종 ID"`
+	PageNo          int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
+	NumOfRows       int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
+	ReqPlantSpecsID string `json:"reqPlantSpecsId" jsonschema:"식물표본 목록 검색 결과의 식물종 ID"`
 }
 
 type plantSmplUnitListOutput struct {
 	Items      []plantSmplUnitListItem `json:"items"`
-	NumOfRows  int                     `json:"numberOfRows"`
-	PageNo     int                     `json:"pageNumber"`
+	NumOfRows  int                     `json:"numOfRows"`
+	PageNo     int                     `json:"pageNo"`
 	TotalCount int                     `json:"totalCount"`
 }
 
 type plantSmplUnitListItem struct {
-	AgpFamilyKorNm     string `json:"apgFamilyKoreanName"`
-	AgpFamilyNm        string `json:"apgFamilyName"`
-	BspcsInsttNm       string `json:"specimenHoldingInstitutionName"`
-	ClarHaslvVal       string `json:"collectionSiteElevation"`
-	ClarNm             string `json:"collectionSite"`
-	CllcrNm            string `json:"collectorName"`
-	FamilyKorNm        string `json:"familyKoreanName"`
-	FamilyNm           string `json:"familyName"`
-	HbttChrcrCont      string `json:"habitatCharacteristics"`
-	HbttTpcdNm         string `json:"habitatTypeName"`
-	PlantBrdgFomTpcdNm string `json:"plantReproductiveForm"`
-	PlantGnrlNm        string `json:"plantGeneralName"`
-	PlantPilbkNo       string `json:"plantPictorialBookNumber"`
-	PlantSmplNo        string `json:"plantSpecimenNumber"`
-	PlantSpecsID       string `json:"plantSpeciesId"`
-	PlantSpecsScnm     string `json:"plantSpeciesScientificName"`
-	SmplCllcnDt        string `json:"specimenCollectionDate"`
-	SmplClnyNm         string `json:"specimenCommunityName"`
-	SmplKindCdNm       string `json:"specimenTypeName"`
-	SmplWrdt           string `json:"specimenPreparationDate"`
-	VgttnTpeCdNm       string `json:"vegetationTypeName"`
+	AgpFamilyKorNm     string `json:"agpFamilyKorNm"`
+	AgpFamilyNm        string `json:"agpFamilyNm"`
+	BspcsInsttNm       string `json:"bspcsInsttNm"`
+	ClarHaslvVal       string `json:"clarHaslvVal"`
+	ClarNm             string `json:"clarNm"`
+	CllcrNm            string `json:"cllcrNm"`
+	FamilyKorNm        string `json:"familyKorNm"`
+	FamilyNm           string `json:"familyNm"`
+	HbttChrcrCont      string `json:"hbttChrcrCont"`
+	HbttTpcdNm         string `json:"hbttTpcdNm"`
+	PlantBrdgFomTpcdNm string `json:"plantBrdgFomTpcdNm"`
+	PlantGnrlNm        string `json:"plantGnrlNm"`
+	PlantPilbkNo       string `json:"plantPilbkNo"`
+	PlantSmplNo        string `json:"plantSmplNo"`
+	PlantSpecsID       string `json:"plantSpecsId"`
+	PlantSpecsScnm     string `json:"plantSpecsScnm"`
+	SmplCllcnDt        string `json:"smplCllcnDt"`
+	SmplClnyNm         string `json:"smplClnyNm"`
+	SmplKindCdNm       string `json:"smplKindCdNm"`
+	SmplWrdt           string `json:"smplWrdt"`
+	VgttnTpeCdNm       string `json:"vgttnTpeCdNm"`
 }
 
 type plantSmplUnitListHandler struct {

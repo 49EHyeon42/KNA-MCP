@@ -77,9 +77,9 @@ func TestPlantPilbkInfoTool(t *testing.T) {
 	defer clientSession.Close()
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name: plantResourcePlantPilbkInfoToolName,
+		Name: "plant_resource_plant_pilbk_info",
 		Arguments: map[string]any{
-			"requestPlantPictorialBookNumber": "test-book-number",
+			"reqPlantPilbkNo": "test-book-number",
 		},
 	})
 	if err != nil {
@@ -99,36 +99,36 @@ func TestPlantPilbkInfoTool(t *testing.T) {
 		t.Fatalf("structured content = %#v", result.StructuredContent)
 	}
 	wantOutput := map[string]string{
-		"apgFamilyKoreanName":          "apg family Korean name",
-		"apgFamilyName":                "apg family name",
-		"pestControlMethod":            "pest control method",
-		"breedingMethodDescription":    "breeding method description",
-		"bugInformation":               "bug information",
-		"distribution":                 "distribution",
-		"englishName":                  "English name",
-		"familyKoreanName":             "family Korean name",
-		"familyName":                   "family name",
-		"farmFeatureDescription":       "farm feature description",
-		"genusKoreanName":              "genus Korean name",
-		"genusName":                    "genus name",
-		"growthEnvironmentDescription": "growth environment description",
-		"inductionDescription":         "induction description",
-		"lastUpdateDateTime":           "last update date time",
-		"notRecommendedGeneralName":    "not recommended general name",
-		"note":                         "note",
-		"originPlaceName":              "origin place name",
-		"overseasDistribution":         "overseas distribution",
-		"plantGeneralName":             "plant general name",
-		"plantPictorialBookNumber":     "plant pictorial book number",
-		"plantSpeciesScientificName":   "plant species scientific name",
-		"protectionPlanDescription":    "protection plan description",
-		"growthClassification":         "growth classification",
-		"growthType":                   "growth type",
-		"shape":                        "shape",
-		"similarPlantDescription":      "similar plant description",
-		"feature":                      "feature",
-		"useMethodDescription":         "use method description",
-		"woodDescription":              "wood description",
+		"apgFamilyKorNm": "apg family Korean name",
+		"apgFamilyNm":    "apg family name",
+		"bfofMthod":      "pest control method",
+		"brdMthdDesc":    "breeding method description",
+		"bugInfo":        "bug information",
+		"dstrb":          "distribution",
+		"engNm":          "English name",
+		"familyKorNm":    "family Korean name",
+		"familyNm":       "family name",
+		"farmSpftDesc":   "farm feature description",
+		"genusKorNm":     "genus Korean name",
+		"genusNm":        "genus name",
+		"grwEvrntDesc":   "growth environment description",
+		"inductionDesc":  "induction description",
+		"lastUpdtDtm":    "last update date time",
+		"notRcmmGnrlNm":  "not recommended general name",
+		"note":           "note",
+		"orplcNm":        "origin place name",
+		"osDstrb":        "overseas distribution",
+		"plantGnrlNm":    "plant general name",
+		"plantPilbkNo":   "plant pictorial book number",
+		"plantSpecsScnm": "plant species scientific name",
+		"prtcPlnDesc":    "protection plan description",
+		"rrngGubun":      "growth classification",
+		"rrngType":       "growth type",
+		"shpe":           "shape",
+		"smlrPlntDesc":   "similar plant description",
+		"spft":           "feature",
+		"useMthdDesc":    "use method description",
+		"woodDesc":       "wood description",
 	}
 	for key, want := range wantOutput {
 		if got := output[key]; got != want {
@@ -138,8 +138,8 @@ func TestPlantPilbkInfoTool(t *testing.T) {
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name:      plantResourcePlantPilbkInfoToolName,
-		Arguments: map[string]any{"requestPlantPictorialBookNumber": "test-book-number"},
+		Name:      "plant_resource_plant_pilbk_info",
+		Arguments: map[string]any{"reqPlantPilbkNo": "test-book-number"},
 	})
 	if err != nil {
 		t.Fatal(err)

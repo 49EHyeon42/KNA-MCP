@@ -9,43 +9,43 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantPilbkInfoToolName = "plant_resource_plant_pictorial_book_information"
+const plantResourcePlantPilbkInfoToolName = "plant_resource_plant_pilbk_info"
 
 type plantPilbkInfoInput struct {
-	ReqPlantPilbkNo string `json:"requestPlantPictorialBookNumber" jsonschema:"식물도감 목록 검색 결과의 식물도감번호"`
+	ReqPlantPilbkNo string `json:"reqPlantPilbkNo" jsonschema:"식물도감 목록 검색 결과의 식물도감번호"`
 }
 
 type plantPilbkInfoOutput struct {
-	APGFamilyKorNm string `json:"apgFamilyKoreanName"`
-	APGFamilyNm    string `json:"apgFamilyName"`
-	BfofMthod      string `json:"pestControlMethod"`
-	BrdMthdDesc    string `json:"breedingMethodDescription"`
-	BugInfo        string `json:"bugInformation"`
-	Dstrb          string `json:"distribution"`
-	EngNm          string `json:"englishName"`
-	FamilyKorNm    string `json:"familyKoreanName"`
-	FamilyNm       string `json:"familyName"`
-	FarmSpftDesc   string `json:"farmFeatureDescription"`
-	GenusKorNm     string `json:"genusKoreanName"`
-	GenusNm        string `json:"genusName"`
-	GrwEvrntDesc   string `json:"growthEnvironmentDescription"`
-	InductionDesc  string `json:"inductionDescription"`
-	LastUpdtDtm    string `json:"lastUpdateDateTime"`
-	NotRcmmGnrlNm  string `json:"notRecommendedGeneralName"`
+	APGFamilyKorNm string `json:"apgFamilyKorNm"`
+	APGFamilyNm    string `json:"apgFamilyNm"`
+	BfofMthod      string `json:"bfofMthod"`
+	BrdMthdDesc    string `json:"brdMthdDesc"`
+	BugInfo        string `json:"bugInfo"`
+	Dstrb          string `json:"dstrb"`
+	EngNm          string `json:"engNm"`
+	FamilyKorNm    string `json:"familyKorNm"`
+	FamilyNm       string `json:"familyNm"`
+	FarmSpftDesc   string `json:"farmSpftDesc"`
+	GenusKorNm     string `json:"genusKorNm"`
+	GenusNm        string `json:"genusNm"`
+	GrwEvrntDesc   string `json:"grwEvrntDesc"`
+	InductionDesc  string `json:"inductionDesc"`
+	LastUpdtDtm    string `json:"lastUpdtDtm"`
+	NotRcmmGnrlNm  string `json:"notRcmmGnrlNm"`
 	Note           string `json:"note"`
-	OrplcNm        string `json:"originPlaceName"`
-	OsDstrb        string `json:"overseasDistribution"`
-	PlantGnrlNm    string `json:"plantGeneralName"`
-	PlantPilbkNo   string `json:"plantPictorialBookNumber"`
-	PlantSpecsScnm string `json:"plantSpeciesScientificName"`
-	PrtcPlnDesc    string `json:"protectionPlanDescription"`
-	RrngGubun      string `json:"growthClassification"`
-	RrngType       string `json:"growthType"`
-	Shpe           string `json:"shape"`
-	SmlrPlntDesc   string `json:"similarPlantDescription"`
-	Spft           string `json:"feature"`
-	UseMthdDesc    string `json:"useMethodDescription"`
-	WoodDesc       string `json:"woodDescription"`
+	OrplcNm        string `json:"orplcNm"`
+	OsDstrb        string `json:"osDstrb"`
+	PlantGnrlNm    string `json:"plantGnrlNm"`
+	PlantPilbkNo   string `json:"plantPilbkNo"`
+	PlantSpecsScnm string `json:"plantSpecsScnm"`
+	PrtcPlnDesc    string `json:"prtcPlnDesc"`
+	RrngGubun      string `json:"rrngGubun"`
+	RrngType       string `json:"rrngType"`
+	Shpe           string `json:"shpe"`
+	SmlrPlntDesc   string `json:"smlrPlntDesc"`
+	Spft           string `json:"spft"`
+	UseMthdDesc    string `json:"useMthdDesc"`
+	WoodDesc       string `json:"woodDesc"`
 }
 
 type plantPilbkInfoHandler struct {

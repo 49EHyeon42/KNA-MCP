@@ -9,28 +9,28 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantSmplSearchToolName = "plant_resource_plant_specimen_search"
+const plantResourcePlantSmplSearchToolName = "plant_resource_plant_smpl_search"
 
 type plantSmplSearchInput struct {
-	PageNo       int    `json:"pageNumber" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows    int    `json:"numberOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSearchWrd string `json:"requestSearchWord,omitempty" jsonschema:"식물표본의 국명 또는 학명 검색어"`
+	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
+	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
+	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"식물표본의 국명 또는 학명 검색어"`
 }
 
 type plantSmplSearchOutput struct {
 	Items      []plantSmplSearchItem `json:"items"`
-	NumOfRows  int                   `json:"numberOfRows"`
-	PageNo     int                   `json:"pageNumber"`
+	NumOfRows  int                   `json:"numOfRows"`
+	PageNo     int                   `json:"pageNo"`
 	TotalCount int                   `json:"totalCount"`
 }
 
 type plantSmplSearchItem struct {
-	Cnt            int    `json:"count"`
-	FamilyKorNm    string `json:"familyKoreanName"`
-	FamilyNm       string `json:"familyName"`
-	PlantGnrlNm    string `json:"plantGeneralName"`
-	PlantSpecsID   string `json:"plantSpeciesId"`
-	PlantSpecsScnm string `json:"plantSpeciesScientificName"`
+	Cnt            int    `json:"cnt"`
+	FamilyKorNm    string `json:"familyKorNm"`
+	FamilyNm       string `json:"familyNm"`
+	PlantGnrlNm    string `json:"plantGnrlNm"`
+	PlantSpecsID   string `json:"plantSpecsId"`
+	PlantSpecsScnm string `json:"plantSpecsScnm"`
 }
 
 type plantSmplSearchHandler struct {

@@ -73,11 +73,11 @@ func TestPlantSmplUnitListTool(t *testing.T) {
 	defer clientSession.Close()
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name: plantResourcePlantSmplUnitListToolName,
+		Name: "plant_resource_plant_smpl_unit_list",
 		Arguments: map[string]any{
-			"pageNumber":            2,
-			"numberOfRows":          10,
-			"requestPlantSpeciesId": "test-plant-species-id",
+			"pageNo":          2,
+			"numOfRows":       10,
+			"reqPlantSpecsId": "test-plant-species-id",
 		},
 	})
 	if err != nil {
@@ -103,6 +103,7 @@ func TestPlantSmplUnitListTool(t *testing.T) {
 	if output["totalCount"] != float64(21) {
 		t.Errorf("totalCount = %#v, want 21", output["totalCount"])
 	}
+	checkKeys(t, output, "items", "numOfRows", "pageNo", "totalCount")
 	items, ok := output["items"].([]any)
 	if !ok || len(items) != 1 {
 		t.Fatalf("items = %#v", output["items"])
@@ -112,27 +113,27 @@ func TestPlantSmplUnitListTool(t *testing.T) {
 		t.Fatalf("item = %#v", items[0])
 	}
 	wantItem := map[string]string{
-		"apgFamilyKoreanName":            "agp family Korean name",
-		"apgFamilyName":                  "agp family name",
-		"specimenHoldingInstitutionName": "specimen holding institution",
-		"collectionSiteElevation":        "collection site elevation",
-		"collectionSite":                 "collection site",
-		"collectorName":                  "collector name",
-		"familyKoreanName":               "family Korean name",
-		"familyName":                     "family name",
-		"habitatCharacteristics":         "habitat characteristics",
-		"habitatTypeName":                "habitat type",
-		"plantReproductiveForm":          "plant reproductive form",
-		"plantGeneralName":               "plant general name",
-		"plantPictorialBookNumber":       "plant pictorial book number",
-		"plantSpecimenNumber":            "plant specimen number",
-		"plantSpeciesId":                 "plant species ID",
-		"plantSpeciesScientificName":     "plant species scientific name",
-		"specimenCollectionDate":         "specimen collection date",
-		"specimenCommunityName":          "specimen community name",
-		"specimenTypeName":               "specimen type",
-		"specimenPreparationDate":        "specimen preparation date",
-		"vegetationTypeName":             "vegetation type",
+		"agpFamilyKorNm":     "agp family Korean name",
+		"agpFamilyNm":        "agp family name",
+		"bspcsInsttNm":       "specimen holding institution",
+		"clarHaslvVal":       "collection site elevation",
+		"clarNm":             "collection site",
+		"cllcrNm":            "collector name",
+		"familyKorNm":        "family Korean name",
+		"familyNm":           "family name",
+		"hbttChrcrCont":      "habitat characteristics",
+		"hbttTpcdNm":         "habitat type",
+		"plantBrdgFomTpcdNm": "plant reproductive form",
+		"plantGnrlNm":        "plant general name",
+		"plantPilbkNo":       "plant pictorial book number",
+		"plantSmplNo":        "plant specimen number",
+		"plantSpecsId":       "plant species ID",
+		"plantSpecsScnm":     "plant species scientific name",
+		"smplCllcnDt":        "specimen collection date",
+		"smplClnyNm":         "specimen community name",
+		"smplKindCdNm":       "specimen type",
+		"smplWrdt":           "specimen preparation date",
+		"vgttnTpeCdNm":       "vegetation type",
 	}
 	for key, want := range wantItem {
 		if got := item[key]; got != want {
@@ -142,11 +143,11 @@ func TestPlantSmplUnitListTool(t *testing.T) {
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name: plantResourcePlantSmplUnitListToolName,
+		Name: "plant_resource_plant_smpl_unit_list",
 		Arguments: map[string]any{
-			"pageNumber":            1,
-			"numberOfRows":          1,
-			"requestPlantSpeciesId": "test-plant-species-id",
+			"pageNo":          1,
+			"numOfRows":       1,
+			"reqPlantSpecsId": "test-plant-species-id",
 		},
 	})
 	if err != nil {

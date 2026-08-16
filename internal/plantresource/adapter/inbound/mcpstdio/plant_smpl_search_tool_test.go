@@ -55,11 +55,11 @@ func TestPlantSmplSearchTool(t *testing.T) {
 	defer clientSession.Close()
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name: plantResourcePlantSmplSearchToolName,
+		Name: "plant_resource_plant_smpl_search",
 		Arguments: map[string]any{
-			"pageNumber":        2,
-			"numberOfRows":      10,
-			"requestSearchWord": "test-search-word",
+			"pageNo":       2,
+			"numOfRows":    10,
+			"reqSearchWrd": "test-search-word",
 		},
 	})
 	if err != nil {
@@ -85,19 +85,21 @@ func TestPlantSmplSearchTool(t *testing.T) {
 	if output["totalCount"] != float64(21) {
 		t.Errorf("totalCount = %#v, want 21", output["totalCount"])
 	}
+	checkKeys(t, output, "items", "numOfRows", "pageNo", "totalCount")
 	items, ok := output["items"].([]any)
 	if !ok || len(items) != 1 {
 		t.Fatalf("items = %#v", output["items"])
 	}
 	item, ok := items[0].(map[string]any)
-	if !ok || item["count"] != float64(123) || item["plantSpeciesId"] != "plant species ID" {
+	if !ok || item["cnt"] != float64(123) || item["plantSpecsId"] != "plant species ID" {
 		t.Errorf("item = %#v", items[0])
 	}
+	checkKeys(t, item, "cnt", "familyKorNm", "familyNm", "plantGnrlNm", "plantSpecsId", "plantSpecsScnm")
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name:      plantResourcePlantSmplSearchToolName,
-		Arguments: map[string]any{"pageNumber": 1, "numberOfRows": 1},
+		Name:      "plant_resource_plant_smpl_search",
+		Arguments: map[string]any{"pageNo": 1, "numOfRows": 1},
 	})
 	if err != nil {
 		t.Fatal(err)
