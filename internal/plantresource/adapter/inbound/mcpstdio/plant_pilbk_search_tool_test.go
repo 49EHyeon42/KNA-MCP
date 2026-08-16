@@ -29,7 +29,19 @@ func TestPlantPilbkSearchTool(t *testing.T) {
 	defer cancel()
 
 	useCase := &plantPilbkSearchUseCaseStub{result: application.PlantPilbkSearchResult{
-		Items:      []application.PlantPilbkSearchItem{{PlantGnrlNm: "plant general name"}},
+		Items: []application.PlantPilbkSearchItem{{
+			APGFamilyKorNm: "apg family Korean name",
+			APGFamilyNm:    "apg family name",
+			FamilyKorNm:    "family Korean name",
+			FamilyNm:       "family name",
+			GenusKorNm:     "genus Korean name",
+			GenusNm:        "genus name",
+			LastUpdtDtm:    "last update date time",
+			NotRcmmGnrlNm:  "not recommended general name",
+			PlantGnrlNm:    "plant general name",
+			PlantPilbkNo:   "plant pictorial book number",
+			PlantSpecsScnm: "plant species scientific name",
+		}},
 		NumOfRows:  10,
 		PageNo:     2,
 		TotalCount: 21,
@@ -49,6 +61,10 @@ func TestPlantPilbkSearchTool(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer clientSession.Close()
+	checkToolInputSchema(t, ctx, clientSession, "plant_resource_plant_pilbk_search",
+		[]string{"pageNo", "numOfRows", "reqSearchWrd"},
+		[]string{"pageNo", "numOfRows"},
+	)
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_pilbk_search",
@@ -78,8 +94,8 @@ func TestPlantPilbkSearchTool(t *testing.T) {
 	if !ok {
 		t.Fatalf("structured content = %#v", result.StructuredContent)
 	}
-	if output["totalCount"] != float64(21) {
-		t.Errorf("totalCount = %#v, want 21", output["totalCount"])
+	if output["numOfRows"] != float64(10) || output["pageNo"] != float64(2) || output["totalCount"] != float64(21) {
+		t.Errorf("pagination = %#v", output)
 	}
 	checkKeys(t, output, "items", "numOfRows", "pageNo", "totalCount")
 	items, ok := output["items"].([]any)
@@ -87,22 +103,30 @@ func TestPlantPilbkSearchTool(t *testing.T) {
 		t.Fatalf("items = %#v", output["items"])
 	}
 	item, ok := items[0].(map[string]any)
-	if !ok || item["plantGnrlNm"] != "plant general name" {
-		t.Errorf("item = %#v", items[0])
+	if !ok {
+		t.Fatalf("item = %#v", items[0])
 	}
-	checkKeys(t, item,
-		"apgFamilyKorNm",
-		"apgFamilyNm",
-		"familyKorNm",
-		"familyNm",
-		"genusKorNm",
-		"genusNm",
-		"lastUpdtDtm",
-		"notRcmmGnrlNm",
-		"plantGnrlNm",
-		"plantPilbkNo",
-		"plantSpecsScnm",
-	)
+	wantItem := map[string]string{
+		"apgFamilyKorNm": "apg family Korean name",
+		"apgFamilyNm":    "apg family name",
+		"familyKorNm":    "family Korean name",
+		"familyNm":       "family name",
+		"genusKorNm":     "genus Korean name",
+		"genusNm":        "genus name",
+		"lastUpdtDtm":    "last update date time",
+		"notRcmmGnrlNm":  "not recommended general name",
+		"plantGnrlNm":    "plant general name",
+		"plantPilbkNo":   "plant pictorial book number",
+		"plantSpecsScnm": "plant species scientific name",
+	}
+	if len(item) != len(wantItem) {
+		t.Errorf("item key count = %d, want %d", len(item), len(wantItem))
+	}
+	for key, want := range wantItem {
+		if got := item[key]; got != want {
+			t.Errorf("item %s = %#v, want %q", key, got, want)
+		}
+	}
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
@@ -131,4 +155,42 @@ func checkKeys(t *testing.T, got map[string]any, want ...string) {
 			t.Errorf("missing key %q in %#v", key, got)
 		}
 	}
+}
+
+func checkToolInputSchema(t *testing.T, ctx context.Context, session *mcp.ClientSession, toolName string, wantProperties, wantRequired []string) {
+	t.Helper()
+	result, err := session.ListTools(ctx, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tool := range result.Tools {
+		if tool.Name != toolName {
+			continue
+		}
+		schema, ok := tool.InputSchema.(map[string]any)
+		if !ok {
+			t.Fatalf("tool %s input schema = %#v", toolName, tool.InputSchema)
+		}
+		properties, ok := schema["properties"].(map[string]any)
+		if !ok {
+			t.Fatalf("tool %s input schema properties = %#v", toolName, schema["properties"])
+		}
+		checkKeys(t, properties, wantProperties...)
+
+		required, ok := schema["required"].([]any)
+		if !ok {
+			t.Fatalf("tool %s input schema required = %#v", toolName, schema["required"])
+		}
+		requiredKeys := make(map[string]any, len(required))
+		for _, key := range required {
+			name, ok := key.(string)
+			if !ok {
+				t.Fatalf("tool %s input schema required key = %#v", toolName, key)
+			}
+			requiredKeys[name] = nil
+		}
+		checkKeys(t, requiredKeys, wantRequired...)
+		return
+	}
+	t.Fatalf("tool %s not found", toolName)
 }

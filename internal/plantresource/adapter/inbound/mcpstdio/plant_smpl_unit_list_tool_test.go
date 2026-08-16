@@ -71,6 +71,10 @@ func TestPlantSmplUnitListTool(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer clientSession.Close()
+	checkToolInputSchema(t, ctx, clientSession, "plant_resource_plant_smpl_unit_list",
+		[]string{"pageNo", "numOfRows", "reqPlantSpecsId"},
+		[]string{"pageNo", "numOfRows", "reqPlantSpecsId"},
+	)
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_smpl_unit_list",
@@ -100,8 +104,8 @@ func TestPlantSmplUnitListTool(t *testing.T) {
 	if !ok {
 		t.Fatalf("structured content = %#v", result.StructuredContent)
 	}
-	if output["totalCount"] != float64(21) {
-		t.Errorf("totalCount = %#v, want 21", output["totalCount"])
+	if output["numOfRows"] != float64(10) || output["pageNo"] != float64(2) || output["totalCount"] != float64(21) {
+		t.Errorf("pagination = %#v", output)
 	}
 	checkKeys(t, output, "items", "numOfRows", "pageNo", "totalCount")
 	items, ok := output["items"].([]any)

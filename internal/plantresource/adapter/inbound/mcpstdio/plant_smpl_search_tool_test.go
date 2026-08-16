@@ -30,9 +30,12 @@ func TestPlantSmplSearchTool(t *testing.T) {
 
 	useCase := &plantSmplSearchUseCaseStub{result: application.PlantSmplSearchResult{
 		Items: []application.PlantSmplSearchItem{{
-			Cnt:          123,
-			PlantGnrlNm:  "plant general name",
-			PlantSpecsID: "plant species ID",
+			Cnt:            123,
+			FamilyKorNm:    "family Korean name",
+			FamilyNm:       "family name",
+			PlantGnrlNm:    "plant general name",
+			PlantSpecsID:   "plant species ID",
+			PlantSpecsScnm: "plant species scientific name",
 		}},
 		NumOfRows:  10,
 		PageNo:     2,
@@ -53,6 +56,10 @@ func TestPlantSmplSearchTool(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer clientSession.Close()
+	checkToolInputSchema(t, ctx, clientSession, "plant_resource_plant_smpl_search",
+		[]string{"pageNo", "numOfRows", "reqSearchWrd"},
+		[]string{"pageNo", "numOfRows"},
+	)
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_smpl_search",
@@ -82,8 +89,8 @@ func TestPlantSmplSearchTool(t *testing.T) {
 	if !ok {
 		t.Fatalf("structured content = %#v", result.StructuredContent)
 	}
-	if output["totalCount"] != float64(21) {
-		t.Errorf("totalCount = %#v, want 21", output["totalCount"])
+	if output["numOfRows"] != float64(10) || output["pageNo"] != float64(2) || output["totalCount"] != float64(21) {
+		t.Errorf("pagination = %#v", output)
 	}
 	checkKeys(t, output, "items", "numOfRows", "pageNo", "totalCount")
 	items, ok := output["items"].([]any)
@@ -91,10 +98,20 @@ func TestPlantSmplSearchTool(t *testing.T) {
 		t.Fatalf("items = %#v", output["items"])
 	}
 	item, ok := items[0].(map[string]any)
-	if !ok || item["cnt"] != float64(123) || item["plantSpecsId"] != "plant species ID" {
-		t.Errorf("item = %#v", items[0])
+	if !ok {
+		t.Fatalf("item = %#v", items[0])
 	}
-	checkKeys(t, item, "cnt", "familyKorNm", "familyNm", "plantGnrlNm", "plantSpecsId", "plantSpecsScnm")
+	wantItem := map[string]any{
+		"cnt":            float64(123),
+		"familyKorNm":    "family Korean name",
+		"familyNm":       "family name",
+		"plantGnrlNm":    "plant general name",
+		"plantSpecsId":   "plant species ID",
+		"plantSpecsScnm": "plant species scientific name",
+	}
+	if !reflect.DeepEqual(item, wantItem) {
+		t.Errorf("item = %#v, want %#v", item, wantItem)
+	}
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

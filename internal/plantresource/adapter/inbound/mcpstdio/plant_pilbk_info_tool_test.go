@@ -75,6 +75,10 @@ func TestPlantPilbkInfoTool(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer clientSession.Close()
+	checkToolInputSchema(t, ctx, clientSession, "plant_resource_plant_pilbk_info",
+		[]string{"reqPlantPilbkNo"},
+		[]string{"reqPlantPilbkNo"},
+	)
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_pilbk_info",

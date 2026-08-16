@@ -213,13 +213,18 @@ func TestPlantSmplSearchLive(t *testing.T) {
 	}
 
 	for _, test := range []struct {
-		name         string
-		pageNo       int
-		numOfRows    int
-		reqSearchWrd string
+		name           string
+		pageNo         int
+		numOfRows      int
+		reqSearchWrd   string
+		plantGnrlNm    string
+		plantSpecsScnm string
 	}{
 		{name: "without search word", pageNo: 1, numOfRows: 1},
-		{name: "with search word and changed pagination", pageNo: 2, numOfRows: 2, reqSearchWrd: "소나무"},
+		{name: "exact Korean name", pageNo: 1, numOfRows: 10, reqSearchWrd: "소나무", plantGnrlNm: "소나무"},
+		{name: "partial Korean name", pageNo: 1, numOfRows: 10, reqSearchWrd: "소나", plantGnrlNm: "소나무"},
+		{name: "uppercase scientific name", pageNo: 1, numOfRows: 10, reqSearchWrd: "Pinus", plantSpecsScnm: "pinus"},
+		{name: "lowercase scientific name", pageNo: 1, numOfRows: 10, reqSearchWrd: "pinus", plantSpecsScnm: "pinus"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -235,6 +240,20 @@ func TestPlantSmplSearchLive(t *testing.T) {
 			}
 			if len(result.Items) == 0 {
 				t.Fatal("plantSmplSearch returned no items")
+			}
+			if test.plantGnrlNm != "" || test.plantSpecsScnm != "" {
+				matched := false
+				for _, item := range result.Items {
+					if test.plantGnrlNm != "" && item.PlantGnrlNm == test.plantGnrlNm {
+						matched = true
+					}
+					if test.plantSpecsScnm != "" && strings.Contains(strings.ToLower(item.PlantSpecsScnm), test.plantSpecsScnm) {
+						matched = true
+					}
+				}
+				if !matched {
+					t.Errorf("plantSmplSearch items = %#v, want matching result", result.Items)
+				}
 			}
 		})
 	}
