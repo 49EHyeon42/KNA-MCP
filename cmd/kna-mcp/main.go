@@ -16,8 +16,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	search := service.NewPlantPictorialBookSearchService(client)
-	if err := mcpstdio.Run(context.Background(), search); err != nil {
+	if err := mcpstdio.Run(context.Background(), mcpstdio.UseCases{
+		PlantPictorialBookSearch: service.NewPlantPictorialBookSearchService(client),
+		PlantSpecimenSearch:      service.NewPlantSpecimenSearchService(client),
+	}); err != nil {
 		log.Fatal(err)
 	}
 }

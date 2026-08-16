@@ -11,6 +11,7 @@ import (
 const (
 	defaultBaseURL        = "https://apis.data.go.kr"
 	defaultRequestTimeout = 60 * time.Second
+	plantResourceBasePath = "/1400119/PlantResource"
 )
 
 // Client calls Korea National Arboretum APIs through the Public Data Portal.
@@ -49,4 +50,10 @@ func (c *Client) do(request *http.Request) (*http.Response, error) {
 		return nil, urlError.Err
 	}
 	return nil, err
+}
+
+func setQueryValue(query url.Values, key, value string) {
+	if value != "" {
+		query.Set(key, value)
+	}
 }

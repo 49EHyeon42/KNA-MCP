@@ -11,28 +11,32 @@ import (
 	"kna-mcp/internal/application"
 )
 
-type plantPictorialBookSearchUseCaseStub struct {
-	query  application.PlantPictorialBookSearchQuery
-	result application.PlantPictorialBookSearchResult
+type plantSpecimenSearchUseCaseStub struct {
+	query  application.PlantSpecimenSearchQuery
+	result application.PlantSpecimenSearchResult
 }
 
-func (s *plantPictorialBookSearchUseCaseStub) PlantPictorialBookSearch(_ context.Context, query application.PlantPictorialBookSearchQuery) (application.PlantPictorialBookSearchResult, error) {
+func (s *plantSpecimenSearchUseCaseStub) PlantSpecimenSearch(_ context.Context, query application.PlantSpecimenSearchQuery) (application.PlantSpecimenSearchResult, error) {
 	s.query = query
 	return s.result, nil
 }
 
-func TestPlantPictorialBookSearchTool(t *testing.T) {
+func TestPlantSpecimenSearchTool(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	useCase := &plantPictorialBookSearchUseCaseStub{result: application.PlantPictorialBookSearchResult{
-		Items:        []application.PlantPictorialBookSearchItem{{PlantGeneralName: "소나무"}},
+	useCase := &plantSpecimenSearchUseCaseStub{result: application.PlantSpecimenSearchResult{
+		Items: []application.PlantSpecimenSearchItem{{
+			Count:            436,
+			PlantGeneralName: "리기다소나무",
+			PlantSpeciesID:   "P000004951",
+		}},
 		NumberOfRows: 10,
 		PageNumber:   2,
 		TotalCount:   21,
 	}}
 	clientTransport, serverTransport := mcp.NewInMemoryTransports()
-	serverSession, err := newServer(UseCases{PlantPictorialBookSearch: useCase}).Connect(ctx, serverTransport, nil)
+	serverSession, err := newServer(UseCases{PlantSpecimenSearch: useCase}).Connect(ctx, serverTransport, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +50,7 @@ func TestPlantPictorialBookSearchTool(t *testing.T) {
 	defer clientSession.Close()
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name: plantResourcePlantPictorialBookSearchToolName,
+		Name: plantResourcePlantSpecimenSearchToolName,
 		Arguments: map[string]any{
 			"pageNumber":        2,
 			"numberOfRows":      10,
@@ -60,7 +64,7 @@ func TestPlantPictorialBookSearchTool(t *testing.T) {
 		t.Fatalf("tool error: %#v", result.Content)
 	}
 
-	wantQuery := application.PlantPictorialBookSearchQuery{
+	wantQuery := application.PlantSpecimenSearchQuery{
 		PageNumber:        2,
 		NumberOfRows:      10,
 		RequestSearchWord: "소나무",
@@ -81,7 +85,7 @@ func TestPlantPictorialBookSearchTool(t *testing.T) {
 		t.Fatalf("items = %#v", output["items"])
 	}
 	item, ok := items[0].(map[string]any)
-	if !ok || item["plantGeneralName"] != "소나무" {
+	if !ok || item["count"] != float64(436) || item["plantSpeciesId"] != "P000004951" {
 		t.Errorf("item = %#v", items[0])
 	}
 }

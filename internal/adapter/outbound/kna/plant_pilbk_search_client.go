@@ -14,7 +14,6 @@ import (
 )
 
 const (
-	plantResourceBasePath       = "/1400119/PlantResource"
 	plantPilbkSearchPath        = plantResourceBasePath + "/plantPilbkSearch"
 	plantPilbkSearchSuccessCode = "00"
 )
@@ -171,11 +170,5 @@ func (body plantPilbkSearchBody) result() application.PlantPictorialBookSearchRe
 		NumberOfRows: body.NumOfRows,
 		PageNumber:   body.PageNo,
 		TotalCount:   body.TotalCount,
-	}
-}
-
-func setQueryValue(query url.Values, key, value string) {
-	if value != "" {
-		query.Set(key, value)
 	}
 }
