@@ -181,7 +181,7 @@ func (item plantPilbkInfoItem) result() application.PlantPictorialBookInformatio
 		PlantPictorialBookNumber:      item.PlantPilbkNo,
 		PlantSpeciesScientificName:    item.PlantSpecsScnm,
 		ProtectionPlanDescription:     item.PrtcPlnDesc,
-		RearingClassification:         item.RrngGubun,
+		RearingGubun:                  item.RrngGubun,
 		RearingType:                   item.RrngType,
 		Shape:                         item.Shpe,
 		SimilarPlantDescription:       item.SmlrPlntDesc,

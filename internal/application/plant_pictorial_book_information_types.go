@@ -30,7 +30,7 @@ type PlantPictorialBookInformationResult struct {
 	PlantPictorialBookNumber      string
 	PlantSpeciesScientificName    string
 	ProtectionPlanDescription     string
-	RearingClassification         string
+	RearingGubun                  string
 	RearingType                   string
 	Shape                         string
 	SimilarPlantDescription       string

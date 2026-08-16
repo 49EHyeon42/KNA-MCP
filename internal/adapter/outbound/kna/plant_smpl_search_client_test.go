@@ -16,7 +16,7 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/application"
 )
 
-func TestPlantSpecimenSearch(t *testing.T) {
+func TestPlantSampleSearch(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
 		if request.URL.Path != plantSmplSearchPath {
 			t.Errorf("path = %q, want %q", request.URL.Path, plantSmplSearchPath)
@@ -57,7 +57,7 @@ func TestPlantSpecimenSearch(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	got, err := client.PlantSpecimenSearch(context.Background(), application.PlantSpecimenSearchQuery{
+	got, err := client.PlantSampleSearch(context.Background(), application.PlantSampleSearchQuery{
 		PageNumber:        1,
 		NumberOfRows:      2,
 		RequestSearchWord: "test-search-word",
@@ -66,8 +66,8 @@ func TestPlantSpecimenSearch(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	want := application.PlantSpecimenSearchResult{
-		Items: []application.PlantSpecimenSearchItem{{
+	want := application.PlantSampleSearchResult{
+		Items: []application.PlantSampleSearchItem{{
 			Count:                      123,
 			FamilyKoreanName:           "family Korean name",
 			FamilyName:                 "family name",
@@ -84,7 +84,7 @@ func TestPlantSpecimenSearch(t *testing.T) {
 	}
 }
 
-func TestPlantSpecimenSearchReturnsEmptyItems(t *testing.T) {
+func TestPlantSampleSearchReturnsEmptyItems(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
 		_, _ = io.WriteString(response, `<response><header><resultCode>00</resultCode></header><body><items/><numOfRows>2</numOfRows><pageNo>1</pageNo><totalCount>0</totalCount></body></response>`)
 	}))
@@ -96,7 +96,7 @@ func TestPlantSpecimenSearchReturnsEmptyItems(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	result, err := client.PlantSpecimenSearch(context.Background(), application.PlantSpecimenSearchQuery{PageNumber: 1, NumberOfRows: 2})
+	result, err := client.PlantSampleSearch(context.Background(), application.PlantSampleSearchQuery{PageNumber: 1, NumberOfRows: 2})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -105,7 +105,7 @@ func TestPlantSpecimenSearchReturnsEmptyItems(t *testing.T) {
 	}
 }
 
-func TestPlantSpecimenSearchReturnsDocumentedAPIErrors(t *testing.T) {
+func TestPlantSampleSearchReturnsDocumentedAPIErrors(t *testing.T) {
 	tests := []struct {
 		code    string
 		message string
@@ -132,7 +132,7 @@ func TestPlantSpecimenSearchReturnsDocumentedAPIErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.PlantSpecimenSearch(context.Background(), application.PlantSpecimenSearchQuery{PageNumber: 1, NumberOfRows: 1})
+			_, err = client.PlantSampleSearch(context.Background(), application.PlantSampleSearchQuery{PageNumber: 1, NumberOfRows: 1})
 			var apiError *PlantSmplSearchError
 			if !errors.As(err, &apiError) {
 				t.Fatalf("error = %v, want *PlantSmplSearchError", err)
@@ -144,7 +144,7 @@ func TestPlantSpecimenSearchReturnsDocumentedAPIErrors(t *testing.T) {
 	}
 }
 
-func TestPlantSpecimenSearchReturnsGatewayError(t *testing.T) {
+func TestPlantSampleSearchReturnsGatewayError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
 		response.WriteHeader(http.StatusForbidden)
 		_, _ = io.WriteString(response, `<OpenAPI_ServiceResponse><cmmMsgHeader><errMsg>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</errMsg><returnAuthMsg>등록되지 않은 서비스키</returnAuthMsg><returnReasonCode>30</returnReasonCode></cmmMsgHeader></OpenAPI_ServiceResponse>`)
@@ -157,7 +157,7 @@ func TestPlantSpecimenSearchReturnsGatewayError(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	_, err = client.PlantSpecimenSearch(context.Background(), application.PlantSpecimenSearchQuery{PageNumber: 1, NumberOfRows: 1})
+	_, err = client.PlantSampleSearch(context.Background(), application.PlantSampleSearchQuery{PageNumber: 1, NumberOfRows: 1})
 	var apiError *PlantSmplSearchError
 	if !errors.As(err, &apiError) {
 		t.Fatalf("error = %v, want *PlantSmplSearchError", err)
@@ -167,7 +167,7 @@ func TestPlantSpecimenSearchReturnsGatewayError(t *testing.T) {
 	}
 }
 
-func TestPlantSpecimenSearchReturnsResponseErrors(t *testing.T) {
+func TestPlantSampleSearchReturnsResponseErrors(t *testing.T) {
 	tests := []struct {
 		name       string
 		statusCode int
@@ -193,7 +193,7 @@ func TestPlantSpecimenSearchReturnsResponseErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.PlantSpecimenSearch(context.Background(), application.PlantSpecimenSearchQuery{PageNumber: 1, NumberOfRows: 1})
+			_, err = client.PlantSampleSearch(context.Background(), application.PlantSampleSearchQuery{PageNumber: 1, NumberOfRows: 1})
 			if err == nil || !strings.Contains(err.Error(), test.wantError) {
 				t.Errorf("error = %v, want containing %q", err, test.wantError)
 			}
@@ -201,7 +201,7 @@ func TestPlantSpecimenSearchReturnsResponseErrors(t *testing.T) {
 	}
 }
 
-func TestPlantSpecimenSearchLive(t *testing.T) {
+func TestPlantSampleSearchLive(t *testing.T) {
 	serviceKey := os.Getenv("DATA_GO_KR_SERVICE_KEY")
 	if serviceKey == "" {
 		t.Skip("DATA_GO_KR_SERVICE_KEY is not set")
@@ -225,7 +225,7 @@ func TestPlantSpecimenSearchLive(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 			defer cancel()
 
-			result, err := client.PlantSpecimenSearch(ctx, application.PlantSpecimenSearchQuery{
+			result, err := client.PlantSampleSearch(ctx, application.PlantSampleSearchQuery{
 				PageNumber:        test.pageNumber,
 				NumberOfRows:      test.numberOfRows,
 				RequestSearchWord: test.requestSearchWord,
@@ -243,7 +243,7 @@ func TestPlantSpecimenSearchLive(t *testing.T) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
 
-		result, err := client.PlantSpecimenSearch(ctx, application.PlantSpecimenSearchQuery{
+		result, err := client.PlantSampleSearch(ctx, application.PlantSampleSearchQuery{
 			PageNumber:        1,
 			NumberOfRows:      1,
 			RequestSearchWord: "kna-mcp-no-result-20260816",

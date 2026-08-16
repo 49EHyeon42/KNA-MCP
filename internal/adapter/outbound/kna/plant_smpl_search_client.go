@@ -29,7 +29,7 @@ var plantSmplSearchResultMessages = map[string]string{
 	"33": "UNSIGNED_CALL_ERROR",
 }
 
-var _ outbound.PlantSpecimenSearchPort = (*Client)(nil)
+var _ outbound.PlantSampleSearchPort = (*Client)(nil)
 
 type plantSmplSearchBody struct {
 	Items      []plantSmplSearchItem `xml:"items>item"`
@@ -72,16 +72,16 @@ func (e *PlantSmplSearchError) Error() string {
 	return fmt.Sprintf("plantSmplSearch: API error %s: %s", e.Code, e.Message)
 }
 
-// PlantSpecimenSearch searches the Korea National Arboretum plant specimens.
-func (c *Client) PlantSpecimenSearch(ctx context.Context, query application.PlantSpecimenSearchQuery) (application.PlantSpecimenSearchResult, error) {
+// PlantSampleSearch searches the Korea National Arboretum plant samples.
+func (c *Client) PlantSampleSearch(ctx context.Context, query application.PlantSampleSearchQuery) (application.PlantSampleSearchResult, error) {
 	endpoint, err := url.JoinPath(c.baseURL, plantSmplSearchPath)
 	if err != nil {
-		return application.PlantSpecimenSearchResult{}, fmt.Errorf("plantSmplSearch: build URL: %w", err)
+		return application.PlantSampleSearchResult{}, fmt.Errorf("plantSmplSearch: build URL: %w", err)
 	}
 
 	requestURL, err := url.Parse(endpoint)
 	if err != nil {
-		return application.PlantSpecimenSearchResult{}, fmt.Errorf("plantSmplSearch: parse URL: %w", err)
+		return application.PlantSampleSearchResult{}, fmt.Errorf("plantSmplSearch: parse URL: %w", err)
 	}
 
 	values := requestURL.Query()
@@ -93,13 +93,13 @@ func (c *Client) PlantSpecimenSearch(ctx context.Context, query application.Plan
 
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL.String(), nil)
 	if err != nil {
-		return application.PlantSpecimenSearchResult{}, fmt.Errorf("plantSmplSearch: create request: %w", err)
+		return application.PlantSampleSearchResult{}, fmt.Errorf("plantSmplSearch: create request: %w", err)
 	}
 	request.Header.Set("Accept", "application/xml")
 
 	response, err := c.do(request)
 	if err != nil {
-		return application.PlantSpecimenSearchResult{}, fmt.Errorf("plantSmplSearch: request: %w", err)
+		return application.PlantSampleSearchResult{}, fmt.Errorf("plantSmplSearch: request: %w", err)
 	}
 	defer response.Body.Close()
 
@@ -110,27 +110,27 @@ func (c *Client) PlantSpecimenSearch(ctx context.Context, query application.Plan
 		if payload.GatewayHeader.ReturnAuthMsg != "" {
 			message += ": " + payload.GatewayHeader.ReturnAuthMsg
 		}
-		return application.PlantSpecimenSearchResult{}, &PlantSmplSearchError{
+		return application.PlantSampleSearchResult{}, &PlantSmplSearchError{
 			HTTPStatus: response.StatusCode,
 			Code:       payload.GatewayHeader.ReturnReasonCode,
 			Message:    message,
 		}
 	}
 	if response.StatusCode != http.StatusOK {
-		return application.PlantSpecimenSearchResult{}, fmt.Errorf("plantSmplSearch: unexpected HTTP status %s", response.Status)
+		return application.PlantSampleSearchResult{}, fmt.Errorf("plantSmplSearch: unexpected HTTP status %s", response.Status)
 	}
 	if decodeErr != nil {
-		return application.PlantSpecimenSearchResult{}, fmt.Errorf("plantSmplSearch: decode response: %w", decodeErr)
+		return application.PlantSampleSearchResult{}, fmt.Errorf("plantSmplSearch: decode response: %w", decodeErr)
 	}
 	if payload.Header.ResultCode == "" {
-		return application.PlantSpecimenSearchResult{}, errors.New("plantSmplSearch: response missing resultCode")
+		return application.PlantSampleSearchResult{}, errors.New("plantSmplSearch: response missing resultCode")
 	}
 	if payload.Header.ResultCode != plantSmplSearchSuccessCode {
 		message := payload.Header.ResultMsg
 		if message == "" {
 			message = plantSmplSearchResultMessages[payload.Header.ResultCode]
 		}
-		return application.PlantSpecimenSearchResult{}, &PlantSmplSearchError{
+		return application.PlantSampleSearchResult{}, &PlantSmplSearchError{
 			HTTPStatus: response.StatusCode,
 			Code:       payload.Header.ResultCode,
 			Message:    message,
@@ -140,10 +140,10 @@ func (c *Client) PlantSpecimenSearch(ctx context.Context, query application.Plan
 	return payload.Body.result(), nil
 }
 
-func (body plantSmplSearchBody) result() application.PlantSpecimenSearchResult {
-	items := make([]application.PlantSpecimenSearchItem, len(body.Items))
+func (body plantSmplSearchBody) result() application.PlantSampleSearchResult {
+	items := make([]application.PlantSampleSearchItem, len(body.Items))
 	for i, item := range body.Items {
-		items[i] = application.PlantSpecimenSearchItem{
+		items[i] = application.PlantSampleSearchItem{
 			Count:                      item.Cnt,
 			FamilyKoreanName:           item.FamilyKorNm,
 			FamilyName:                 item.FamilyNm,
@@ -153,7 +153,7 @@ func (body plantSmplSearchBody) result() application.PlantSpecimenSearchResult {
 		}
 	}
 
-	return application.PlantSpecimenSearchResult{
+	return application.PlantSampleSearchResult{
 		Items:        items,
 		NumberOfRows: body.NumOfRows,
 		PageNumber:   body.PageNo,

@@ -12,7 +12,7 @@ import (
 type UseCases struct {
 	PlantPictorialBookSearch      inbound.PlantPictorialBookSearchUseCase
 	PlantPictorialBookInformation inbound.PlantPictorialBookInformationUseCase
-	PlantSpecimenSearch           inbound.PlantSpecimenSearchUseCase
+	PlantSampleSearch             inbound.PlantSampleSearchUseCase
 }
 
 // Run serves MCP over standard input and output.
@@ -28,8 +28,8 @@ func newServer(useCases UseCases) *mcp.Server {
 	if useCases.PlantPictorialBookInformation != nil {
 		addPlantPictorialBookInformationTool(server, useCases.PlantPictorialBookInformation)
 	}
-	if useCases.PlantSpecimenSearch != nil {
-		addPlantSpecimenSearchTool(server, useCases.PlantSpecimenSearch)
+	if useCases.PlantSampleSearch != nil {
+		addPlantSampleSearchTool(server, useCases.PlantSampleSearch)
 	}
 	return server
 }

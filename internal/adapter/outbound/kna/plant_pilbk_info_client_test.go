@@ -49,7 +49,7 @@ func TestPlantPictorialBookInformation(t *testing.T) {
     <orplcNm>origin place name</orplcNm><osDstrb>overseas distribution</osDstrb>
     <plantGnrlNm>plant general name</plantGnrlNm><plantPilbkNo>plant pictorial book number</plantPilbkNo>
     <plantSpecsScnm>plant species scientific name</plantSpecsScnm><prtcPlnDesc>protection plan description</prtcPlnDesc>
-    <rrngGubun>rearing classification</rrngGubun><rrngType>rearing type</rrngType><shpe>shape</shpe>
+    <rrngGubun>rearing gubun</rrngGubun><rrngType>rearing type</rrngType><shpe>shape</shpe>
     <smlrPlntDesc>similar plant description</smlrPlntDesc><spft>special feature</spft>
     <useMthdDesc>use method description</useMthdDesc><woodDesc>wood description</woodDesc>
   </item></body>
@@ -94,7 +94,7 @@ func TestPlantPictorialBookInformation(t *testing.T) {
 		PlantPictorialBookNumber:      "plant pictorial book number",
 		PlantSpeciesScientificName:    "plant species scientific name",
 		ProtectionPlanDescription:     "protection plan description",
-		RearingClassification:         "rearing classification",
+		RearingGubun:                  "rearing gubun",
 		RearingType:                   "rearing type",
 		Shape:                         "shape",
 		SimilarPlantDescription:       "similar plant description",

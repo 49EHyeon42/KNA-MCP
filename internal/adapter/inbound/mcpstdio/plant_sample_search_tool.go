@@ -9,22 +9,22 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/application/port/inbound"
 )
 
-const plantResourcePlantSpecimenSearchToolName = "plant_resource_plant_specimen_search"
+const plantResourcePlantSampleSearchToolName = "plant_resource_plant_sample_search"
 
-type plantSpecimenSearchInput struct {
+type plantSampleSearchInput struct {
 	PageNumber        int    `json:"pageNumber" jsonschema:"페이지 번호(1 이상)"`
 	NumberOfRows      int    `json:"numberOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
 	RequestSearchWord string `json:"requestSearchWord,omitempty" jsonschema:"식물표본의 국명 또는 학명 검색어"`
 }
 
-type plantSpecimenSearchOutput struct {
-	Items        []plantSpecimenSearchItem `json:"items"`
-	NumberOfRows int                       `json:"numberOfRows"`
-	PageNumber   int                       `json:"pageNumber"`
-	TotalCount   int                       `json:"totalCount"`
+type plantSampleSearchOutput struct {
+	Items        []plantSampleSearchItem `json:"items"`
+	NumberOfRows int                     `json:"numberOfRows"`
+	PageNumber   int                     `json:"pageNumber"`
+	TotalCount   int                     `json:"totalCount"`
 }
 
-type plantSpecimenSearchItem struct {
+type plantSampleSearchItem struct {
 	Count                      int    `json:"count"`
 	FamilyKoreanName           string `json:"familyKoreanName"`
 	FamilyName                 string `json:"familyName"`
@@ -33,31 +33,31 @@ type plantSpecimenSearchItem struct {
 	PlantSpeciesScientificName string `json:"plantSpeciesScientificName"`
 }
 
-type plantSpecimenSearchHandler struct {
-	useCase inbound.PlantSpecimenSearchUseCase
+type plantSampleSearchHandler struct {
+	useCase inbound.PlantSampleSearchUseCase
 }
 
-func addPlantSpecimenSearchTool(server *mcp.Server, useCase inbound.PlantSpecimenSearchUseCase) {
-	handler := plantSpecimenSearchHandler{useCase: useCase}
+func addPlantSampleSearchTool(server *mcp.Server, useCase inbound.PlantSampleSearchUseCase) {
+	handler := plantSampleSearchHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        plantResourcePlantSpecimenSearchToolName,
+		Name:        plantResourcePlantSampleSearchToolName,
 		Description: "산림청 국립수목원 식물표본 목록을 검색합니다.",
 	}, handler.handle)
 }
 
-func (h plantSpecimenSearchHandler) handle(ctx context.Context, _ *mcp.CallToolRequest, input plantSpecimenSearchInput) (*mcp.CallToolResult, plantSpecimenSearchOutput, error) {
-	result, err := h.useCase.PlantSpecimenSearch(ctx, application.PlantSpecimenSearchQuery{
+func (h plantSampleSearchHandler) handle(ctx context.Context, _ *mcp.CallToolRequest, input plantSampleSearchInput) (*mcp.CallToolResult, plantSampleSearchOutput, error) {
+	result, err := h.useCase.PlantSampleSearch(ctx, application.PlantSampleSearchQuery{
 		PageNumber:        input.PageNumber,
 		NumberOfRows:      input.NumberOfRows,
 		RequestSearchWord: input.RequestSearchWord,
 	})
 	if err != nil {
-		return nil, plantSpecimenSearchOutput{}, err
+		return nil, plantSampleSearchOutput{}, err
 	}
 
-	items := make([]plantSpecimenSearchItem, len(result.Items))
+	items := make([]plantSampleSearchItem, len(result.Items))
 	for i, item := range result.Items {
-		items[i] = plantSpecimenSearchItem{
+		items[i] = plantSampleSearchItem{
 			Count:                      item.Count,
 			FamilyKoreanName:           item.FamilyKoreanName,
 			FamilyName:                 item.FamilyName,
@@ -67,7 +67,7 @@ func (h plantSpecimenSearchHandler) handle(ctx context.Context, _ *mcp.CallToolR
 		}
 	}
 
-	return nil, plantSpecimenSearchOutput{
+	return nil, plantSampleSearchOutput{
 		Items:        items,
 		NumberOfRows: result.NumberOfRows,
 		PageNumber:   result.PageNumber,

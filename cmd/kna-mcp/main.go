@@ -19,7 +19,7 @@ func main() {
 	if err := mcpstdio.Run(context.Background(), mcpstdio.UseCases{
 		PlantPictorialBookSearch:      service.NewPlantPictorialBookSearchService(client),
 		PlantPictorialBookInformation: service.NewPlantPictorialBookInformationService(client),
-		PlantSpecimenSearch:           service.NewPlantSpecimenSearchService(client),
+		PlantSampleSearch:             service.NewPlantSampleSearchService(client),
 	}); err != nil {
 		log.Fatal(err)
 	}

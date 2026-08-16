@@ -39,7 +39,7 @@ type plantPictorialBookInformationOutput struct {
 	PlantPictorialBookNumber      string `json:"plantPictorialBookNumber"`
 	PlantSpeciesScientificName    string `json:"plantSpeciesScientificName"`
 	ProtectionPlanDescription     string `json:"protectionPlanDescription"`
-	RearingClassification         string `json:"rearingClassification"`
+	RearingGubun                  string `json:"rearingGubun"`
 	RearingType                   string `json:"rearingType"`
 	Shape                         string `json:"shape"`
 	SimilarPlantDescription       string `json:"similarPlantDescription"`
@@ -92,7 +92,7 @@ func (h plantPictorialBookInformationHandler) handle(ctx context.Context, _ *mcp
 		PlantPictorialBookNumber:      result.PlantPictorialBookNumber,
 		PlantSpeciesScientificName:    result.PlantSpeciesScientificName,
 		ProtectionPlanDescription:     result.ProtectionPlanDescription,
-		RearingClassification:         result.RearingClassification,
+		RearingGubun:                  result.RearingGubun,
 		RearingType:                   result.RearingType,
 		Shape:                         result.Shape,
 		SimilarPlantDescription:       result.SimilarPlantDescription,
