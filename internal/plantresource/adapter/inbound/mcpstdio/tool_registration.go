@@ -8,9 +8,10 @@ import (
 
 // UseCases contains the plant resource use cases exposed as MCP tools.
 type UseCases struct {
-	PlantPilbkSearch inbound.PlantPilbkSearchUseCase
-	PlantPilbkInfo   inbound.PlantPilbkInfoUseCase
-	PlantSmplSearch  inbound.PlantSmplSearchUseCase
+	PlantPilbkSearch  inbound.PlantPilbkSearchUseCase
+	PlantPilbkInfo    inbound.PlantPilbkInfoUseCase
+	PlantSmplSearch   inbound.PlantSmplSearchUseCase
+	PlantSmplUnitList inbound.PlantSmplUnitListUseCase
 }
 
 // AddTools adds the plant resource tools to an MCP server.
@@ -23,5 +24,8 @@ func AddTools(server *mcp.Server, useCases UseCases) {
 	}
 	if useCases.PlantSmplSearch != nil {
 		addPlantSmplSearchTool(server, useCases.PlantSmplSearch)
+	}
+	if useCases.PlantSmplUnitList != nil {
+		addPlantSmplUnitListTool(server, useCases.PlantSmplUnitList)
 	}
 }
