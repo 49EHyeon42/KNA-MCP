@@ -44,7 +44,7 @@ func TestPlantFolkAreaListTool(t *testing.T) {
 	}}
 	clientTransport, serverTransport := mcp.NewInMemoryTransports()
 	server := mcpserver.NewServer()
-	AddTools(server, UseCases{PlantFolkAreaList: useCase})
+	addPlantFolkAreaListTool(server, useCase)
 	serverSession, err := server.Connect(ctx, serverTransport, nil)
 	if err != nil {
 		t.Fatal(err)

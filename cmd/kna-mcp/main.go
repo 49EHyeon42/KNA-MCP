@@ -18,7 +18,7 @@ func main() {
 	}
 
 	server := mcpstdio.NewServer()
-	plantresourcemcp.AddTools(server, plantresourcemcp.UseCases{
+	if err := plantresourcemcp.AddTools(server, plantresourcemcp.UseCases{
 		PlantPilbkSearch:     service.NewPlantPilbkSearchService(client),
 		PlantPilbkInfo:       service.NewPlantPilbkInfoService(client),
 		PlantSmplSearch:      service.NewPlantSmplSearchService(client),
@@ -32,7 +32,9 @@ func main() {
 		PlantRareList:        service.NewPlantRareListService(client),
 		PlantSpcltList:       service.NewPlantSpcltListService(client),
 		PlantWordList:        service.NewPlantWordListService(client),
-	})
+	}); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := mcpstdio.Run(context.Background(), server); err != nil {
 		log.Fatal(err)

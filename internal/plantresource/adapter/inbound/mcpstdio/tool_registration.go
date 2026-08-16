@@ -1,6 +1,8 @@
 package mcpstdio
 
 import (
+	"errors"
+
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
@@ -23,45 +25,50 @@ type UseCases struct {
 	PlantWordList        inbound.PlantWordListUseCase
 }
 
-// AddTools adds the plant resource tools to an MCP server.
-func AddTools(server *mcp.Server, useCases UseCases) {
-	if useCases.PlantPilbkSearch != nil {
-		addPlantPilbkSearchTool(server, useCases.PlantPilbkSearch)
+// AddTools adds all plant resource tools to an MCP server.
+func AddTools(server *mcp.Server, useCases UseCases) error {
+	switch {
+	case useCases.PlantPilbkSearch == nil:
+		return errors.New("plantPilbkSearch use case is required")
+	case useCases.PlantPilbkInfo == nil:
+		return errors.New("plantPilbkInfo use case is required")
+	case useCases.PlantSmplSearch == nil:
+		return errors.New("plantSmplSearch use case is required")
+	case useCases.PlantSmplUnitList == nil:
+		return errors.New("plantSmplUnitList use case is required")
+	case useCases.PlantSeedSearch == nil:
+		return errors.New("plantSeedSearch use case is required")
+	case useCases.PlantSeedUnitList == nil:
+		return errors.New("plantSeedUnitList use case is required")
+	case useCases.PlantSeedGrmntList == nil:
+		return errors.New("plantSeedGrmntList use case is required")
+	case useCases.PlantFolkSearch == nil:
+		return errors.New("plantFolkSearch use case is required")
+	case useCases.PlantFolkAreaList == nil:
+		return errors.New("plantFolkAreaList use case is required")
+	case useCases.PlantNaturalizedList == nil:
+		return errors.New("plantNaturalizedList use case is required")
+	case useCases.PlantRareList == nil:
+		return errors.New("plantRareList use case is required")
+	case useCases.PlantSpcltList == nil:
+		return errors.New("plantSpcltList use case is required")
+	case useCases.PlantWordList == nil:
+		return errors.New("plantWordList use case is required")
 	}
-	if useCases.PlantPilbkInfo != nil {
-		addPlantPilbkInfoTool(server, useCases.PlantPilbkInfo)
-	}
-	if useCases.PlantSmplSearch != nil {
-		addPlantSmplSearchTool(server, useCases.PlantSmplSearch)
-	}
-	if useCases.PlantSmplUnitList != nil {
-		addPlantSmplUnitListTool(server, useCases.PlantSmplUnitList)
-	}
-	if useCases.PlantSeedSearch != nil {
-		addPlantSeedSearchTool(server, useCases.PlantSeedSearch)
-	}
-	if useCases.PlantSeedUnitList != nil {
-		addPlantSeedUnitListTool(server, useCases.PlantSeedUnitList)
-	}
-	if useCases.PlantSeedGrmntList != nil {
-		addPlantSeedGrmntListTool(server, useCases.PlantSeedGrmntList)
-	}
-	if useCases.PlantFolkSearch != nil {
-		addPlantFolkSearchTool(server, useCases.PlantFolkSearch)
-	}
-	if useCases.PlantFolkAreaList != nil {
-		addPlantFolkAreaListTool(server, useCases.PlantFolkAreaList)
-	}
-	if useCases.PlantNaturalizedList != nil {
-		addPlantNaturalizedListTool(server, useCases.PlantNaturalizedList)
-	}
-	if useCases.PlantRareList != nil {
-		addPlantRareListTool(server, useCases.PlantRareList)
-	}
-	if useCases.PlantSpcltList != nil {
-		addPlantSpcltListTool(server, useCases.PlantSpcltList)
-	}
-	if useCases.PlantWordList != nil {
-		addPlantWordListTool(server, useCases.PlantWordList)
-	}
+
+	addPlantPilbkSearchTool(server, useCases.PlantPilbkSearch)
+	addPlantPilbkInfoTool(server, useCases.PlantPilbkInfo)
+	addPlantSmplSearchTool(server, useCases.PlantSmplSearch)
+	addPlantSmplUnitListTool(server, useCases.PlantSmplUnitList)
+	addPlantSeedSearchTool(server, useCases.PlantSeedSearch)
+	addPlantSeedUnitListTool(server, useCases.PlantSeedUnitList)
+	addPlantSeedGrmntListTool(server, useCases.PlantSeedGrmntList)
+	addPlantFolkSearchTool(server, useCases.PlantFolkSearch)
+	addPlantFolkAreaListTool(server, useCases.PlantFolkAreaList)
+	addPlantNaturalizedListTool(server, useCases.PlantNaturalizedList)
+	addPlantRareListTool(server, useCases.PlantRareList)
+	addPlantSpcltListTool(server, useCases.PlantSpcltList)
+	addPlantWordListTool(server, useCases.PlantWordList)
+
+	return nil
 }

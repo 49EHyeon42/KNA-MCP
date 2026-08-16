@@ -41,7 +41,7 @@ func TestPlantWordListTool(t *testing.T) {
 	}}
 	clientTransport, serverTransport := mcp.NewInMemoryTransports()
 	server := mcpserver.NewServer()
-	AddTools(server, UseCases{PlantWordList: useCase})
+	addPlantWordListTool(server, useCase)
 	serverSession, err := server.Connect(ctx, serverTransport, nil)
 	if err != nil {
 		t.Fatal(err)
