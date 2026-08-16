@@ -25,13 +25,13 @@ func NewPlantSmplUnitListService(port outbound.PlantSmplUnitListPort) *PlantSmpl
 // PlantSmplUnitList returns plant specimen details.
 func (s *PlantSmplUnitListService) PlantSmplUnitList(ctx context.Context, query application.PlantSmplUnitListQuery) (application.PlantSmplUnitListResult, error) {
 	if query.PageNo < 1 {
-		return application.PlantSmplUnitListResult{}, errors.New("pageNumber must be greater than zero")
+		return application.PlantSmplUnitListResult{}, errors.New("pageNo must be greater than zero")
 	}
 	if query.NumOfRows < 1 {
-		return application.PlantSmplUnitListResult{}, errors.New("numberOfRows must be greater than zero")
+		return application.PlantSmplUnitListResult{}, errors.New("numOfRows must be greater than zero")
 	}
 	if strings.TrimSpace(query.ReqPlantSpecsID) == "" {
-		return application.PlantSmplUnitListResult{}, errors.New("requestPlantSpeciesId is required")
+		return application.PlantSmplUnitListResult{}, errors.New("reqPlantSpecsId is required")
 	}
 
 	return s.port.PlantSmplUnitList(ctx, query)

@@ -23,8 +23,8 @@ func TestPlantSmplSearchService(t *testing.T) {
 		wantError string
 		wantCall  bool
 	}{
-		{name: "invalid page number", query: application.PlantSmplSearchQuery{NumOfRows: 1}, wantError: "pageNumber must be greater than zero"},
-		{name: "invalid number of rows", query: application.PlantSmplSearchQuery{PageNo: 1}, wantError: "numberOfRows must be greater than zero"},
+		{name: "invalid page number", query: application.PlantSmplSearchQuery{NumOfRows: 1}, wantError: "pageNo must be greater than zero"},
+		{name: "invalid number of rows", query: application.PlantSmplSearchQuery{PageNo: 1}, wantError: "numOfRows must be greater than zero"},
 		{name: "valid pagination", query: application.PlantSmplSearchQuery{PageNo: 1, NumOfRows: 1}, wantCall: true},
 	}
 

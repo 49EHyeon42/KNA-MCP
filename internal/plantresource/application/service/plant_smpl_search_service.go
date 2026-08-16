@@ -24,10 +24,10 @@ func NewPlantSmplSearchService(port outbound.PlantSmplSearchPort) *PlantSmplSear
 // PlantSmplSearch searches plant samples.
 func (s *PlantSmplSearchService) PlantSmplSearch(ctx context.Context, query application.PlantSmplSearchQuery) (application.PlantSmplSearchResult, error) {
 	if query.PageNo < 1 {
-		return application.PlantSmplSearchResult{}, errors.New("pageNumber must be greater than zero")
+		return application.PlantSmplSearchResult{}, errors.New("pageNo must be greater than zero")
 	}
 	if query.NumOfRows < 1 {
-		return application.PlantSmplSearchResult{}, errors.New("numberOfRows must be greater than zero")
+		return application.PlantSmplSearchResult{}, errors.New("numOfRows must be greater than zero")
 	}
 
 	return s.port.PlantSmplSearch(ctx, query)

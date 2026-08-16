@@ -23,8 +23,8 @@ func TestPlantPilbkInfoService(t *testing.T) {
 		wantError string
 		wantCall  bool
 	}{
-		{name: "missing pictorial book number", wantError: "requestPlantPictorialBookNumber is required"},
-		{name: "blank pictorial book number", query: application.PlantPilbkInfoQuery{ReqPlantPilbkNo: "  "}, wantError: "requestPlantPictorialBookNumber is required"},
+		{name: "missing pictorial book number", wantError: "reqPlantPilbkNo is required"},
+		{name: "blank pictorial book number", query: application.PlantPilbkInfoQuery{ReqPlantPilbkNo: "  "}, wantError: "reqPlantPilbkNo is required"},
 		{name: "valid pictorial book number", query: application.PlantPilbkInfoQuery{ReqPlantPilbkNo: "test-book-number"}, wantCall: true},
 	}
 

@@ -25,7 +25,7 @@ func NewPlantPilbkInfoService(port outbound.PlantPilbkInfoPort) *PlantPilbkInfoS
 // PlantPilbkInfo returns plant pictorial book information.
 func (s *PlantPilbkInfoService) PlantPilbkInfo(ctx context.Context, query application.PlantPilbkInfoQuery) (application.PlantPilbkInfoResult, error) {
 	if strings.TrimSpace(query.ReqPlantPilbkNo) == "" {
-		return application.PlantPilbkInfoResult{}, errors.New("requestPlantPictorialBookNumber is required")
+		return application.PlantPilbkInfoResult{}, errors.New("reqPlantPilbkNo is required")
 	}
 
 	return s.port.PlantPilbkInfo(ctx, query)

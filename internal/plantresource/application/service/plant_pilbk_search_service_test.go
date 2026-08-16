@@ -23,8 +23,8 @@ func TestPlantPilbkSearchService(t *testing.T) {
 		wantError string
 		wantCall  bool
 	}{
-		{name: "invalid page number", query: application.PlantPilbkSearchQuery{NumOfRows: 1}, wantError: "pageNumber must be greater than zero"},
-		{name: "invalid number of rows", query: application.PlantPilbkSearchQuery{PageNo: 1}, wantError: "numberOfRows must be greater than zero"},
+		{name: "invalid page number", query: application.PlantPilbkSearchQuery{NumOfRows: 1}, wantError: "pageNo must be greater than zero"},
+		{name: "invalid number of rows", query: application.PlantPilbkSearchQuery{PageNo: 1}, wantError: "numOfRows must be greater than zero"},
 		{name: "valid pagination", query: application.PlantPilbkSearchQuery{PageNo: 1, NumOfRows: 1}, wantCall: true},
 	}
 

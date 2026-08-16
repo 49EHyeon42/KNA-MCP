@@ -24,10 +24,10 @@ func NewPlantPilbkSearchService(port outbound.PlantPilbkSearchPort) *PlantPilbkS
 // PlantPilbkSearch searches the plant pictorial book.
 func (s *PlantPilbkSearchService) PlantPilbkSearch(ctx context.Context, query application.PlantPilbkSearchQuery) (application.PlantPilbkSearchResult, error) {
 	if query.PageNo < 1 {
-		return application.PlantPilbkSearchResult{}, errors.New("pageNumber must be greater than zero")
+		return application.PlantPilbkSearchResult{}, errors.New("pageNo must be greater than zero")
 	}
 	if query.NumOfRows < 1 {
-		return application.PlantPilbkSearchResult{}, errors.New("numberOfRows must be greater than zero")
+		return application.PlantPilbkSearchResult{}, errors.New("numOfRows must be greater than zero")
 	}
 
 	return s.port.PlantPilbkSearch(ctx, query)

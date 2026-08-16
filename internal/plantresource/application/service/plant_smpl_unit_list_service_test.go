@@ -23,9 +23,9 @@ func TestPlantSmplUnitListService(t *testing.T) {
 		wantError string
 		wantCall  bool
 	}{
-		{name: "invalid page number", query: application.PlantSmplUnitListQuery{NumOfRows: 1, ReqPlantSpecsID: "test-plant-species-id"}, wantError: "pageNumber must be greater than zero"},
-		{name: "invalid number of rows", query: application.PlantSmplUnitListQuery{PageNo: 1, ReqPlantSpecsID: "test-plant-species-id"}, wantError: "numberOfRows must be greater than zero"},
-		{name: "blank plant species ID", query: application.PlantSmplUnitListQuery{PageNo: 1, NumOfRows: 1, ReqPlantSpecsID: "  "}, wantError: "requestPlantSpeciesId is required"},
+		{name: "invalid page number", query: application.PlantSmplUnitListQuery{NumOfRows: 1, ReqPlantSpecsID: "test-plant-species-id"}, wantError: "pageNo must be greater than zero"},
+		{name: "invalid number of rows", query: application.PlantSmplUnitListQuery{PageNo: 1, ReqPlantSpecsID: "test-plant-species-id"}, wantError: "numOfRows must be greater than zero"},
+		{name: "blank plant species ID", query: application.PlantSmplUnitListQuery{PageNo: 1, NumOfRows: 1, ReqPlantSpecsID: "  "}, wantError: "reqPlantSpecsId is required"},
 		{name: "valid query", query: application.PlantSmplUnitListQuery{PageNo: 1, NumOfRows: 1, ReqPlantSpecsID: "test-plant-species-id"}, wantCall: true},
 	}
 
