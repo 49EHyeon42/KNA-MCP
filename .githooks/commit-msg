@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if grep -Eiq '^[[:space:]]*co-authored-by[[:space:]]*:' "$1"; then
+	echo "Co-authored-by trailers are not allowed." >&2
+	exit 1
+fi

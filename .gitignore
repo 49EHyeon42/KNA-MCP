@@ -1,0 +1,7 @@
+# Local environment
+.env
+
+# Build and test outputs
+/kna-mcp
+*.test
+coverage.out
