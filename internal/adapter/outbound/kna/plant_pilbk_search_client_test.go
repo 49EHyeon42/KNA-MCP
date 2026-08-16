@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
@@ -26,9 +27,9 @@ func TestPlantPictorialBookSearch(t *testing.T) {
 			"serviceKey":   "test+/=",
 			"pageNo":       "1",
 			"numOfRows":    "2",
-			"reqSearchWrd": "소나무",
-			"dateFrom":     "20250101",
-			"dateTo":       "20251231",
+			"reqSearchWrd": "test-search-word",
+			"dateFrom":     "test-date-from",
+			"dateTo":       "test-date-to",
 		}
 		for key, want := range wantQuery {
 			if got := query.Get(key); got != want {
@@ -42,12 +43,12 @@ func TestPlantPictorialBookSearch(t *testing.T) {
   <header><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header>
   <body>
     <items><item>
-      <apgFamilyKorNm>소나무과</apgFamilyKorNm><apgFamilyNm>Pinaceae</apgFamilyNm>
-      <familyKorNm>소나무과</familyKorNm><familyNm>Pinaceae</familyNm>
-      <genusKorNm>소나무속</genusKorNm><genusNm>Pinus</genusNm>
-      <lastUpdtDtm>20040323</lastUpdtDtm><notRcmmGnrlNm>세잎소나무,삼엽송</notRcmmGnrlNm>
-      <plantGnrlNm>리기다소나무</plantGnrlNm><plantPilbkNo>31665</plantPilbkNo>
-      <plantSpecsScnm>Pinus rigida Mill.</plantSpecsScnm>
+      <apgFamilyKorNm>apg family Korean name</apgFamilyKorNm><apgFamilyNm>apg family name</apgFamilyNm>
+      <familyKorNm>family Korean name</familyKorNm><familyNm>family name</familyNm>
+      <genusKorNm>genus Korean name</genusKorNm><genusNm>genus name</genusNm>
+      <lastUpdtDtm>last update date time</lastUpdtDtm><notRcmmGnrlNm>not recommended general name</notRcmmGnrlNm>
+      <plantGnrlNm>plant general name</plantGnrlNm><plantPilbkNo>plant pictorial book number</plantPilbkNo>
+      <plantSpecsScnm>plant species scientific name</plantSpecsScnm>
     </item></items>
     <numOfRows>2</numOfRows><pageNo>1</pageNo><totalCount>7</totalCount>
   </body>
@@ -64,9 +65,9 @@ func TestPlantPictorialBookSearch(t *testing.T) {
 	got, err := client.PlantPictorialBookSearch(context.Background(), application.PlantPictorialBookSearchQuery{
 		PageNumber:        1,
 		NumberOfRows:      2,
-		RequestSearchWord: "소나무",
-		DateFrom:          "20250101",
-		DateTo:            "20251231",
+		RequestSearchWord: "test-search-word",
+		DateFrom:          "test-date-from",
+		DateTo:            "test-date-to",
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -74,17 +75,17 @@ func TestPlantPictorialBookSearch(t *testing.T) {
 
 	want := application.PlantPictorialBookSearchResult{
 		Items: []application.PlantPictorialBookSearchItem{{
-			APGFamilyKoreanName:        "소나무과",
-			APGFamilyName:              "Pinaceae",
-			FamilyKoreanName:           "소나무과",
-			FamilyName:                 "Pinaceae",
-			GenusKoreanName:            "소나무속",
-			GenusName:                  "Pinus",
-			LastUpdateDateTime:         "20040323",
-			NotRecommendedGeneralName:  "세잎소나무,삼엽송",
-			PlantGeneralName:           "리기다소나무",
-			PlantPictorialBookNumber:   "31665",
-			PlantSpeciesScientificName: "Pinus rigida Mill.",
+			APGFamilyKoreanName:        "apg family Korean name",
+			APGFamilyName:              "apg family name",
+			FamilyKoreanName:           "family Korean name",
+			FamilyName:                 "family name",
+			GenusKoreanName:            "genus Korean name",
+			GenusName:                  "genus name",
+			LastUpdateDateTime:         "last update date time",
+			NotRecommendedGeneralName:  "not recommended general name",
+			PlantGeneralName:           "plant general name",
+			PlantPictorialBookNumber:   "plant pictorial book number",
+			PlantSpeciesScientificName: "plant species scientific name",
 		}},
 		NumberOfRows: 2,
 		PageNumber:   1,
@@ -92,6 +93,27 @@ func TestPlantPictorialBookSearch(t *testing.T) {
 	}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("result = %#v, want %#v", got, want)
+	}
+}
+
+func TestPlantPictorialBookSearchReturnsEmptyItems(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
+		_, _ = io.WriteString(response, `<response><header><resultCode>00</resultCode></header><body><items/><numOfRows>2</numOfRows><pageNo>1</pageNo><totalCount>0</totalCount></body></response>`)
+	}))
+	defer server.Close()
+
+	client, err := NewClient("test-key")
+	if err != nil {
+		t.Fatal(err)
+	}
+	client.baseURL = server.URL
+
+	result, err := client.PlantPictorialBookSearch(context.Background(), application.PlantPictorialBookSearchQuery{PageNumber: 1, NumberOfRows: 2})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(result.Items) != 0 || result.TotalCount != 0 {
+		t.Errorf("result = %#v, want empty result", result)
 	}
 }
 
@@ -157,6 +179,40 @@ func TestPlantPictorialBookSearchReturnsGatewayError(t *testing.T) {
 	}
 }
 
+func TestPlantPictorialBookSearchReturnsResponseErrors(t *testing.T) {
+	tests := []struct {
+		name       string
+		statusCode int
+		body       string
+		wantError  string
+	}{
+		{name: "unexpected HTTP status", statusCode: http.StatusBadGateway, body: `<response/>`, wantError: "plantPilbkSearch: unexpected HTTP status 502 Bad Gateway"},
+		{name: "invalid XML", statusCode: http.StatusOK, body: `<response>`, wantError: "plantPilbkSearch: decode response"},
+		{name: "missing result code", statusCode: http.StatusOK, body: `<response/>`, wantError: "plantPilbkSearch: response missing resultCode"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
+				response.WriteHeader(test.statusCode)
+				_, _ = io.WriteString(response, test.body)
+			}))
+			defer server.Close()
+
+			client, err := NewClient("test-key")
+			if err != nil {
+				t.Fatal(err)
+			}
+			client.baseURL = server.URL
+
+			_, err = client.PlantPictorialBookSearch(context.Background(), application.PlantPictorialBookSearchQuery{PageNumber: 1, NumberOfRows: 1})
+			if err == nil || !strings.Contains(err.Error(), test.wantError) {
+				t.Errorf("error = %v, want containing %q", err, test.wantError)
+			}
+		})
+	}
+}
+
 func TestPlantPictorialBookSearchLive(t *testing.T) {
 	serviceKey := os.Getenv("DATA_GO_KR_SERVICE_KEY")
 	if serviceKey == "" {
@@ -168,18 +224,47 @@ func TestPlantPictorialBookSearchLive(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
+	for _, test := range []struct {
+		name              string
+		pageNumber        int
+		numberOfRows      int
+		requestSearchWord string
+	}{
+		{name: "without search word", pageNumber: 1, numberOfRows: 1},
+		{name: "with search word and changed pagination", pageNumber: 2, numberOfRows: 2, requestSearchWord: "소나무"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			defer cancel()
 
-	result, err := client.PlantPictorialBookSearch(ctx, application.PlantPictorialBookSearchQuery{
-		PageNumber:        1,
-		NumberOfRows:      1,
-		RequestSearchWord: "소나무",
+			result, err := client.PlantPictorialBookSearch(ctx, application.PlantPictorialBookSearchQuery{
+				PageNumber:        test.pageNumber,
+				NumberOfRows:      test.numberOfRows,
+				RequestSearchWord: test.requestSearchWord,
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(result.Items) == 0 {
+				t.Fatal("plantPilbkSearch returned no items")
+			}
+		})
+	}
+
+	t.Run("without result", func(t *testing.T) {
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+
+		result, err := client.PlantPictorialBookSearch(ctx, application.PlantPictorialBookSearchQuery{
+			PageNumber:        1,
+			NumberOfRows:      1,
+			RequestSearchWord: "kna-mcp-no-result-20260816",
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(result.Items) != 0 || result.TotalCount != 0 {
+			t.Errorf("result = %#v, want empty result", result)
+		}
 	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(result.Items) == 0 {
-		t.Fatal("plantPilbkSearch returned no items")
-	}
 }

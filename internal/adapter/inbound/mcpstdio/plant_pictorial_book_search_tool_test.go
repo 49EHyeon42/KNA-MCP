@@ -2,6 +2,7 @@ package mcpstdio
 
 import (
 	"context"
+	"errors"
 	"reflect"
 	"testing"
 	"time"
@@ -14,11 +15,12 @@ import (
 type plantPictorialBookSearchUseCaseStub struct {
 	query  application.PlantPictorialBookSearchQuery
 	result application.PlantPictorialBookSearchResult
+	err    error
 }
 
 func (s *plantPictorialBookSearchUseCaseStub) PlantPictorialBookSearch(_ context.Context, query application.PlantPictorialBookSearchQuery) (application.PlantPictorialBookSearchResult, error) {
 	s.query = query
-	return s.result, nil
+	return s.result, s.err
 }
 
 func TestPlantPictorialBookSearchTool(t *testing.T) {
@@ -26,7 +28,7 @@ func TestPlantPictorialBookSearchTool(t *testing.T) {
 	defer cancel()
 
 	useCase := &plantPictorialBookSearchUseCaseStub{result: application.PlantPictorialBookSearchResult{
-		Items:        []application.PlantPictorialBookSearchItem{{PlantGeneralName: "소나무"}},
+		Items:        []application.PlantPictorialBookSearchItem{{PlantGeneralName: "plant general name"}},
 		NumberOfRows: 10,
 		PageNumber:   2,
 		TotalCount:   21,
@@ -50,7 +52,7 @@ func TestPlantPictorialBookSearchTool(t *testing.T) {
 		Arguments: map[string]any{
 			"pageNumber":        2,
 			"numberOfRows":      10,
-			"requestSearchWord": "소나무",
+			"requestSearchWord": "test-search-word",
 		},
 	})
 	if err != nil {
@@ -63,7 +65,7 @@ func TestPlantPictorialBookSearchTool(t *testing.T) {
 	wantQuery := application.PlantPictorialBookSearchQuery{
 		PageNumber:        2,
 		NumberOfRows:      10,
-		RequestSearchWord: "소나무",
+		RequestSearchWord: "test-search-word",
 	}
 	if !reflect.DeepEqual(useCase.query, wantQuery) {
 		t.Errorf("query = %#v, want %#v", useCase.query, wantQuery)
@@ -81,7 +83,23 @@ func TestPlantPictorialBookSearchTool(t *testing.T) {
 		t.Fatalf("items = %#v", output["items"])
 	}
 	item, ok := items[0].(map[string]any)
-	if !ok || item["plantGeneralName"] != "소나무" {
+	if !ok || item["plantGeneralName"] != "plant general name" {
 		t.Errorf("item = %#v", items[0])
+	}
+
+	useCase.err = errors.New("upstream unavailable")
+	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
+		Name:      plantResourcePlantPictorialBookSearchToolName,
+		Arguments: map[string]any{"pageNumber": 1, "numberOfRows": 1},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !result.IsError {
+		t.Fatal("tool result is not an error")
+	}
+	content, ok := result.Content[0].(*mcp.TextContent)
+	if !ok || content.Text != useCase.err.Error() {
+		t.Errorf("error content = %#v, want %q", result.Content, useCase.err)
 	}
 }

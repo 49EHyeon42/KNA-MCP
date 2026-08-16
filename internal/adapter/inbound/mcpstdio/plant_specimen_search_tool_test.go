@@ -29,9 +29,9 @@ func TestPlantSpecimenSearchTool(t *testing.T) {
 
 	useCase := &plantSpecimenSearchUseCaseStub{result: application.PlantSpecimenSearchResult{
 		Items: []application.PlantSpecimenSearchItem{{
-			Count:            436,
-			PlantGeneralName: "리기다소나무",
-			PlantSpeciesID:   "P000004951",
+			Count:            123,
+			PlantGeneralName: "plant general name",
+			PlantSpeciesID:   "plant species ID",
 		}},
 		NumberOfRows: 10,
 		PageNumber:   2,
@@ -56,7 +56,7 @@ func TestPlantSpecimenSearchTool(t *testing.T) {
 		Arguments: map[string]any{
 			"pageNumber":        2,
 			"numberOfRows":      10,
-			"requestSearchWord": "소나무",
+			"requestSearchWord": "test-search-word",
 		},
 	})
 	if err != nil {
@@ -69,7 +69,7 @@ func TestPlantSpecimenSearchTool(t *testing.T) {
 	wantQuery := application.PlantSpecimenSearchQuery{
 		PageNumber:        2,
 		NumberOfRows:      10,
-		RequestSearchWord: "소나무",
+		RequestSearchWord: "test-search-word",
 	}
 	if !reflect.DeepEqual(useCase.query, wantQuery) {
 		t.Errorf("query = %#v, want %#v", useCase.query, wantQuery)
@@ -87,7 +87,7 @@ func TestPlantSpecimenSearchTool(t *testing.T) {
 		t.Fatalf("items = %#v", output["items"])
 	}
 	item, ok := items[0].(map[string]any)
-	if !ok || item["count"] != float64(436) || item["plantSpeciesId"] != "P000004951" {
+	if !ok || item["count"] != float64(123) || item["plantSpeciesId"] != "plant species ID" {
 		t.Errorf("item = %#v", items[0])
 	}
 

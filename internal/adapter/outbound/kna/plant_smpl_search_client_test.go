@@ -27,7 +27,7 @@ func TestPlantSpecimenSearch(t *testing.T) {
 			"serviceKey":   "test+/=",
 			"pageNo":       "1",
 			"numOfRows":    "2",
-			"reqSearchWrd": "소나무",
+			"reqSearchWrd": "test-search-word",
 		}
 		for key, want := range wantQuery {
 			if got := query.Get(key); got != want {
@@ -41,9 +41,9 @@ func TestPlantSpecimenSearch(t *testing.T) {
   <header><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header>
   <body>
     <items><item>
-      <cnt>436</cnt><familyKorNm>소나무과</familyKorNm><familyNm>Pinaceae</familyNm>
-      <plantGnrlNm>리기다소나무</plantGnrlNm><plantSpecsId>P000004951</plantSpecsId>
-      <plantSpecsScnm>Pinus rigida Mill.</plantSpecsScnm>
+      <cnt>123</cnt><familyKorNm>family Korean name</familyKorNm><familyNm>family name</familyNm>
+      <plantGnrlNm>plant general name</plantGnrlNm><plantSpecsId>plant species ID</plantSpecsId>
+      <plantSpecsScnm>plant species scientific name</plantSpecsScnm>
     </item></items>
     <numOfRows>2</numOfRows><pageNo>1</pageNo><totalCount>7</totalCount>
   </body>
@@ -60,7 +60,7 @@ func TestPlantSpecimenSearch(t *testing.T) {
 	got, err := client.PlantSpecimenSearch(context.Background(), application.PlantSpecimenSearchQuery{
 		PageNumber:        1,
 		NumberOfRows:      2,
-		RequestSearchWord: "소나무",
+		RequestSearchWord: "test-search-word",
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -68,12 +68,12 @@ func TestPlantSpecimenSearch(t *testing.T) {
 
 	want := application.PlantSpecimenSearchResult{
 		Items: []application.PlantSpecimenSearchItem{{
-			Count:                      436,
-			FamilyKoreanName:           "소나무과",
-			FamilyName:                 "Pinaceae",
-			PlantGeneralName:           "리기다소나무",
-			PlantSpeciesID:             "P000004951",
-			PlantSpeciesScientificName: "Pinus rigida Mill.",
+			Count:                      123,
+			FamilyKoreanName:           "family Korean name",
+			FamilyName:                 "family name",
+			PlantGeneralName:           "plant general name",
+			PlantSpeciesID:             "plant species ID",
+			PlantSpeciesScientificName: "plant species scientific name",
 		}},
 		NumberOfRows: 2,
 		PageNumber:   1,
@@ -176,6 +176,7 @@ func TestPlantSpecimenSearchReturnsResponseErrors(t *testing.T) {
 	}{
 		{name: "unexpected HTTP status", statusCode: http.StatusBadGateway, body: `<response/>`, wantError: "plantSmplSearch: unexpected HTTP status 502 Bad Gateway"},
 		{name: "invalid XML", statusCode: http.StatusOK, body: `<response>`, wantError: "plantSmplSearch: decode response"},
+		{name: "missing result code", statusCode: http.StatusOK, body: `<response/>`, wantError: "plantSmplSearch: response missing resultCode"},
 	}
 
 	for _, test := range tests {
@@ -211,18 +212,47 @@ func TestPlantSpecimenSearchLive(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
+	for _, test := range []struct {
+		name              string
+		pageNumber        int
+		numberOfRows      int
+		requestSearchWord string
+	}{
+		{name: "without search word", pageNumber: 1, numberOfRows: 1},
+		{name: "with search word and changed pagination", pageNumber: 2, numberOfRows: 2, requestSearchWord: "소나무"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			defer cancel()
 
-	result, err := client.PlantSpecimenSearch(ctx, application.PlantSpecimenSearchQuery{
-		PageNumber:        1,
-		NumberOfRows:      1,
-		RequestSearchWord: "소나무",
+			result, err := client.PlantSpecimenSearch(ctx, application.PlantSpecimenSearchQuery{
+				PageNumber:        test.pageNumber,
+				NumberOfRows:      test.numberOfRows,
+				RequestSearchWord: test.requestSearchWord,
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(result.Items) == 0 {
+				t.Fatal("plantSmplSearch returned no items")
+			}
+		})
+	}
+
+	t.Run("without result", func(t *testing.T) {
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+
+		result, err := client.PlantSpecimenSearch(ctx, application.PlantSpecimenSearchQuery{
+			PageNumber:        1,
+			NumberOfRows:      1,
+			RequestSearchWord: "kna-mcp-no-result-20260816",
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(result.Items) != 0 || result.TotalCount != 0 {
+			t.Errorf("result = %#v, want empty result", result)
+		}
 	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(result.Items) == 0 {
-		t.Fatal("plantSmplSearch returned no items")
-	}
 }
