@@ -5,9 +5,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/49EHyeon42/KNA-MCP/internal/adapter/inbound/mcpstdio"
-	"github.com/49EHyeon42/KNA-MCP/internal/adapter/outbound/kna"
-	"github.com/49EHyeon42/KNA-MCP/internal/application/service"
+	"github.com/49EHyeon42/KNA-MCP/internal/mcpstdio"
+	plantresourcemcp "github.com/49EHyeon42/KNA-MCP/internal/plantresource/adapter/inbound/mcpstdio"
+	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/adapter/outbound/kna"
+	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/service"
 )
 
 func main() {
@@ -16,11 +17,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := mcpstdio.Run(context.Background(), mcpstdio.UseCases{
+	server := mcpstdio.NewServer()
+	plantresourcemcp.AddTools(server, plantresourcemcp.UseCases{
 		PlantPictorialBookSearch:      service.NewPlantPictorialBookSearchService(client),
 		PlantPictorialBookInformation: service.NewPlantPictorialBookInformationService(client),
 		PlantSampleSearch:             service.NewPlantSampleSearchService(client),
-	}); err != nil {
+	})
+
+	if err := mcpstdio.Run(context.Background(), server); err != nil {
 		log.Fatal(err)
 	}
 }
