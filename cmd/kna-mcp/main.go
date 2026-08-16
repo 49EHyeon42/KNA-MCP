@@ -6,33 +6,11 @@ import (
 	"os"
 
 	"github.com/49EHyeon42/KNA-MCP/internal/mcpstdio"
-	plantresourcemcp "github.com/49EHyeon42/KNA-MCP/internal/plantresource/adapter/inbound/mcpstdio"
-	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/adapter/outbound/kna"
-	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/service"
 )
 
 func main() {
-	client, err := kna.NewClient(os.Getenv("DATA_GO_KR_SERVICE_KEY"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	server := mcpstdio.NewServer()
-	if err := plantresourcemcp.AddTools(server, plantresourcemcp.UseCases{
-		PlantPilbkSearch:     service.NewPlantPilbkSearchService(client),
-		PlantPilbkInfo:       service.NewPlantPilbkInfoService(client),
-		PlantSmplSearch:      service.NewPlantSmplSearchService(client),
-		PlantSmplUnitList:    service.NewPlantSmplUnitListService(client),
-		PlantSeedSearch:      service.NewPlantSeedSearchService(client),
-		PlantSeedUnitList:    service.NewPlantSeedUnitListService(client),
-		PlantSeedGrmntList:   service.NewPlantSeedGrmntListService(client),
-		PlantFolkSearch:      service.NewPlantFolkSearchService(client),
-		PlantFolkAreaList:    service.NewPlantFolkAreaListService(client),
-		PlantNaturalizedList: service.NewPlantNaturalizedListService(client),
-		PlantRareList:        service.NewPlantRareListService(client),
-		PlantSpcltList:       service.NewPlantSpcltListService(client),
-		PlantWordList:        service.NewPlantWordListService(client),
-	}); err != nil {
+	if err := addPlantResourceTools(server, os.Getenv("DATA_GO_KR_SERVICE_KEY")); err != nil {
 		log.Fatal(err)
 	}
 
