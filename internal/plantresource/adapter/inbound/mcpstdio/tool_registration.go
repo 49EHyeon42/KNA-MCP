@@ -8,12 +8,13 @@ import (
 
 // UseCases contains the plant resource use cases exposed as MCP tools.
 type UseCases struct {
-	PlantPilbkSearch  inbound.PlantPilbkSearchUseCase
-	PlantPilbkInfo    inbound.PlantPilbkInfoUseCase
-	PlantSmplSearch   inbound.PlantSmplSearchUseCase
-	PlantSmplUnitList inbound.PlantSmplUnitListUseCase
-	PlantSeedSearch   inbound.PlantSeedSearchUseCase
-	PlantSeedUnitList inbound.PlantSeedUnitListUseCase
+	PlantPilbkSearch   inbound.PlantPilbkSearchUseCase
+	PlantPilbkInfo     inbound.PlantPilbkInfoUseCase
+	PlantSmplSearch    inbound.PlantSmplSearchUseCase
+	PlantSmplUnitList  inbound.PlantSmplUnitListUseCase
+	PlantSeedSearch    inbound.PlantSeedSearchUseCase
+	PlantSeedUnitList  inbound.PlantSeedUnitListUseCase
+	PlantSeedGrmntList inbound.PlantSeedGrmntListUseCase
 }
 
 // AddTools adds the plant resource tools to an MCP server.
@@ -35,5 +36,8 @@ func AddTools(server *mcp.Server, useCases UseCases) {
 	}
 	if useCases.PlantSeedUnitList != nil {
 		addPlantSeedUnitListTool(server, useCases.PlantSeedUnitList)
+	}
+	if useCases.PlantSeedGrmntList != nil {
+		addPlantSeedGrmntListTool(server, useCases.PlantSeedGrmntList)
 	}
 }
