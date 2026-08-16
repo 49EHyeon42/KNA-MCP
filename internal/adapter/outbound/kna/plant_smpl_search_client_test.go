@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
@@ -163,6 +164,39 @@ func TestPlantSpecimenSearchReturnsGatewayError(t *testing.T) {
 	}
 	if apiError.HTTPStatus != http.StatusForbidden || apiError.Code != "30" || apiError.Message != "SERVICE_KEY_IS_NOT_REGISTERED_ERROR: 등록되지 않은 서비스키" {
 		t.Errorf("error = %#v", apiError)
+	}
+}
+
+func TestPlantSpecimenSearchReturnsResponseErrors(t *testing.T) {
+	tests := []struct {
+		name       string
+		statusCode int
+		body       string
+		wantError  string
+	}{
+		{name: "unexpected HTTP status", statusCode: http.StatusBadGateway, body: `<response/>`, wantError: "plantSmplSearch: unexpected HTTP status 502 Bad Gateway"},
+		{name: "invalid XML", statusCode: http.StatusOK, body: `<response>`, wantError: "plantSmplSearch: decode response"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
+				response.WriteHeader(test.statusCode)
+				_, _ = io.WriteString(response, test.body)
+			}))
+			defer server.Close()
+
+			client, err := NewClient("test-key")
+			if err != nil {
+				t.Fatal(err)
+			}
+			client.baseURL = server.URL
+
+			_, err = client.PlantSpecimenSearch(context.Background(), application.PlantSpecimenSearchQuery{PageNumber: 1, NumberOfRows: 1})
+			if err == nil || !strings.Contains(err.Error(), test.wantError) {
+				t.Errorf("error = %v, want containing %q", err, test.wantError)
+			}
+		})
 	}
 }
 

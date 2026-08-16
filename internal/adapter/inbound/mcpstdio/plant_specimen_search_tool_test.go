@@ -2,6 +2,7 @@ package mcpstdio
 
 import (
 	"context"
+	"errors"
 	"reflect"
 	"testing"
 	"time"
@@ -14,11 +15,12 @@ import (
 type plantSpecimenSearchUseCaseStub struct {
 	query  application.PlantSpecimenSearchQuery
 	result application.PlantSpecimenSearchResult
+	err    error
 }
 
 func (s *plantSpecimenSearchUseCaseStub) PlantSpecimenSearch(_ context.Context, query application.PlantSpecimenSearchQuery) (application.PlantSpecimenSearchResult, error) {
 	s.query = query
-	return s.result, nil
+	return s.result, s.err
 }
 
 func TestPlantSpecimenSearchTool(t *testing.T) {
@@ -87,5 +89,21 @@ func TestPlantSpecimenSearchTool(t *testing.T) {
 	item, ok := items[0].(map[string]any)
 	if !ok || item["count"] != float64(436) || item["plantSpeciesId"] != "P000004951" {
 		t.Errorf("item = %#v", items[0])
+	}
+
+	useCase.err = errors.New("upstream unavailable")
+	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
+		Name:      plantResourcePlantSpecimenSearchToolName,
+		Arguments: map[string]any{"pageNumber": 1, "numberOfRows": 1},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !result.IsError {
+		t.Fatal("tool result is not an error")
+	}
+	content, ok := result.Content[0].(*mcp.TextContent)
+	if !ok || content.Text != useCase.err.Error() {
+		t.Errorf("error content = %#v, want %q", result.Content, useCase.err)
 	}
 }
