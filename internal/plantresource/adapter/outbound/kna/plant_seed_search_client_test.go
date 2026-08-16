@@ -297,6 +297,23 @@ func TestPlantSeedSearchLive(t *testing.T) {
 		})
 	}
 
+	t.Run("changed page", func(t *testing.T) {
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+
+		first, err := client.PlantSeedSearch(ctx, application.PlantSeedSearchQuery{PageNo: 1, NumOfRows: 1})
+		if err != nil {
+			t.Fatal(err)
+		}
+		second, err := client.PlantSeedSearch(ctx, application.PlantSeedSearchQuery{PageNo: 2, NumOfRows: 1})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(first.Items) != 1 || len(second.Items) != 1 || first.TotalCount != second.TotalCount || first.TotalCount < 2 || first.Items[0].SeedSpecsID == second.Items[0].SeedSpecsID {
+			t.Errorf("first = %#v, second = %#v, want distinct pages", first, second)
+		}
+	})
+
 	t.Run("without result", func(t *testing.T) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()

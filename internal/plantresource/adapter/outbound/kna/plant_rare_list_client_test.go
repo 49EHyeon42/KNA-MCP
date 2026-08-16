@@ -225,18 +225,18 @@ func TestPlantRareListLive(t *testing.T) {
 	}
 
 	for _, test := range []struct {
-		name           string
-		reqSearchWrd   string
-		plantGnrlNm    string
-		plantSpecsScnm string
-		extrmScls1Yn   string
+		name             string
+		reqSearchWrd     string
+		plantGnrlNm      string
+		plantSpecsScnm   string
+		extrmCrssScls1Yn string
 	}{
 		{name: "without search word"},
 		{name: "exact Korean name", reqSearchWrd: "가는다리장구채", plantGnrlNm: "가는다리장구채"},
 		{name: "partial Korean name", reqSearchWrd: "장구채", plantGnrlNm: "가는다리장구채"},
 		{name: "uppercase scientific name", reqSearchWrd: "Silene", plantSpecsScnm: "silene"},
 		{name: "lowercase scientific name", reqSearchWrd: "silene", plantSpecsScnm: "silene"},
-		{name: "endangered class one", reqSearchWrd: "광릉요강꽃", plantGnrlNm: "광릉요강꽃", extrmScls1Yn: "Y"},
+		{name: "endangered class one", reqSearchWrd: "광릉요강꽃", plantGnrlNm: "광릉요강꽃", extrmCrssScls1Yn: "Y"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -251,7 +251,7 @@ func TestPlantRareListLive(t *testing.T) {
 			}
 			matched := test.plantGnrlNm == "" && test.plantSpecsScnm == ""
 			for _, item := range result.Items {
-				if test.plantGnrlNm != "" && item.PlantGnrlNm == test.plantGnrlNm && (test.extrmScls1Yn == "" || item.ExtrmCrssScls1Yn == test.extrmScls1Yn) {
+				if test.plantGnrlNm != "" && item.PlantGnrlNm == test.plantGnrlNm && (test.extrmCrssScls1Yn == "" || item.ExtrmCrssScls1Yn == test.extrmCrssScls1Yn) {
 					matched = true
 				}
 				if test.plantSpecsScnm != "" && strings.Contains(strings.ToLower(item.PlantSpecsScnm), test.plantSpecsScnm) {
