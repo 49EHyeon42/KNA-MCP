@@ -18,26 +18,26 @@ type plantSeedUnitListInput struct {
 }
 
 type plantSeedUnitListOutput struct {
-	Items      []plantSeedUnitListItem `json:"items"`
-	NumOfRows  int                     `json:"numOfRows"`
-	PageNo     int                     `json:"pageNo"`
-	TotalCount int                     `json:"totalCount"`
+	Items      []plantSeedUnitListItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                     `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                     `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                     `json:"totalCount" jsonschema:"전체 검색 결과 수"`
 }
 
 type plantSeedUnitListItem struct {
-	CllcnDate        string `json:"cllcnDate"`
-	PlantGnrlNm      string `json:"plantGnrlNm"`
-	QualtFllnsRt     string `json:"qualtFllnsRt"`
-	SdwghWeght       string `json:"sdwghWeght"`
-	SeedAdmcn        string `json:"seedAdmcn"`
-	SeedCllctPlace   string `json:"seedCllctPlace"`
-	SeedHoldGrainCnt string `json:"seedHoldGrainCnt"`
-	SeedHoldQntt     string `json:"seedHoldQntt"`
-	SeedNo           string `json:"seedNo"`
-	SeedSpecsID      string `json:"seedSpecsId"`
-	StoreChrcrTpcdNm string `json:"storeChrcrTpcdNm"`
-	Vtlfct           string `json:"vtlfct"`
-	VtlfctTestYr     string `json:"vtlfctTestYr"`
+	CllcnDate        string `json:"cllcnDate" jsonschema:"종자수집일"`
+	PlantGnrlNm      string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	QualtFllnsRt     string `json:"qualtFllnsRt" jsonschema:"품질충실율"`
+	SdwghWeght       string `json:"sdwghWeght" jsonschema:"천립중무게"`
+	SeedAdmcn        string `json:"seedAdmcn" jsonschema:"종자기건함수율"`
+	SeedCllctPlace   string `json:"seedCllctPlace" jsonschema:"종자수집장소"`
+	SeedHoldGrainCnt string `json:"seedHoldGrainCnt" jsonschema:"종자보유립수"`
+	SeedHoldQntt     string `json:"seedHoldQntt" jsonschema:"종자보유량"`
+	SeedNo           string `json:"seedNo" jsonschema:"종자번호"`
+	SeedSpecsID      string `json:"seedSpecsId" jsonschema:"종자종ID"`
+	StoreChrcrTpcdNm string `json:"storeChrcrTpcdNm" jsonschema:"저장특성"`
+	Vtlfct           string `json:"vtlfct" jsonschema:"활력률"`
+	VtlfctTestYr     string `json:"vtlfctTestYr" jsonschema:"활력률테스트년도"`
 }
 
 type plantSeedUnitListHandler struct {

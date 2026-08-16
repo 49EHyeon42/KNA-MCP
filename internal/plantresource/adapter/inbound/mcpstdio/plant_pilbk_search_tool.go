@@ -19,24 +19,24 @@ type plantPilbkSearchInput struct {
 }
 
 type plantPilbkSearchOutput struct {
-	Items      []plantPilbkSearchItem `json:"items"`
-	NumOfRows  int                    `json:"numOfRows"`
-	PageNo     int                    `json:"pageNo"`
-	TotalCount int                    `json:"totalCount"`
+	Items      []plantPilbkSearchItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                    `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                    `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                    `json:"totalCount" jsonschema:"전체 검색 결과 수"`
 }
 
 type plantPilbkSearchItem struct {
-	APGFamilyKorNm string `json:"apgFamilyKorNm"`
-	APGFamilyNm    string `json:"apgFamilyNm"`
-	FamilyKorNm    string `json:"familyKorNm"`
-	FamilyNm       string `json:"familyNm"`
-	GenusKorNm     string `json:"genusKorNm"`
-	GenusNm        string `json:"genusNm"`
-	LastUpdtDtm    string `json:"lastUpdtDtm"`
-	NotRcmmGnrlNm  string `json:"notRcmmGnrlNm"`
-	PlantGnrlNm    string `json:"plantGnrlNm"`
-	PlantPilbkNo   string `json:"plantPilbkNo"`
-	PlantSpecsScnm string `json:"plantSpecsScnm"`
+	APGFamilyKorNm string `json:"apgFamilyKorNm" jsonschema:"APG과국명"`
+	APGFamilyNm    string `json:"apgFamilyNm" jsonschema:"APG과명"`
+	FamilyKorNm    string `json:"familyKorNm" jsonschema:"과국명"`
+	FamilyNm       string `json:"familyNm" jsonschema:"과명"`
+	GenusKorNm     string `json:"genusKorNm" jsonschema:"속국명"`
+	GenusNm        string `json:"genusNm" jsonschema:"속명"`
+	LastUpdtDtm    string `json:"lastUpdtDtm" jsonschema:"최종수정일"`
+	NotRcmmGnrlNm  string `json:"notRcmmGnrlNm" jsonschema:"비추천국명"`
+	PlantGnrlNm    string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	PlantPilbkNo   string `json:"plantPilbkNo" jsonschema:"식물도감번호"`
+	PlantSpecsScnm string `json:"plantSpecsScnm" jsonschema:"학명"`
 }
 
 type plantPilbkSearchHandler struct {

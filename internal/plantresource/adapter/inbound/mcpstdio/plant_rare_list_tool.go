@@ -18,22 +18,22 @@ type plantRareListInput struct {
 }
 
 type plantRareListOutput struct {
-	Items      []plantRareListItem `json:"items"`
-	NumOfRows  int                 `json:"numOfRows"`
-	PageNo     int                 `json:"pageNo"`
-	TotalCount int                 `json:"totalCount"`
+	Items      []plantRareListItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                 `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                 `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                 `json:"totalCount" jsonschema:"전체 결과 수"`
 }
 
 type plantRareListItem struct {
-	AgpFamilyNm      string `json:"agpFamilyNm"`
-	APGFamilyKorNm   string `json:"apgFamilyKorNm"`
-	ExtrmCrssScls1Yn string `json:"extrmCrssScls1Yn"`
-	ExtrmCrssScls2Yn string `json:"extrmCrssScls2Yn"`
-	FamilyKorNm      string `json:"familyKorNm"`
-	FamilyNm         string `json:"familyNm"`
-	PlantGnrlNm      string `json:"plantGnrlNm"`
-	PlantSpecsScnm   string `json:"plantSpecsScnm"`
-	RareTpcdNm       string `json:"rareTpcdNm"`
+	AgpFamilyNm      string `json:"agpFamilyNm" jsonschema:"APG과국명"`
+	APGFamilyKorNm   string `json:"apgFamilyKorNm" jsonschema:"APG과명"`
+	ExtrmCrssScls1Yn string `json:"extrmCrssScls1Yn" jsonschema:"멸종위기종1급 여부"`
+	ExtrmCrssScls2Yn string `json:"extrmCrssScls2Yn" jsonschema:"멸종위기종2급 여부"`
+	FamilyKorNm      string `json:"familyKorNm" jsonschema:"과국명"`
+	FamilyNm         string `json:"familyNm" jsonschema:"과명"`
+	PlantGnrlNm      string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	PlantSpecsScnm   string `json:"plantSpecsScnm" jsonschema:"학명"`
+	RareTpcdNm       string `json:"rareTpcdNm" jsonschema:"IUCN 적색식물 등급"`
 }
 
 type plantRareListHandler struct {

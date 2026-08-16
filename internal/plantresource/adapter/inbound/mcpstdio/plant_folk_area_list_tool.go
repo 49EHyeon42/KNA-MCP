@@ -18,20 +18,20 @@ type plantFolkAreaListInput struct {
 }
 
 type plantFolkAreaListOutput struct {
-	Items      []plantFolkAreaListItem `json:"items"`
-	NumOfRows  int                     `json:"numOfRows"`
-	PageNo     int                     `json:"pageNo"`
-	TotalCount int                     `json:"totalCount"`
+	Items      []plantFolkAreaListItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                     `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                     `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                     `json:"totalCount" jsonschema:"전체 검색 결과 수"`
 }
 
 type plantFolkAreaListItem struct {
-	FlcstPlantExmnnAraTpcdNm string `json:"flcstPlantExmnnAraTpcdNm"`
-	FlcstPlantLcltDscrt      string `json:"flcstPlantLcltDscrt"`
-	FlcstPlantPrpseDscrt     string `json:"flcstPlantPrpseDscrt"`
-	FlpltID                  string `json:"flpltId"`
-	PlantBrdgFomTpcdNm       string `json:"plantBrdgFomTpcdNm"`
-	PlantGnrlNm              string `json:"plantGnrlNm"`
-	PlantSpecsScnm           string `json:"plantSpecsScnm"`
+	FlcstPlantExmnnAraTpcdNm string `json:"flcstPlantExmnnAraTpcdNm" jsonschema:"지역명"`
+	FlcstPlantLcltDscrt      string `json:"flcstPlantLcltDscrt" jsonschema:"지방특성설명"`
+	FlcstPlantPrpseDscrt     string `json:"flcstPlantPrpseDscrt" jsonschema:"지방별 용도설명"`
+	FlpltID                  string `json:"flpltId" jsonschema:"민속식물ID"`
+	PlantBrdgFomTpcdNm       string `json:"plantBrdgFomTpcdNm" jsonschema:"식물번식형태"`
+	PlantGnrlNm              string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	PlantSpecsScnm           string `json:"plantSpecsScnm" jsonschema:"학명"`
 }
 
 type plantFolkAreaListHandler struct {

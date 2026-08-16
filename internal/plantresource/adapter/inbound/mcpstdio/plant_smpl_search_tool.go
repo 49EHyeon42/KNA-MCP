@@ -18,19 +18,19 @@ type plantSmplSearchInput struct {
 }
 
 type plantSmplSearchOutput struct {
-	Items      []plantSmplSearchItem `json:"items"`
-	NumOfRows  int                   `json:"numOfRows"`
-	PageNo     int                   `json:"pageNo"`
-	TotalCount int                   `json:"totalCount"`
+	Items      []plantSmplSearchItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                   `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                   `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                   `json:"totalCount" jsonschema:"전체 검색 결과 수"`
 }
 
 type plantSmplSearchItem struct {
-	Cnt            int    `json:"cnt"`
-	FamilyKorNm    string `json:"familyKorNm"`
-	FamilyNm       string `json:"familyNm"`
-	PlantGnrlNm    string `json:"plantGnrlNm"`
-	PlantSpecsID   string `json:"plantSpecsId"`
-	PlantSpecsScnm string `json:"plantSpecsScnm"`
+	Cnt            int    `json:"cnt" jsonschema:"표본수"`
+	FamilyKorNm    string `json:"familyKorNm" jsonschema:"과국명"`
+	FamilyNm       string `json:"familyNm" jsonschema:"과명"`
+	PlantGnrlNm    string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	PlantSpecsID   string `json:"plantSpecsId" jsonschema:"식물 종ID"`
+	PlantSpecsScnm string `json:"plantSpecsScnm" jsonschema:"학명"`
 }
 
 type plantSmplSearchHandler struct {

@@ -147,6 +147,8 @@ func TestPlantSmplUnitListTool(t *testing.T) {
 			t.Errorf("item %s = %#v, want %q", key, got, want)
 		}
 	}
+	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_smpl_unit_list",
+		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem))
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

@@ -18,34 +18,34 @@ type plantSmplUnitListInput struct {
 }
 
 type plantSmplUnitListOutput struct {
-	Items      []plantSmplUnitListItem `json:"items"`
-	NumOfRows  int                     `json:"numOfRows"`
-	PageNo     int                     `json:"pageNo"`
-	TotalCount int                     `json:"totalCount"`
+	Items      []plantSmplUnitListItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                     `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                     `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                     `json:"totalCount" jsonschema:"전체 검색 결과 수"`
 }
 
 type plantSmplUnitListItem struct {
-	AgpFamilyKorNm     string `json:"agpFamilyKorNm"`
-	AgpFamilyNm        string `json:"agpFamilyNm"`
-	BspcsInsttNm       string `json:"bspcsInsttNm"`
-	ClarHaslvVal       string `json:"clarHaslvVal"`
-	ClarNm             string `json:"clarNm"`
-	CllcrNm            string `json:"cllcrNm"`
-	FamilyKorNm        string `json:"familyKorNm"`
-	FamilyNm           string `json:"familyNm"`
-	HbttChrcrCont      string `json:"hbttChrcrCont"`
-	HbttTpcdNm         string `json:"hbttTpcdNm"`
-	PlantBrdgFomTpcdNm string `json:"plantBrdgFomTpcdNm"`
-	PlantGnrlNm        string `json:"plantGnrlNm"`
-	PlantPilbkNo       string `json:"plantPilbkNo"`
-	PlantSmplNo        string `json:"plantSmplNo"`
-	PlantSpecsID       string `json:"plantSpecsId"`
-	PlantSpecsScnm     string `json:"plantSpecsScnm"`
-	SmplCllcnDt        string `json:"smplCllcnDt"`
-	SmplClnyNm         string `json:"smplClnyNm"`
-	SmplKindCdNm       string `json:"smplKindCdNm"`
-	SmplWrdt           string `json:"smplWrdt"`
-	VgttnTpeCdNm       string `json:"vgttnTpeCdNm"`
+	AgpFamilyKorNm     string `json:"agpFamilyKorNm" jsonschema:"APG과국명"`
+	AgpFamilyNm        string `json:"agpFamilyNm" jsonschema:"APG과명"`
+	BspcsInsttNm       string `json:"bspcsInsttNm" jsonschema:"표본소장기관"`
+	ClarHaslvVal       string `json:"clarHaslvVal" jsonschema:"채집지해발고도"`
+	ClarNm             string `json:"clarNm" jsonschema:"채집지"`
+	CllcrNm            string `json:"cllcrNm" jsonschema:"채집자"`
+	FamilyKorNm        string `json:"familyKorNm" jsonschema:"과국명"`
+	FamilyNm           string `json:"familyNm" jsonschema:"과명"`
+	HbttChrcrCont      string `json:"hbttChrcrCont" jsonschema:"서식지특성"`
+	HbttTpcdNm         string `json:"hbttTpcdNm" jsonschema:"서식지구분"`
+	PlantBrdgFomTpcdNm string `json:"plantBrdgFomTpcdNm" jsonschema:"식물번식형태"`
+	PlantGnrlNm        string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	PlantPilbkNo       string `json:"plantPilbkNo" jsonschema:"식물도감번호"`
+	PlantSmplNo        string `json:"plantSmplNo" jsonschema:"식물표본번호"`
+	PlantSpecsID       string `json:"plantSpecsId" jsonschema:"식물종ID"`
+	PlantSpecsScnm     string `json:"plantSpecsScnm" jsonschema:"학명"`
+	SmplCllcnDt        string `json:"smplCllcnDt" jsonschema:"채집일"`
+	SmplClnyNm         string `json:"smplClnyNm" jsonschema:"표본군락명"`
+	SmplKindCdNm       string `json:"smplKindCdNm" jsonschema:"표본종류"`
+	SmplWrdt           string `json:"smplWrdt" jsonschema:"표본작성일"`
+	VgttnTpeCdNm       string `json:"vgttnTpeCdNm" jsonschema:"식생유형"`
 }
 
 type plantSmplUnitListHandler struct {

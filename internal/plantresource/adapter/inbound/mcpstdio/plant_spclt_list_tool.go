@@ -18,22 +18,22 @@ type plantSpcltListInput struct {
 }
 
 type plantSpcltListOutput struct {
-	Items      []plantSpcltListItem `json:"items"`
-	NumOfRows  int                  `json:"numOfRows"`
-	PageNo     int                  `json:"pageNo"`
-	TotalCount int                  `json:"totalCount"`
+	Items      []plantSpcltListItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                  `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                  `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                  `json:"totalCount" jsonschema:"전체 결과 수"`
 }
 
 type plantSpcltListItem struct {
-	AgpFamilyKorNm     string `json:"agpFamilyKorNm"`
-	AgpFamilyNm        string `json:"agpFamilyNm"`
-	ExtrmCrssScls1Yn   string `json:"extrmCrssScls1Yn"`
-	ExtrmCrssScls2Yn   string `json:"extrmCrssScls2Yn"`
-	FamilyKorNm        string `json:"familyKorNm"`
-	FamilyNm           string `json:"familyNm"`
-	PlantBrdgFomTpcdNm string `json:"plantBrdgFomTpcdNm"`
-	PlantGnrlNm        string `json:"plantGnrlNm"`
-	PlantSpecsScnm     string `json:"plantSpecsScnm"`
+	AgpFamilyKorNm     string `json:"agpFamilyKorNm" jsonschema:"APG과국명"`
+	AgpFamilyNm        string `json:"agpFamilyNm" jsonschema:"APG과명"`
+	ExtrmCrssScls1Yn   string `json:"extrmCrssScls1Yn" jsonschema:"멸종위기식물 1급 여부"`
+	ExtrmCrssScls2Yn   string `json:"extrmCrssScls2Yn" jsonschema:"멸종위기식물 2급 여부"`
+	FamilyKorNm        string `json:"familyKorNm" jsonschema:"과국명"`
+	FamilyNm           string `json:"familyNm" jsonschema:"과명"`
+	PlantBrdgFomTpcdNm string `json:"plantBrdgFomTpcdNm" jsonschema:"식물번식형태"`
+	PlantGnrlNm        string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	PlantSpecsScnm     string `json:"plantSpecsScnm" jsonschema:"학명"`
 }
 
 type plantSpcltListHandler struct {

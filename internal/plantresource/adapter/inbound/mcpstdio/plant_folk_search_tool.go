@@ -18,19 +18,19 @@ type plantFolkSearchInput struct {
 }
 
 type plantFolkSearchOutput struct {
-	Items      []plantFolkSearchItem `json:"items"`
-	NumOfRows  int                   `json:"numOfRows"`
-	PageNo     int                   `json:"pageNo"`
-	TotalCount int                   `json:"totalCount"`
+	Items      []plantFolkSearchItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                   `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                   `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                   `json:"totalCount" jsonschema:"전체 검색결과 수"`
 }
 
 type plantFolkSearchItem struct {
-	FlcstPlantIdntfDscrt string `json:"flcstPlantIdntfDscrt"`
-	FlpltID              string `json:"flpltId"`
-	PlantBrdgFomTpcdNm   string `json:"plantBrdgFomTpcdNm"`
-	PlantGnrlNm          string `json:"plantGnrlNm"`
-	PlantSpecsScnm       string `json:"plantSpecsScnm"`
-	Ptnt                 string `json:"ptnt"`
+	FlcstPlantIdntfDscrt string `json:"flcstPlantIdntfDscrt" jsonschema:"식별설명"`
+	FlpltID              string `json:"flpltId" jsonschema:"민속식물ID"`
+	PlantBrdgFomTpcdNm   string `json:"plantBrdgFomTpcdNm" jsonschema:"식물번식형태"`
+	PlantGnrlNm          string `json:"plantGnrlNm" jsonschema:"국명(식물명"`
+	PlantSpecsScnm       string `json:"plantSpecsScnm" jsonschema:"학명"`
+	Ptnt                 string `json:"ptnt" jsonschema:"특허정보"`
 }
 
 type plantFolkSearchHandler struct {

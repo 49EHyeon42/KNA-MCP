@@ -155,6 +155,8 @@ func TestPlantSeedSearchTool(t *testing.T) {
 			t.Errorf("item %s = %#v, want %q", key, got, want)
 		}
 	}
+	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_seed_search",
+		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem))
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

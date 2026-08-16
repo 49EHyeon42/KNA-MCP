@@ -127,6 +127,8 @@ func TestPlantPilbkSearchTool(t *testing.T) {
 			t.Errorf("item %s = %#v, want %q", key, got, want)
 		}
 	}
+	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_pilbk_search",
+		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem))
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
@@ -157,6 +159,28 @@ func checkKeys(t *testing.T, got map[string]any, want ...string) {
 	}
 }
 
+func mapKeys[T any](values map[string]T) []string {
+	keys := make([]string, 0, len(values))
+	for key := range values {
+		keys = append(keys, key)
+	}
+	return keys
+}
+
+func checkPropertyDescriptions(t *testing.T, toolName string, properties map[string]any) {
+	t.Helper()
+	for name, property := range properties {
+		propertySchema, ok := property.(map[string]any)
+		if !ok {
+			t.Fatalf("tool %s property %s schema = %#v", toolName, name, property)
+		}
+		description, ok := propertySchema["description"].(string)
+		if !ok || description == "" {
+			t.Errorf("tool %s property %s has no description", toolName, name)
+		}
+	}
+}
+
 func checkToolInputSchema(t *testing.T, ctx context.Context, session *mcp.ClientSession, toolName string, wantProperties, wantRequired []string) {
 	t.Helper()
 	result, err := session.ListTools(ctx, nil)
@@ -176,6 +200,7 @@ func checkToolInputSchema(t *testing.T, ctx context.Context, session *mcp.Client
 			t.Fatalf("tool %s input schema properties = %#v", toolName, schema["properties"])
 		}
 		checkKeys(t, properties, wantProperties...)
+		checkPropertyDescriptions(t, toolName, properties)
 
 		required, ok := schema["required"].([]any)
 		if !ok {
@@ -190,6 +215,49 @@ func checkToolInputSchema(t *testing.T, ctx context.Context, session *mcp.Client
 			requiredKeys[name] = nil
 		}
 		checkKeys(t, requiredKeys, wantRequired...)
+		return
+	}
+	t.Fatalf("tool %s not found", toolName)
+}
+
+func checkToolOutputSchema(t *testing.T, ctx context.Context, session *mcp.ClientSession, toolName string, wantProperties, wantItemProperties []string) {
+	t.Helper()
+	result, err := session.ListTools(ctx, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tool := range result.Tools {
+		if tool.Name != toolName {
+			continue
+		}
+		schema, ok := tool.OutputSchema.(map[string]any)
+		if !ok {
+			t.Fatalf("tool %s output schema = %#v", toolName, tool.OutputSchema)
+		}
+		properties, ok := schema["properties"].(map[string]any)
+		if !ok {
+			t.Fatalf("tool %s output schema properties = %#v", toolName, schema["properties"])
+		}
+		checkKeys(t, properties, wantProperties...)
+		checkPropertyDescriptions(t, toolName, properties)
+		if wantItemProperties == nil {
+			return
+		}
+
+		itemsProperty, ok := properties["items"].(map[string]any)
+		if !ok {
+			t.Fatalf("tool %s items property = %#v", toolName, properties["items"])
+		}
+		itemSchema, ok := itemsProperty["items"].(map[string]any)
+		if !ok {
+			t.Fatalf("tool %s item schema = %#v", toolName, itemsProperty["items"])
+		}
+		itemProperties, ok := itemSchema["properties"].(map[string]any)
+		if !ok {
+			t.Fatalf("tool %s item schema properties = %#v", toolName, itemSchema["properties"])
+		}
+		checkKeys(t, itemProperties, wantItemProperties...)
+		checkPropertyDescriptions(t, toolName, itemProperties)
 		return
 	}
 	t.Fatalf("tool %s not found", toolName)

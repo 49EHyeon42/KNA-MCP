@@ -112,6 +112,8 @@ func TestPlantSmplSearchTool(t *testing.T) {
 	if !reflect.DeepEqual(item, wantItem) {
 		t.Errorf("item = %#v, want %#v", item, wantItem)
 	}
+	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_smpl_search",
+		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem))
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

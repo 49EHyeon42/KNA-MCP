@@ -142,6 +142,7 @@ func TestPlantPilbkInfoTool(t *testing.T) {
 			t.Errorf("output %s = %#v, want %q", key, got, want)
 		}
 	}
+	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_pilbk_info", mapKeys(wantOutput), nil)
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

@@ -19,24 +19,24 @@ type plantMstnsListInput struct {
 }
 
 type plantMstnsListOutput struct {
-	Items      []plantMstnsListItem `json:"items"`
-	NumOfRows  int                  `json:"numOfRows"`
-	PageNo     int                  `json:"pageNo"`
-	TotalCount int                  `json:"totalCount"`
+	Items      []plantMstnsListItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                  `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                  `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                  `json:"totalCount" jsonschema:"전체 결과 수"`
 }
 
 type plantMstnsListItem struct {
-	DistrAraDscrt         string `json:"distrAraDscrt"`
-	MinitrTpcdNm          string `json:"minitrTpcdNm"`
-	PlantBrdgFomTpcdNm    string `json:"plantBrdgFomTpcdNm"`
-	PlantGnrlNm           string `json:"plantGnrlNm"`
-	PlantMinitrAthrNm     string `json:"plantMinitrAthrNm"`
-	PlantMinitrMnfctMonth string `json:"plantMinitrMnfctMonth"`
-	PlantMinitrMnfctYr    string `json:"plantMinitrMnfctYr"`
-	PlantMinitrPsinsNm    string `json:"plantMinitrPsinsNm"`
-	PlantSpecsScnm        string `json:"plantSpecsScnm"`
-	RrnssPlantYn          string `json:"rrnssPlantYn"`
-	SpcltPlantYn          string `json:"spcltPlantYn"`
+	DistrAraDscrt         string `json:"distrAraDscrt" jsonschema:"분포정보"`
+	MinitrTpcdNm          string `json:"minitrTpcdNm" jsonschema:"세밀화구분"`
+	PlantBrdgFomTpcdNm    string `json:"plantBrdgFomTpcdNm" jsonschema:"식물번식형태"`
+	PlantGnrlNm           string `json:"plantGnrlNm" jsonschema:"국명"`
+	PlantMinitrAthrNm     string `json:"plantMinitrAthrNm" jsonschema:"작가명"`
+	PlantMinitrMnfctMonth string `json:"plantMinitrMnfctMonth" jsonschema:"제작월"`
+	PlantMinitrMnfctYr    string `json:"plantMinitrMnfctYr" jsonschema:"제작년도"`
+	PlantMinitrPsinsNm    string `json:"plantMinitrPsinsNm" jsonschema:"보유기관"`
+	PlantSpecsScnm        string `json:"plantSpecsScnm" jsonschema:"학명"`
+	RrnssPlantYn          string `json:"rrnssPlantYn" jsonschema:"희귀식물여부"`
+	SpcltPlantYn          string `json:"spcltPlantYn" jsonschema:"특산식물여부"`
 }
 
 type plantMstnsListHandler struct {

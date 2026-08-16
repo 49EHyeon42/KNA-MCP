@@ -18,17 +18,17 @@ type plantWordListInput struct {
 }
 
 type plantWordListOutput struct {
-	Items      []plantWordListItem `json:"items"`
-	NumOfRows  int                 `json:"numOfRows"`
-	PageNo     int                 `json:"pageNo"`
-	TotalCount int                 `json:"totalCount"`
+	Items      []plantWordListItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                 `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                 `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                 `json:"totalCount" jsonschema:"전체 결과 수"`
 }
 
 type plantWordListItem struct {
-	EnglsWrdNm string `json:"englsWrdNm"`
-	KrnWrdNm   string `json:"krnWrdNm"`
-	PrfcnWrdNm string `json:"prfcnWrdNm"`
-	Wrddscrt   string `json:"wrddscrt"`
+	EnglsWrdNm string `json:"englsWrdNm" jsonschema:"영문용어명"`
+	KrnWrdNm   string `json:"krnWrdNm" jsonschema:"한글용어명"`
+	PrfcnWrdNm string `json:"prfcnWrdNm" jsonschema:"순화용어명"`
+	Wrddscrt   string `json:"wrddscrt" jsonschema:"용어서술"`
 }
 
 type plantWordListHandler struct {

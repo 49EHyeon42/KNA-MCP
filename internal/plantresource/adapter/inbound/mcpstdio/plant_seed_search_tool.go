@@ -19,38 +19,38 @@ type plantSeedSearchInput struct {
 }
 
 type plantSeedSearchOutput struct {
-	Items      []plantSeedSearchItem `json:"items"`
-	NumOfRows  int                   `json:"numOfRows"`
-	PageNo     int                   `json:"pageNo"`
-	TotalCount int                   `json:"totalCount"`
+	Items      []plantSeedSearchItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                   `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                   `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                   `json:"totalCount" jsonschema:"전체 검색 결과 수"`
 }
 
 type plantSeedSearchItem struct {
-	APGFamilyKorNm   string `json:"apgFamilyKorNm"`
-	APGFamilyNm      string `json:"apgFamilyNm"`
-	BlprdEnmnt       string `json:"blprdEnmnt"`
-	BlprdStmnt       string `json:"blprdStmnt"`
-	ClrngMthodCdNm   string `json:"clrngMthodCdNm"`
-	FamilyKorNm      string `json:"familyKorNm"`
-	FamilyNm         string `json:"familyNm"`
-	FritCdNm         string `json:"fritCdNm"`
-	FrssnEnmnt       string `json:"frssnEnmnt"`
-	FrssnStmnt       string `json:"frssnStmnt"`
-	LastUpdtDtm      string `json:"lastUpdtDtm"`
-	PlantGnrlNm      string `json:"plantGnrlNm"`
-	PlantSpecsScnm   string `json:"plantSpecsScnm"`
-	RfrncLtrtrCont   string `json:"rfrncLtrtrCont"`
-	SeedCtsrfcDesc   string `json:"seedCtsrfcDesc"`
-	SeedCtsrfcTpcdNm string `json:"seedCtsrfcTpcdNm"`
-	SeedEmbrTpcdNm   string `json:"seedEmbrTpcdNm"`
-	SeedMnmmBrdth    string `json:"seedMnmmBrdth"`
-	SeedMnmmLngth    string `json:"seedMnmmLngth"`
-	SeedMxmmBrdth    string `json:"seedMxmmBrdth"`
-	SeedMxmmLngth    string `json:"seedMxmmLngth"`
-	SeedShpDesc      string `json:"seedShpDesc"`
-	SeedShpTpcdNm    string `json:"seedShpTpcdNm"`
-	SeedSpecsID      string `json:"seedSpecsId"`
-	SeedTpcdNm       string `json:"seedTpcdNm"`
+	APGFamilyKorNm   string `json:"apgFamilyKorNm" jsonschema:"APG과국명"`
+	APGFamilyNm      string `json:"apgFamilyNm" jsonschema:"APG과명"`
+	BlprdEnmnt       string `json:"blprdEnmnt" jsonschema:"개화기종료일"`
+	BlprdStmnt       string `json:"blprdStmnt" jsonschema:"개화기시작일"`
+	ClrngMthodCdNm   string `json:"clrngMthodCdNm" jsonschema:"정선방법"`
+	FamilyKorNm      string `json:"familyKorNm" jsonschema:"과국명"`
+	FamilyNm         string `json:"familyNm" jsonschema:"과명"`
+	FritCdNm         string `json:"fritCdNm" jsonschema:"열매형태"`
+	FrssnEnmnt       string `json:"frssnEnmnt" jsonschema:"결실기종료일"`
+	FrssnStmnt       string `json:"frssnStmnt" jsonschema:"결실기시작일"`
+	LastUpdtDtm      string `json:"lastUpdtDtm" jsonschema:"최종수정일"`
+	PlantGnrlNm      string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	PlantSpecsScnm   string `json:"plantSpecsScnm" jsonschema:"학명"`
+	RfrncLtrtrCont   string `json:"rfrncLtrtrCont" jsonschema:"참고문헌"`
+	SeedCtsrfcDesc   string `json:"seedCtsrfcDesc" jsonschema:"종자표면형태설명"`
+	SeedCtsrfcTpcdNm string `json:"seedCtsrfcTpcdNm" jsonschema:"종자표면형태"`
+	SeedEmbrTpcdNm   string `json:"seedEmbrTpcdNm" jsonschema:"배아형태"`
+	SeedMnmmBrdth    string `json:"seedMnmmBrdth" jsonschema:"종자최소너비"`
+	SeedMnmmLngth    string `json:"seedMnmmLngth" jsonschema:"종자최소길이"`
+	SeedMxmmBrdth    string `json:"seedMxmmBrdth" jsonschema:"종자최대너비"`
+	SeedMxmmLngth    string `json:"seedMxmmLngth" jsonschema:"종자최대길이"`
+	SeedShpDesc      string `json:"seedShpDesc" jsonschema:"종자형태설명"`
+	SeedShpTpcdNm    string `json:"seedShpTpcdNm" jsonschema:"종자형태"`
+	SeedSpecsID      string `json:"seedSpecsId" jsonschema:"종자종ID"`
+	SeedTpcdNm       string `json:"seedTpcdNm" jsonschema:"종자구분"`
 }
 
 type plantSeedSearchHandler struct {
