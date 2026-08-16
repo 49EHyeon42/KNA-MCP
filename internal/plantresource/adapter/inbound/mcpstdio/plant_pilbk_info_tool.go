@@ -9,8 +9,6 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantPilbkInfoToolName = "plant_resource_plant_pilbk_info"
-
 type plantPilbkInfoInput struct {
 	ReqPlantPilbkNo string `json:"reqPlantPilbkNo" jsonschema:"식물도감 목록 검색 결과의 식물도감번호"`
 }
@@ -55,7 +53,7 @@ type plantPilbkInfoHandler struct {
 func addPlantPilbkInfoTool(server *mcp.Server, useCase inbound.PlantPilbkInfoUseCase) {
 	handler := plantPilbkInfoHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        plantResourcePlantPilbkInfoToolName,
+		Name:        "plant_resource_plant_pilbk_info",
 		Description: "산림청 국립수목원 식물도감 상세정보를 조회합니다.",
 	}, handler.handle)
 }

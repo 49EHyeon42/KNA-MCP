@@ -9,8 +9,6 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantWordListToolName = "plant_resource_plant_word_list"
-
 type plantWordListInput struct {
 	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
 	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
@@ -38,7 +36,7 @@ type plantWordListHandler struct {
 func addPlantWordListTool(server *mcp.Server, useCase inbound.PlantWordListUseCase) {
 	handler := plantWordListHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        plantResourcePlantWordListToolName,
+		Name:        "plant_resource_plant_word_list",
 		Description: "산림청 국립수목원 식물 용어사전 목록을 조회합니다.",
 	}, handler.handle)
 }

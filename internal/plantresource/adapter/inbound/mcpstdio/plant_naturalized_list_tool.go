@@ -9,8 +9,6 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantNaturalizedListToolName = "plant_resource_plant_naturalized_list"
-
 type plantNaturalizedListInput struct {
 	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
 	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
@@ -58,7 +56,7 @@ type plantNaturalizedListHandler struct {
 func addPlantNaturalizedListTool(server *mcp.Server, useCase inbound.PlantNaturalizedListUseCase) {
 	handler := plantNaturalizedListHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        plantResourcePlantNaturalizedListToolName,
+		Name:        "plant_resource_plant_naturalized_list",
 		Description: "산림청 국립수목원 외래식물정보 목록을 조회합니다.",
 	}, handler.handle)
 }

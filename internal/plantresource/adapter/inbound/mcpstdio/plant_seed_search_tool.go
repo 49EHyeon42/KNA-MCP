@@ -9,8 +9,6 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantSeedSearchToolName = "plant_resource_plant_seed_search"
-
 type plantSeedSearchInput struct {
 	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
 	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
@@ -60,7 +58,7 @@ type plantSeedSearchHandler struct {
 func addPlantSeedSearchTool(server *mcp.Server, useCase inbound.PlantSeedSearchUseCase) {
 	handler := plantSeedSearchHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        plantResourcePlantSeedSearchToolName,
+		Name:        "plant_resource_plant_seed_search",
 		Description: "산림청 국립수목원 식물종자 기본정보 목록을 검색합니다.",
 	}, handler.handle)
 }
