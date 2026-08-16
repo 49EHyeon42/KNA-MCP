@@ -10,7 +10,11 @@ import (
 
 func main() {
 	server := mcpstdio.NewServer()
-	if err := addPlantResourceTools(server, os.Getenv("DATA_GO_KR_SERVICE_KEY")); err != nil {
+	serviceKey := os.Getenv("DATA_GO_KR_SERVICE_KEY")
+	if err := addPlantResourceTools(server, serviceKey); err != nil {
+		log.Fatal(err)
+	}
+	if err := addPlantMstnsTools(server, serviceKey); err != nil {
 		log.Fatal(err)
 	}
 
