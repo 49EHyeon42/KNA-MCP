@@ -63,6 +63,10 @@ type plantPilbkInfoItem struct {
 	WoodDesc       string `xml:"woodDesc"`
 }
 
+type plantPilbkInfoBody struct {
+	Item plantPilbkInfoItem `xml:"item"`
+}
+
 type plantPilbkInfoResponse struct {
 	Header struct {
 		ResultCode string `xml:"resultCode"`
@@ -73,9 +77,7 @@ type plantPilbkInfoResponse struct {
 		ReturnAuthMsg    string `xml:"returnAuthMsg"`
 		ReturnReasonCode string `xml:"returnReasonCode"`
 	} `xml:"cmmMsgHeader"`
-	Body struct {
-		Item plantPilbkInfoItem `xml:"item"`
-	} `xml:"body"`
+	Body plantPilbkInfoBody `xml:"body"`
 }
 
 // PlantPilbkInfoError reports an error returned by plantPilbkInfo.

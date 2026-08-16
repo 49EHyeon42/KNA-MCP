@@ -213,22 +213,22 @@ func TestPlantSmplSearchLive(t *testing.T) {
 	}
 
 	for _, test := range []struct {
-		name              string
-		pageNumber        int
-		numberOfRows      int
-		requestSearchWord string
+		name         string
+		pageNo       int
+		numOfRows    int
+		reqSearchWrd string
 	}{
-		{name: "without search word", pageNumber: 1, numberOfRows: 1},
-		{name: "with search word and changed pagination", pageNumber: 2, numberOfRows: 2, requestSearchWord: "소나무"},
+		{name: "without search word", pageNo: 1, numOfRows: 1},
+		{name: "with search word and changed pagination", pageNo: 2, numOfRows: 2, reqSearchWrd: "소나무"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 			defer cancel()
 
 			result, err := client.PlantSmplSearch(ctx, application.PlantSmplSearchQuery{
-				PageNo:       test.pageNumber,
-				NumOfRows:    test.numberOfRows,
-				ReqSearchWrd: test.requestSearchWord,
+				PageNo:       test.pageNo,
+				NumOfRows:    test.numOfRows,
+				ReqSearchWrd: test.reqSearchWrd,
 			})
 			if err != nil {
 				t.Fatal(err)

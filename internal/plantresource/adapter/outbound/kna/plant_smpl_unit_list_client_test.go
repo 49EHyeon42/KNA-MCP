@@ -236,22 +236,22 @@ func TestPlantSmplUnitListLive(t *testing.T) {
 	}
 
 	for _, test := range []struct {
-		name                string
-		pageNumber          int
-		numberOfRows        int
-		requestPlantSpecsID string
+		name            string
+		pageNo          int
+		numOfRows       int
+		reqPlantSpecsID string
 	}{
-		{name: "first plant species", pageNumber: 1, numberOfRows: 1, requestPlantSpecsID: "P000004958"},
-		{name: "second plant species and changed pagination", pageNumber: 2, numberOfRows: 2, requestPlantSpecsID: "P000004954"},
+		{name: "first plant species", pageNo: 1, numOfRows: 1, reqPlantSpecsID: "P000004958"},
+		{name: "second plant species and changed pagination", pageNo: 2, numOfRows: 2, reqPlantSpecsID: "P000004954"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 			defer cancel()
 
 			result, err := client.PlantSmplUnitList(ctx, application.PlantSmplUnitListQuery{
-				PageNo:          test.pageNumber,
-				NumOfRows:       test.numberOfRows,
-				ReqPlantSpecsID: test.requestPlantSpecsID,
+				PageNo:          test.pageNo,
+				NumOfRows:       test.numOfRows,
+				ReqPlantSpecsID: test.reqPlantSpecsID,
 			})
 			if err != nil {
 				t.Fatal(err)

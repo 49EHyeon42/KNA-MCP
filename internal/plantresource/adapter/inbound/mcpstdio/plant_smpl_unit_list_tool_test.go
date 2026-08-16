@@ -135,6 +135,9 @@ func TestPlantSmplUnitListTool(t *testing.T) {
 		"smplWrdt":           "specimen preparation date",
 		"vgttnTpeCdNm":       "vegetation type",
 	}
+	if len(item) != len(wantItem) {
+		t.Errorf("item key count = %d, want %d", len(item), len(wantItem))
+	}
 	for key, want := range wantItem {
 		if got := item[key]; got != want {
 			t.Errorf("item %s = %#v, want %q", key, got, want)

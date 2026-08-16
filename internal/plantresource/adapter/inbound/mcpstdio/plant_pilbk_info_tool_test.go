@@ -130,6 +130,9 @@ func TestPlantPilbkInfoTool(t *testing.T) {
 		"useMthdDesc":    "use method description",
 		"woodDesc":       "wood description",
 	}
+	if len(output) != len(wantOutput) {
+		t.Errorf("output key count = %d, want %d", len(output), len(wantOutput))
+	}
 	for key, want := range wantOutput {
 		if got := output[key]; got != want {
 			t.Errorf("output %s = %#v, want %q", key, got, want)
