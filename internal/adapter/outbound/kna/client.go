@@ -37,3 +37,16 @@ func NewClient(serviceKey string) (*Client, error) {
 		serviceKey: serviceKey,
 	}, nil
 }
+
+func (c *Client) do(request *http.Request) (*http.Response, error) {
+	response, err := c.httpClient.Do(request)
+	if err == nil {
+		return response, nil
+	}
+
+	var urlError *url.Error
+	if errors.As(err, &urlError) {
+		return nil, urlError.Err
+	}
+	return nil, err
+}

@@ -105,7 +105,7 @@ func (c *Client) PlantPictorialBookSearch(ctx context.Context, query application
 	}
 	request.Header.Set("Accept", "application/xml")
 
-	response, err := c.httpClient.Do(request)
+	response, err := c.do(request)
 	if err != nil {
 		return application.PlantPictorialBookSearchResult{}, fmt.Errorf("plantPilbkSearch: request: %w", err)
 	}
