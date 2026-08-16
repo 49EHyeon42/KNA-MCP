@@ -24,6 +24,7 @@ func main() {
 		PlantSmplSearch:   service.NewPlantSmplSearchService(client),
 		PlantSmplUnitList: service.NewPlantSmplUnitListService(client),
 		PlantSeedSearch:   service.NewPlantSeedSearchService(client),
+		PlantSeedUnitList: service.NewPlantSeedUnitListService(client),
 	})
 
 	if err := mcpstdio.Run(context.Background(), server); err != nil {
