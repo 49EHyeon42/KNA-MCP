@@ -58,6 +58,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	want := []string{
 		"fungi_resource_fngs_pilbk_info",
 		"fungi_resource_fngs_pilbk_search",
+		"fungi_resource_fngs_smpl_search",
 		"insect_resource_insect_pilbk_info",
 		"insect_resource_insect_pilbk_search",
 		"insect_resource_insect_prtct_list",
