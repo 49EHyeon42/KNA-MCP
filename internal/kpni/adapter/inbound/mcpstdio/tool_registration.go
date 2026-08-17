@@ -10,8 +10,9 @@ import (
 
 // UseCases contains the national standard plant list use cases exposed as MCP tools.
 type UseCases struct {
-	ScnmSearch inbound.ScnmSearchUseCase
-	ScnmInfo   inbound.ScnmInfoUseCase
+	ScnmSearch        inbound.ScnmSearchUseCase
+	ScnmInfo          inbound.ScnmInfoUseCase
+	GnrlNmLtrtrSearch inbound.GnrlNmLtrtrSearchUseCase
 }
 
 // AddTools adds all national standard plant list tools to an MCP server.
@@ -22,8 +23,12 @@ func AddTools(server *mcp.Server, useCases UseCases) error {
 	if useCases.ScnmInfo == nil {
 		return errors.New("scnmInfo use case is required")
 	}
+	if useCases.GnrlNmLtrtrSearch == nil {
+		return errors.New("gnrlNmLtrtrSearch use case is required")
+	}
 
 	addScnmSearchTool(server, useCases.ScnmSearch)
 	addScnmInfoTool(server, useCases.ScnmInfo)
+	addGnrlNmLtrtrSearchTool(server, useCases.GnrlNmLtrtrSearch)
 	return nil
 }
