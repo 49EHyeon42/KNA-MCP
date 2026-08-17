@@ -236,7 +236,7 @@ func TestInsectSmplSearchLive(t *testing.T) {
 		{name: "lowercase scientific name", reqSearchWrd: "aphantopus", insctSpecsScnm: "aphantopus"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.InsectSmplSearch(ctx, application.InsectSmplSearchQuery{
@@ -268,7 +268,7 @@ func TestInsectSmplSearchLive(t *testing.T) {
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		first, err := client.InsectSmplSearch(ctx, application.InsectSmplSearchQuery{PageNo: 1, NumOfRows: 2, ReqSearchWrd: "나비"})
@@ -285,7 +285,7 @@ func TestInsectSmplSearchLive(t *testing.T) {
 	})
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.InsectSmplSearch(ctx, application.InsectSmplSearchQuery{

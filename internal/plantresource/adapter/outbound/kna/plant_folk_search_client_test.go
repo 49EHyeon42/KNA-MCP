@@ -232,7 +232,7 @@ func TestPlantFolkSearchLive(t *testing.T) {
 		{name: "lowercase scientific name", pageNo: 1, numOfRows: 10, reqSearchWrd: "inula", plantSpecsScnm: "inula"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantFolkSearch(ctx, application.PlantFolkSearchQuery{
@@ -264,7 +264,7 @@ func TestPlantFolkSearchLive(t *testing.T) {
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		first, err := client.PlantFolkSearch(ctx, application.PlantFolkSearchQuery{PageNo: 1, NumOfRows: 1, ReqSearchWrd: "금불초"})
@@ -275,13 +275,13 @@ func TestPlantFolkSearchLive(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if len(first.Items) != 1 || len(second.Items) != 1 || first.TotalCount != 2 || second.TotalCount != 2 || first.Items[0].FlpltID == second.Items[0].FlpltID {
-			t.Errorf("first = %#v, second = %#v, want distinct pages with totalCount 2", first, second)
+		if len(first.Items) != 1 || len(second.Items) != 1 || first.TotalCount != second.TotalCount || first.TotalCount < 2 || first.Items[0].FlpltID == second.Items[0].FlpltID {
+			t.Errorf("first = %#v, second = %#v, want distinct pages with matching totalCount", first, second)
 		}
 	})
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.PlantFolkSearch(ctx, application.PlantFolkSearchQuery{

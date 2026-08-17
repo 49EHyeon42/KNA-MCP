@@ -258,7 +258,7 @@ func TestInsectPilbkSearchLive(t *testing.T) {
 		{name: "lowercase scientific name", reqSearchWrd: "aphantopus", insctSpecsScnm: "aphantopus"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.InsectPilbkSearch(ctx, application.InsectPilbkSearchQuery{
@@ -290,7 +290,7 @@ func TestInsectPilbkSearchLive(t *testing.T) {
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		first, err := client.InsectPilbkSearch(ctx, application.InsectPilbkSearchQuery{PageNo: 1, NumOfRows: 2, ReqSearchWrd: "나비"})
@@ -307,7 +307,7 @@ func TestInsectPilbkSearchLive(t *testing.T) {
 	})
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.InsectPilbkSearch(ctx, application.InsectPilbkSearchQuery{

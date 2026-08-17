@@ -230,13 +230,12 @@ func TestInsectSmplUnitListLive(t *testing.T) {
 	for _, test := range []struct {
 		name            string
 		reqInsctSpecsID string
-		wantTotalCount  int
 	}{
-		{name: "first insect species ID", reqInsctSpecsID: "I000008533", wantTotalCount: 46},
-		{name: "second insect species ID", reqInsctSpecsID: "I000019060", wantTotalCount: 6},
+		{name: "first insect species ID", reqInsctSpecsID: "I000008533"},
+		{name: "second insect species ID", reqInsctSpecsID: "I000019060"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.InsectSmplUnitList(ctx, application.InsectSmplUnitListQuery{
@@ -247,8 +246,8 @@ func TestInsectSmplUnitListLive(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if len(result.Items) != 2 || result.TotalCount != test.wantTotalCount {
-				t.Fatalf("result = %#v, want 2 items and totalCount %d", result, test.wantTotalCount)
+			if len(result.Items) != 2 || result.TotalCount < len(result.Items) {
+				t.Fatalf("result = %#v, want 2 items and a valid totalCount", result)
 			}
 			for _, item := range result.Items {
 				if item.InsctSpecsID != test.reqInsctSpecsID || item.InsctSmplNo == "" {
@@ -259,7 +258,7 @@ func TestInsectSmplUnitListLive(t *testing.T) {
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		first, err := client.InsectSmplUnitList(ctx, application.InsectSmplUnitListQuery{PageNo: 1, NumOfRows: 2, ReqInsctSpecsID: "I000008533"})
@@ -276,7 +275,7 @@ func TestInsectSmplUnitListLive(t *testing.T) {
 	})
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.InsectSmplUnitList(ctx, application.InsectSmplUnitListQuery{

@@ -223,7 +223,7 @@ func TestPlantWordListLive(t *testing.T) {
 		{name: "partial Korean word name", reqSearchWrd: "가는", krnWrdNm: "가는맥"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantWordList(ctx, application.PlantWordListQuery{PageNo: 1, NumOfRows: 10, ReqSearchWrd: test.reqSearchWrd})
@@ -256,7 +256,7 @@ func TestPlantWordListLive(t *testing.T) {
 		{name: "without result", reqSearchWrd: "KNA-MCP-NO-RESULT"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantWordList(ctx, application.PlantWordListQuery{PageNo: 1, NumOfRows: 1, ReqSearchWrd: test.reqSearchWrd})
@@ -270,7 +270,7 @@ func TestPlantWordListLive(t *testing.T) {
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		first, err := client.PlantWordList(ctx, application.PlantWordListQuery{PageNo: 1, NumOfRows: 1})

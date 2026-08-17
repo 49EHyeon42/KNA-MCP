@@ -235,7 +235,7 @@ func TestPlantRareListLive(t *testing.T) {
 		{name: "endangered class one", reqSearchWrd: "광릉요강꽃", plantGnrlNm: "광릉요강꽃", extrmCrssScls1Yn: "Y"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantRareList(ctx, application.PlantRareListQuery{PageNo: 1, NumOfRows: 10, ReqSearchWrd: test.reqSearchWrd})
@@ -261,7 +261,7 @@ func TestPlantRareListLive(t *testing.T) {
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		first, err := client.PlantRareList(ctx, application.PlantRareListQuery{PageNo: 1, NumOfRows: 1})
@@ -278,7 +278,7 @@ func TestPlantRareListLive(t *testing.T) {
 	})
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.PlantRareList(ctx, application.PlantRareListQuery{PageNo: 1, NumOfRows: 1, ReqSearchWrd: "KNA-MCP-NO-RESULT"})

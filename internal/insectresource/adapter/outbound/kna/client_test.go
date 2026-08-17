@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 )
 
 type roundTripFunc func(*http.Request) (*http.Response, error)
@@ -46,6 +47,16 @@ func TestClientDoDoesNotExposeServiceKey(t *testing.T) {
 	}
 	if strings.Contains(err.Error(), "secret") {
 		t.Fatalf("error exposes service key: %v", err)
+	}
+}
+
+func TestNewClientUses60SecondTimeout(t *testing.T) {
+	client, err := NewClient("test-key")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if client.httpClient.Timeout != 60*time.Second {
+		t.Errorf("timeout = %s, want 60s", client.httpClient.Timeout)
 	}
 }
 

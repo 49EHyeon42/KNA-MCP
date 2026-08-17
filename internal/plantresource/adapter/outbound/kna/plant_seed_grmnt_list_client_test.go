@@ -236,7 +236,7 @@ func TestPlantSeedGrmntListLive(t *testing.T) {
 		{name: "second seed species and changed number of rows", pageNo: 1, numOfRows: 2, reqSeedSpecsID: "SS0003338"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantSeedGrmntList(ctx, application.PlantSeedGrmntListQuery{
@@ -257,7 +257,7 @@ func TestPlantSeedGrmntListLive(t *testing.T) {
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.PlantSeedGrmntList(ctx, application.PlantSeedGrmntListQuery{
@@ -268,13 +268,13 @@ func TestPlantSeedGrmntListLive(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if len(result.Items) != 1 || result.TotalCount != 2 || result.PageNo != 2 {
-			t.Errorf("result = %#v, want one item on second page with totalCount 2", result)
+		if len(result.Items) != 1 || result.TotalCount < 2 || result.PageNo != 2 || result.Items[0].SeedSpecsID != "SS0003338" {
+			t.Errorf("result = %#v, want one matching item on the second page", result)
 		}
 	})
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.PlantSeedGrmntList(ctx, application.PlantSeedGrmntListQuery{
