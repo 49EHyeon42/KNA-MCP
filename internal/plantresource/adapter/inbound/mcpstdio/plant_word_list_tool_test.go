@@ -62,6 +62,7 @@ func TestPlantWordListTool(t *testing.T) {
 		},
 		[]string{"pageNo", "numOfRows"},
 	)
+	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_word_list", "산림청 국립수목원 식물 용어사전 목록을 조회합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_word_list",
@@ -118,7 +119,17 @@ func TestPlantWordListTool(t *testing.T) {
 		}
 	}
 	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_word_list",
-		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem), nil)
+		map[string]string{
+			"items":      "조회 결과 목록",
+			"numOfRows":  "한 페이지 결과 수",
+			"pageNo":     "페이지번호",
+			"totalCount": "전체 결과 수",
+		}, map[string]string{
+			"englsWrdNm": "영문용어명",
+			"krnWrdNm":   "한글용어명",
+			"prfcnWrdNm": "순화용어명",
+			"wrddscrt":   "용어서술",
+		})
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

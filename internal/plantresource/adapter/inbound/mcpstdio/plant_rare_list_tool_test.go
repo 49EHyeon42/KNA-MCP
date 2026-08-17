@@ -67,6 +67,7 @@ func TestPlantRareListTool(t *testing.T) {
 		},
 		[]string{"pageNo", "numOfRows"},
 	)
+	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_rare_list", "산림청 국립수목원 적색식물 목록을 조회합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_rare_list",
@@ -128,8 +129,22 @@ func TestPlantRareListTool(t *testing.T) {
 		}
 	}
 	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_rare_list",
-		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem),
-		map[string]string{"agpFamilyNm": "APG과명", "apgFamilyKorNm": "APG과국명"})
+		map[string]string{
+			"items":      "조회 결과 목록",
+			"numOfRows":  "한 페이지 결과 수",
+			"pageNo":     "페이지번호",
+			"totalCount": "전체 결과 수",
+		}, map[string]string{
+			"agpFamilyNm":      "APG과명",
+			"apgFamilyKorNm":   "APG과국명",
+			"extrmCrssScls1Yn": "멸종위기종1급 여부",
+			"extrmCrssScls2Yn": "멸종위기종2급 여부",
+			"familyKorNm":      "과국명",
+			"familyNm":         "과명",
+			"plantGnrlNm":      "국명(식물명)",
+			"plantSpecsScnm":   "학명",
+			"rareTpcdNm":       "IUCN 적색식물 등급",
+		})
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

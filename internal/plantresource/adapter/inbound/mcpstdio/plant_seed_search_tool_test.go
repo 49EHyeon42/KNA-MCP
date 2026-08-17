@@ -83,6 +83,7 @@ func TestPlantSeedSearchTool(t *testing.T) {
 		},
 		[]string{"pageNo", "numOfRows"},
 	)
+	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_seed_search", "산림청 국립수목원 식물종자 기본정보 목록을 검색합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_seed_search",
@@ -160,7 +161,38 @@ func TestPlantSeedSearchTool(t *testing.T) {
 		}
 	}
 	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_seed_search",
-		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem), nil)
+		map[string]string{
+			"items":      "조회 결과 목록",
+			"numOfRows":  "한 페이지 결과 수",
+			"pageNo":     "페이지번호",
+			"totalCount": "전체 검색 결과 수",
+		}, map[string]string{
+			"apgFamilyKorNm":   "APG과국명",
+			"apgFamilyNm":      "APG과명",
+			"blprdEnmnt":       "개화기종료일",
+			"blprdStmnt":       "개화기시작일",
+			"clrngMthodCdNm":   "정선방법",
+			"familyKorNm":      "과국명",
+			"familyNm":         "과명",
+			"fritCdNm":         "열매형태",
+			"frssnEnmnt":       "결실기종료일",
+			"frssnStmnt":       "결실기시작일",
+			"lastUpdtDtm":      "최종수정일",
+			"plantGnrlNm":      "국명(식물명)",
+			"plantSpecsScnm":   "학명",
+			"rfrncLtrtrCont":   "참고문헌",
+			"seedCtsrfcDesc":   "종자표면형태설명",
+			"seedCtsrfcTpcdNm": "종자표면형태",
+			"seedEmbrTpcdNm":   "배아형태",
+			"seedMnmmBrdth":    "종자최소너비",
+			"seedMnmmLngth":    "종자최소길이",
+			"seedMxmmBrdth":    "종자최대너비",
+			"seedMxmmLngth":    "종자최대길이",
+			"seedShpDesc":      "종자형태설명",
+			"seedShpTpcdNm":    "종자형태",
+			"seedSpecsId":      "종자종ID",
+			"seedTpcdNm":       "종자구분",
+		})
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

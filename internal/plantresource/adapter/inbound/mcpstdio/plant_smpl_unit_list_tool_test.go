@@ -79,6 +79,7 @@ func TestPlantSmplUnitListTool(t *testing.T) {
 		},
 		[]string{"pageNo", "numOfRows", "reqPlantSpecsId"},
 	)
+	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_smpl_unit_list", "산림청 국립수목원 식물표본 상세정보 목록을 조회합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_smpl_unit_list",
@@ -152,7 +153,34 @@ func TestPlantSmplUnitListTool(t *testing.T) {
 		}
 	}
 	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_smpl_unit_list",
-		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem), nil)
+		map[string]string{
+			"items":      "조회 결과 목록",
+			"numOfRows":  "한 페이지 결과 수",
+			"pageNo":     "페이지번호",
+			"totalCount": "전체 검색 결과 수",
+		}, map[string]string{
+			"agpFamilyKorNm":     "APG과국명",
+			"agpFamilyNm":        "APG과명",
+			"bspcsInsttNm":       "표본소장기관",
+			"clarHaslvVal":       "채집지해발고도",
+			"clarNm":             "채집지",
+			"cllcrNm":            "채집자",
+			"familyKorNm":        "과국명",
+			"familyNm":           "과명",
+			"hbttChrcrCont":      "서식지특성",
+			"hbttTpcdNm":         "서식지구분",
+			"plantBrdgFomTpcdNm": "식물번식형태",
+			"plantGnrlNm":        "국명(식물명)",
+			"plantPilbkNo":       "식물도감번호",
+			"plantSmplNo":        "식물표본번호",
+			"plantSpecsId":       "식물종ID",
+			"plantSpecsScnm":     "학명",
+			"smplCllcnDt":        "채집일",
+			"smplClnyNm":         "표본군락명",
+			"smplKindCdNm":       "표본종류",
+			"smplWrdt":           "표본작성일",
+			"vgttnTpeCdNm":       "식생유형",
+		})
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

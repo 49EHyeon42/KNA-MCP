@@ -9,38 +9,45 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
+	"github.com/49EHyeon42/KNA-MCP/internal/kpni/application"
 	mcpserver "github.com/49EHyeon42/KNA-MCP/internal/mcpstdio"
-	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application"
 )
 
-type plantPilbkSearchUseCaseStub struct {
-	query  application.PlantPilbkSearchQuery
-	result application.PlantPilbkSearchResult
+type scnmSearchUseCaseStub struct {
+	query  application.ScnmSearchQuery
+	result application.ScnmSearchResult
 	err    error
 }
 
-func (s *plantPilbkSearchUseCaseStub) PlantPilbkSearch(_ context.Context, query application.PlantPilbkSearchQuery) (application.PlantPilbkSearchResult, error) {
+func (s *scnmSearchUseCaseStub) ScnmSearch(_ context.Context, query application.ScnmSearchQuery) (application.ScnmSearchResult, error) {
 	s.query = query
 	return s.result, s.err
 }
 
-func TestPlantPilbkSearchTool(t *testing.T) {
+func TestScnmSearchTool(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	useCase := &plantPilbkSearchUseCaseStub{result: application.PlantPilbkSearchResult{
-		Items: []application.PlantPilbkSearchItem{{
-			APGFamilyKorNm: "apg family Korean name",
-			APGFamilyNm:    "apg family name",
-			FamilyKorNm:    "family Korean name",
-			FamilyNm:       "family name",
-			GenusKorNm:     "genus Korean name",
-			GenusNm:        "genus name",
-			LastUpdtDtm:    "last update date time",
-			NotRcmmGnrlNm:  "not recommended general name",
-			PlantGnrlNm:    "plant general name",
-			PlantPilbkNo:   "plant pictorial book number",
-			PlantSpecsScnm: "plant species scientific name",
+	useCase := &scnmSearchUseCaseStub{result: application.ScnmSearchResult{
+		Items: []application.ScnmSearchItem{{
+			ClassKorNm:          "class Korean name",
+			ClassNm:             "class name",
+			FalmKorNm:           "family Korean name",
+			FalmNm:              "family name",
+			GenusKorNm:          "genus Korean name",
+			GenusNm:             "genus name",
+			LastUpdtDtm:         "last update date time",
+			OrdKorNm:            "order Korean name",
+			OrdNm:               "order name",
+			PhylumKorNm:         "phylum Korean name",
+			PhylumNm:            "phylum name",
+			PlantGnrlNm:         "plant general name",
+			PlantScnmID:         "plant scientific name ID",
+			PlantSpecsClsscCdNm: "plant species classification code name",
+			PlantSpecsScnm:      "plant species scientific name",
+			StpltScnmRltnCdNm:   "standard plant scientific name relation code name",
+			SubClassKorNm:       "subclass Korean name",
+			SubClassNm:          "subclass name",
 		}},
 		NumOfRows:  10,
 		PageNo:     2,
@@ -48,7 +55,7 @@ func TestPlantPilbkSearchTool(t *testing.T) {
 	}}
 	clientTransport, serverTransport := mcp.NewInMemoryTransports()
 	server := mcpserver.NewServer()
-	addPlantPilbkSearchTool(server, useCase)
+	addScnmSearchTool(server, useCase)
 	serverSession, err := server.Connect(ctx, serverTransport, nil)
 	if err != nil {
 		t.Fatal(err)
@@ -61,22 +68,27 @@ func TestPlantPilbkSearchTool(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer clientSession.Close()
-	checkToolInputSchema(t, ctx, clientSession, "plant_resource_plant_pilbk_search",
-		map[string]string{
-			"pageNo":       "페이지번호 (1 이상)",
-			"numOfRows":    "한 페이지 결과 수 (1 이상)",
-			"reqSearchWrd": "검색할 식물도감의 학명 또는 국명",
-		},
-		[]string{"pageNo", "numOfRows"},
-	)
-	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_pilbk_search", "산림청 국립수목원 식물도감 목록을 검색합니다.")
+
+	inputDescriptions := map[string]string{
+		"pageNo":    "페이지번호 (1 이상)",
+		"numOfRows": "한 페이지 결과 수 (1 이상)",
+		"reqGnrlNm": "검색하려는 식물 국명 (부분 문자열 검색)",
+		"reqScnm":   "검색하려는 식물 학명 (대소문자를 구분하지 않는 부분 문자열 검색)",
+		"dateFrom":  "최종수정일 이후 정보 (yyyyMMdd)",
+		"dateTo":    "최종수정일 이전 정보 (yyyyMMdd)",
+	}
+	checkToolInputSchema(t, ctx, clientSession, "kpni_scnm_search", inputDescriptions, []string{"pageNo", "numOfRows"})
+	checkToolDescription(t, ctx, clientSession, "kpni_scnm_search", "산림청 국립수목원 국가표준식물목록의 식물 학명 목록을 조회합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name: "plant_resource_plant_pilbk_search",
+		Name: "kpni_scnm_search",
 		Arguments: map[string]any{
-			"pageNo":       2,
-			"numOfRows":    10,
-			"reqSearchWrd": "test-search-word",
+			"pageNo":    2,
+			"numOfRows": 10,
+			"reqGnrlNm": "general name",
+			"reqScnm":   "scientific name",
+			"dateFrom":  "20240101",
+			"dateTo":    "20241231",
 		},
 	})
 	if err != nil {
@@ -86,10 +98,13 @@ func TestPlantPilbkSearchTool(t *testing.T) {
 		t.Fatalf("tool error: %#v", result.Content)
 	}
 
-	wantQuery := application.PlantPilbkSearchQuery{
-		PageNo:       2,
-		NumOfRows:    10,
-		ReqSearchWrd: "test-search-word",
+	wantQuery := application.ScnmSearchQuery{
+		PageNo:    2,
+		NumOfRows: 10,
+		ReqGnrlNm: "general name",
+		ReqScnm:   "scientific name",
+		DateFrom:  "20240101",
+		DateTo:    "20241231",
 	}
 	if !reflect.DeepEqual(useCase.query, wantQuery) {
 		t.Errorf("query = %#v, want %#v", useCase.query, wantQuery)
@@ -99,10 +114,10 @@ func TestPlantPilbkSearchTool(t *testing.T) {
 	if !ok {
 		t.Fatalf("structured content = %#v", result.StructuredContent)
 	}
+	checkKeys(t, output, "items", "numOfRows", "pageNo", "totalCount")
 	if output["numOfRows"] != float64(10) || output["pageNo"] != float64(2) || output["totalCount"] != float64(21) {
 		t.Errorf("pagination = %#v", output)
 	}
-	checkKeys(t, output, "items", "numOfRows", "pageNo", "totalCount")
 	items, ok := output["items"].([]any)
 	if !ok || len(items) != 1 {
 		t.Fatalf("items = %#v", output["items"])
@@ -112,50 +127,63 @@ func TestPlantPilbkSearchTool(t *testing.T) {
 		t.Fatalf("item = %#v", items[0])
 	}
 	wantItem := map[string]string{
-		"apgFamilyKorNm": "apg family Korean name",
-		"apgFamilyNm":    "apg family name",
-		"familyKorNm":    "family Korean name",
-		"familyNm":       "family name",
-		"genusKorNm":     "genus Korean name",
-		"genusNm":        "genus name",
-		"lastUpdtDtm":    "last update date time",
-		"notRcmmGnrlNm":  "not recommended general name",
-		"plantGnrlNm":    "plant general name",
-		"plantPilbkNo":   "plant pictorial book number",
-		"plantSpecsScnm": "plant species scientific name",
+		"classKorNm":          "class Korean name",
+		"classNm":             "class name",
+		"falmKorNm":           "family Korean name",
+		"falmNm":              "family name",
+		"genusKorNm":          "genus Korean name",
+		"genusNm":             "genus name",
+		"lastUpdtDtm":         "last update date time",
+		"ordKorNm":            "order Korean name",
+		"ordNm":               "order name",
+		"phylumKorNm":         "phylum Korean name",
+		"phylumNm":            "phylum name",
+		"plantGnrlNm":         "plant general name",
+		"plantScnmId":         "plant scientific name ID",
+		"plantSpecsClsscCdNm": "plant species classification code name",
+		"plantSpecsScnm":      "plant species scientific name",
+		"stpltScnmRltnCdNm":   "standard plant scientific name relation code name",
+		"subClassKorNm":       "subclass Korean name",
+		"subClassNm":          "subclass name",
 	}
-	itemDescriptions := map[string]string{
-		"apgFamilyKorNm": "APG과국명",
-		"apgFamilyNm":    "APG과명",
-		"familyKorNm":    "과국명",
-		"familyNm":       "과명",
-		"genusKorNm":     "속국명",
-		"genusNm":        "속명",
-		"lastUpdtDtm":    "최종수정일",
-		"notRcmmGnrlNm":  "비추천국명",
-		"plantGnrlNm":    "국명(식물명)",
-		"plantPilbkNo":   "식물도감번호",
-		"plantSpecsScnm": "학명",
-	}
-	if len(item) != len(wantItem) {
-		t.Errorf("item key count = %d, want %d", len(item), len(wantItem))
-	}
+	checkKeys(t, item, mapKeys(wantItem)...)
 	for key, want := range wantItem {
 		if got := item[key]; got != want {
 			t.Errorf("item %s = %#v, want %q", key, got, want)
 		}
 	}
-	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_pilbk_search",
-		map[string]string{
-			"items":      "조회 결과 목록",
-			"numOfRows":  "한 페이지 결과 수",
-			"pageNo":     "페이지번호",
-			"totalCount": "전체 검색 결과 수",
-		}, itemDescriptions)
+
+	outputDescriptions := map[string]string{
+		"items":      "조회 결과 목록",
+		"numOfRows":  "한 페이지 결과 수",
+		"pageNo":     "페이지 번호",
+		"totalCount": "전체 결과 수",
+	}
+	itemDescriptions := map[string]string{
+		"classKorNm":          "식물 학명 분류군 강국명",
+		"classNm":             "식물 학명 분류군 강명(Class Name)",
+		"falmKorNm":           "식물 학명 분류군 과국명",
+		"falmNm":              "식물 학명 분류군 과명(Family Name)",
+		"genusKorNm":          "식물 학명 분류군 속국명",
+		"genusNm":             "식물 학명 분류군 속명(Genus Name)",
+		"lastUpdtDtm":         "최종수정일",
+		"ordKorNm":            "식물 학명 분류군 목국명",
+		"ordNm":               "식물 학명 분류군 목명(Order Name)",
+		"phylumKorNm":         "식물 학명 분류군 문국명",
+		"phylumNm":            "식물 학명 분류군 문명(Phylum Name)",
+		"plantGnrlNm":         "식물 국명",
+		"plantScnmId":         "식물 학명ID",
+		"plantSpecsClsscCdNm": "식물 분류명(자생, 재배, 외래)",
+		"plantSpecsScnm":      "식물 학명",
+		"stpltScnmRltnCdNm":   "식물 학명 정명/이명 구분",
+		"subClassKorNm":       "식물 학명 분류군 아강국명",
+		"subClassNm":          "식물 학명 분류군 아강명(SubClass Name)",
+	}
+	checkToolOutputSchema(t, ctx, clientSession, "kpni_scnm_search", outputDescriptions, itemDescriptions)
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
-		Name:      "plant_resource_plant_pilbk_search",
+		Name:      "kpni_scnm_search",
 		Arguments: map[string]any{"pageNo": 1, "numOfRows": 1},
 	})
 	if err != nil {
@@ -283,9 +311,6 @@ func checkToolOutputSchema(t *testing.T, ctx context.Context, session *mcp.Clien
 		}
 		checkKeys(t, properties, mapKeys(wantDescriptions)...)
 		checkPropertyDescriptions(t, toolName, properties, wantDescriptions)
-		if wantItemDescriptions == nil {
-			return
-		}
 
 		itemsProperty, ok := properties["items"].(map[string]any)
 		if !ok {

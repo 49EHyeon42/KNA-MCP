@@ -1,0 +1,34 @@
+package mcpstdio
+
+import (
+	"errors"
+
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+
+	"github.com/49EHyeon42/KNA-MCP/internal/kpni/application/port/inbound"
+)
+
+// UseCases contains the national standard plant list use cases exposed as MCP tools.
+type UseCases struct {
+	ScnmSearch        inbound.ScnmSearchUseCase
+	ScnmInfo          inbound.ScnmInfoUseCase
+	GnrlNmLtrtrSearch inbound.GnrlNmLtrtrSearchUseCase
+}
+
+// AddTools adds all national standard plant list tools to an MCP server.
+func AddTools(server *mcp.Server, useCases UseCases) error {
+	if useCases.ScnmSearch == nil {
+		return errors.New("scnmSearch use case is required")
+	}
+	if useCases.ScnmInfo == nil {
+		return errors.New("scnmInfo use case is required")
+	}
+	if useCases.GnrlNmLtrtrSearch == nil {
+		return errors.New("gnrlNmLtrtrSearch use case is required")
+	}
+
+	addScnmSearchTool(server, useCases.ScnmSearch)
+	addScnmInfoTool(server, useCases.ScnmInfo)
+	addGnrlNmLtrtrSearchTool(server, useCases.GnrlNmLtrtrSearch)
+	return nil
+}

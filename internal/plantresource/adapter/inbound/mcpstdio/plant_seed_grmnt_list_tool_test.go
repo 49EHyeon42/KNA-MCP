@@ -70,6 +70,7 @@ func TestPlantSeedGrmntListTool(t *testing.T) {
 		},
 		[]string{"pageNo", "numOfRows", "reqSeedSpecsId"},
 	)
+	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_seed_grmnt_list", "산림청 국립수목원 종자 발아율정보 목록을 조회합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_seed_grmnt_list",
@@ -134,7 +135,25 @@ func TestPlantSeedGrmntListTool(t *testing.T) {
 		}
 	}
 	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_seed_grmnt_list",
-		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem), nil)
+		map[string]string{
+			"items":      "조회 결과 목록",
+			"numOfRows":  "한 페이지 결과 수",
+			"pageNo":     "페이지번호",
+			"totalCount": "전체 검색 결과 수",
+		}, map[string]string{
+			"avrgGrmntDcnt":     "평균 발아 일수",
+			"grmntBfrPrcesCont": "발아 전처리 내용",
+			"grmntClmdmCont":    "발아배지내용",
+			"grmntDscrt":        "발아설명",
+			"grmntExprmNo":      "실험번호",
+			"grmntExprmSeq":     "실험순번",
+			"grmntLightCndtn":   "광조건",
+			"grmntRt":           "발아율",
+			"grmntTmpCndtn":     "온도조건",
+			"plantGnrlNm":       "국명(식물명)",
+			"seedNo":            "종자번호",
+			"seedSpecsId":       "종자종ID",
+		})
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
