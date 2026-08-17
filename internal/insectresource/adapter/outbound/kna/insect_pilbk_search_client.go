@@ -90,15 +90,9 @@ func (c *Client) InsectPilbkSearch(ctx context.Context, query application.Insect
 	values.Set("serviceKey", c.serviceKey)
 	values.Set("pageNo", strconv.Itoa(query.PageNo))
 	values.Set("numOfRows", strconv.Itoa(query.NumOfRows))
-	if query.ReqSearchWrd != "" {
-		values.Set("reqSearchWrd", query.ReqSearchWrd)
-	}
-	if query.DateFrom != "" {
-		values.Set("dateFrom", query.DateFrom)
-	}
-	if query.DateTo != "" {
-		values.Set("dateTo", query.DateTo)
-	}
+	setQueryValue(values, "reqSearchWrd", query.ReqSearchWrd)
+	setQueryValue(values, "dateFrom", query.DateFrom)
+	setQueryValue(values, "dateTo", query.DateTo)
 	requestURL.RawQuery = values.Encode()
 
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL.String(), nil)

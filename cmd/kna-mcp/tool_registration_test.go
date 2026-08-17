@@ -55,6 +55,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	want := []string{
 		"insect_resource_insect_pilbk_info",
 		"insect_resource_insect_pilbk_search",
+		"insect_resource_insect_smpl_search",
 		"kpni_gnrl_nm_ltrtr_search",
 		"kpni_scnm_info",
 		"kpni_scnm_search",

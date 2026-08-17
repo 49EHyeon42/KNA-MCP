@@ -51,3 +51,9 @@ func (c *Client) do(request *http.Request) (*http.Response, error) {
 	}
 	return nil, err
 }
+
+func setQueryValue(query url.Values, key, value string) {
+	if value != "" {
+		query.Set(key, value)
+	}
+}
