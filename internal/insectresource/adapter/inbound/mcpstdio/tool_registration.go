@@ -12,6 +12,7 @@ import (
 type UseCases struct {
 	InsectPilbkSearch  inbound.InsectPilbkSearchUseCase
 	InsectPilbkInfo    inbound.InsectPilbkInfoUseCase
+	InsectPrtctList    inbound.InsectPrtctListUseCase
 	InsectSmplSearch   inbound.InsectSmplSearchUseCase
 	InsectSmplUnitList inbound.InsectSmplUnitListUseCase
 }
@@ -23,6 +24,8 @@ func AddTools(server *mcp.Server, useCases UseCases) error {
 		return errors.New("insectPilbkSearch use case is required")
 	case useCases.InsectPilbkInfo == nil:
 		return errors.New("insectPilbkInfo use case is required")
+	case useCases.InsectPrtctList == nil:
+		return errors.New("insectPrtctList use case is required")
 	case useCases.InsectSmplSearch == nil:
 		return errors.New("insectSmplSearch use case is required")
 	case useCases.InsectSmplUnitList == nil:
@@ -31,6 +34,7 @@ func AddTools(server *mcp.Server, useCases UseCases) error {
 
 	addInsectPilbkSearchTool(server, useCases.InsectPilbkSearch)
 	addInsectPilbkInfoTool(server, useCases.InsectPilbkInfo)
+	addInsectPrtctListTool(server, useCases.InsectPrtctList)
 	addInsectSmplSearchTool(server, useCases.InsectSmplSearch)
 	addInsectSmplUnitListTool(server, useCases.InsectSmplUnitList)
 	return nil

@@ -17,6 +17,7 @@ func addInsectResourceTools(server *mcp.Server, serviceKey string) error {
 	return insectresourcemcp.AddTools(server, insectresourcemcp.UseCases{
 		InsectPilbkSearch:  service.NewInsectPilbkSearchService(client),
 		InsectPilbkInfo:    service.NewInsectPilbkInfoService(client),
+		InsectPrtctList:    service.NewInsectPrtctListService(client),
 		InsectSmplSearch:   service.NewInsectSmplSearchService(client),
 		InsectSmplUnitList: service.NewInsectSmplUnitListService(client),
 	})

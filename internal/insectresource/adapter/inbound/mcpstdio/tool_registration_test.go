@@ -20,6 +20,7 @@ func TestAddToolsRegistersAllInsectResourceTools(t *testing.T) {
 	if err := AddTools(server, UseCases{
 		InsectPilbkSearch:  &insectPilbkSearchUseCaseStub{},
 		InsectPilbkInfo:    &insectPilbkInfoUseCaseStub{},
+		InsectPrtctList:    &insectPrtctListUseCaseStub{},
 		InsectSmplSearch:   &insectSmplSearchUseCaseStub{},
 		InsectSmplUnitList: &insectSmplUnitListUseCaseStub{},
 	}); err != nil {
@@ -52,7 +53,7 @@ func TestAddToolsRegistersAllInsectResourceTools(t *testing.T) {
 		}
 	}
 	slices.Sort(got)
-	want := []string{"insect_resource_insect_pilbk_info", "insect_resource_insect_pilbk_search", "insect_resource_insect_smpl_search", "insect_resource_insect_smpl_unit_list"}
+	want := []string{"insect_resource_insect_pilbk_info", "insect_resource_insect_pilbk_search", "insect_resource_insect_prtct_list", "insect_resource_insect_smpl_search", "insect_resource_insect_smpl_unit_list"}
 	if !slices.Equal(got, want) {
 		t.Fatalf("tools = %#v, want %#v", got, want)
 	}
@@ -72,10 +73,21 @@ func TestAddToolsRequiresInsectPilbkInfoUseCase(t *testing.T) {
 	}
 }
 
+func TestAddToolsRequiresInsectPrtctListUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{
+		InsectPilbkSearch: &insectPilbkSearchUseCaseStub{},
+		InsectPilbkInfo:   &insectPilbkInfoUseCaseStub{},
+	})
+	if err == nil || err.Error() != "insectPrtctList use case is required" {
+		t.Errorf("error = %v, want insectPrtctList use case is required", err)
+	}
+}
+
 func TestAddToolsRequiresInsectSmplSearchUseCase(t *testing.T) {
 	err := AddTools(mcpserver.NewServer(), UseCases{
 		InsectPilbkSearch: &insectPilbkSearchUseCaseStub{},
 		InsectPilbkInfo:   &insectPilbkInfoUseCaseStub{},
+		InsectPrtctList:   &insectPrtctListUseCaseStub{},
 	})
 	if err == nil || err.Error() != "insectSmplSearch use case is required" {
 		t.Errorf("error = %v, want insectSmplSearch use case is required", err)
@@ -86,6 +98,7 @@ func TestAddToolsRequiresInsectSmplUnitListUseCase(t *testing.T) {
 	err := AddTools(mcpserver.NewServer(), UseCases{
 		InsectPilbkSearch: &insectPilbkSearchUseCaseStub{},
 		InsectPilbkInfo:   &insectPilbkInfoUseCaseStub{},
+		InsectPrtctList:   &insectPrtctListUseCaseStub{},
 		InsectSmplSearch:  &insectSmplSearchUseCaseStub{},
 	})
 	if err == nil || err.Error() != "insectSmplUnitList use case is required" {
