@@ -10,9 +10,9 @@ import (
 )
 
 type plantFolkSearchInput struct {
-	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"민속식물의 국명 또는 학명 검색어"`
+	PageNo       int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows    int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"검색할 민속식물의 학명 또는 국명"`
 }
 
 type plantFolkSearchOutput struct {
@@ -26,7 +26,7 @@ type plantFolkSearchItem struct {
 	FlcstPlantIdntfDscrt string `json:"flcstPlantIdntfDscrt" jsonschema:"식별설명"`
 	FlpltID              string `json:"flpltId" jsonschema:"민속식물ID"`
 	PlantBrdgFomTpcdNm   string `json:"plantBrdgFomTpcdNm" jsonschema:"식물번식형태"`
-	PlantGnrlNm          string `json:"plantGnrlNm" jsonschema:"국명(식물명"`
+	PlantGnrlNm          string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
 	PlantSpecsScnm       string `json:"plantSpecsScnm" jsonschema:"학명"`
 	Ptnt                 string `json:"ptnt" jsonschema:"특허정보"`
 }

@@ -62,7 +62,12 @@ func TestPlantMstnsListTool(t *testing.T) {
 	}
 	defer clientSession.Close()
 	checkToolInputSchema(t, ctx, clientSession, "plant_mstns_plant_mstns_list",
-		[]string{"pageNo", "numOfRows", "reqSearchWrd", "reqMnfctYr"},
+		map[string]string{
+			"pageNo":       "페이지번호 (1 이상)",
+			"numOfRows":    "한 페이지 결과 수 (1 이상)",
+			"reqSearchWrd": "세밀화의 식물 국명 또는 학명",
+			"reqMnfctYr":   "세밀화 제작년도",
+		},
 		[]string{"pageNo", "numOfRows"},
 	)
 
@@ -169,7 +174,7 @@ func mapKeys[T any](values map[string]T) []string {
 	return keys
 }
 
-func checkPropertyDescriptions(t *testing.T, toolName string, properties map[string]any) {
+func checkPropertyDescriptions(t *testing.T, toolName string, properties map[string]any, wantDescriptions map[string]string) {
 	t.Helper()
 	for name, property := range properties {
 		propertySchema, ok := property.(map[string]any)
@@ -180,10 +185,13 @@ func checkPropertyDescriptions(t *testing.T, toolName string, properties map[str
 		if !ok || description == "" {
 			t.Errorf("tool %s property %s has no description", toolName, name)
 		}
+		if want, ok := wantDescriptions[name]; ok && description != want {
+			t.Errorf("tool %s property %s description = %q, want %q", toolName, name, description, want)
+		}
 	}
 }
 
-func checkToolInputSchema(t *testing.T, ctx context.Context, session *mcp.ClientSession, toolName string, wantProperties, wantRequired []string) {
+func checkToolInputSchema(t *testing.T, ctx context.Context, session *mcp.ClientSession, toolName string, wantDescriptions map[string]string, wantRequired []string) {
 	t.Helper()
 	result, err := session.ListTools(ctx, nil)
 	if err != nil {
@@ -201,8 +209,8 @@ func checkToolInputSchema(t *testing.T, ctx context.Context, session *mcp.Client
 		if !ok {
 			t.Fatalf("tool %s input schema properties = %#v", toolName, schema["properties"])
 		}
-		checkKeys(t, properties, wantProperties...)
-		checkPropertyDescriptions(t, toolName, properties)
+		checkKeys(t, properties, mapKeys(wantDescriptions)...)
+		checkPropertyDescriptions(t, toolName, properties, wantDescriptions)
 
 		required, ok := schema["required"].([]any)
 		if !ok {
@@ -241,7 +249,7 @@ func checkToolOutputSchema(t *testing.T, ctx context.Context, session *mcp.Clien
 			t.Fatalf("tool %s output schema properties = %#v", toolName, schema["properties"])
 		}
 		checkKeys(t, properties, wantProperties...)
-		checkPropertyDescriptions(t, toolName, properties)
+		checkPropertyDescriptions(t, toolName, properties, nil)
 		if wantItemProperties == nil {
 			return
 		}
@@ -259,7 +267,7 @@ func checkToolOutputSchema(t *testing.T, ctx context.Context, session *mcp.Clien
 			t.Fatalf("tool %s item schema properties = %#v", toolName, itemSchema["properties"])
 		}
 		checkKeys(t, itemProperties, wantItemProperties...)
-		checkPropertyDescriptions(t, toolName, itemProperties)
+		checkPropertyDescriptions(t, toolName, itemProperties, nil)
 		return
 	}
 	t.Fatalf("tool %s not found", toolName)

@@ -10,9 +10,9 @@ import (
 )
 
 type plantSmplUnitListInput struct {
-	PageNo          int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows       int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqPlantSpecsID string `json:"reqPlantSpecsId" jsonschema:"식물표본 목록 검색 결과의 식물종 ID"`
+	PageNo          int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows       int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	ReqPlantSpecsID string `json:"reqPlantSpecsId" jsonschema:"검색할 식물표본의 식물종ID (plantSmplSearch 결과의 plantSpecsId)"`
 }
 
 type plantSmplUnitListOutput struct {

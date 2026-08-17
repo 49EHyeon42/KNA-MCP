@@ -10,7 +10,7 @@ import (
 )
 
 type plantPilbkInfoInput struct {
-	ReqPlantPilbkNo string `json:"reqPlantPilbkNo" jsonschema:"식물도감 목록 검색 결과의 식물도감번호"`
+	ReqPlantPilbkNo string `json:"reqPlantPilbkNo" jsonschema:"검색할 식물도감번호 (plantPilbkSearch 결과의 plantPilbkNo)"`
 }
 
 type plantPilbkInfoOutput struct {

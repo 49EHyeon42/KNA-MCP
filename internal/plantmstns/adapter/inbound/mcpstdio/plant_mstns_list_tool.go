@@ -10,10 +10,10 @@ import (
 )
 
 type plantMstnsListInput struct {
-	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"식물세밀화의 식물 국명 또는 학명 검색어"`
-	ReqMnfctYr   string `json:"reqMnfctYr,omitempty" jsonschema:"식물세밀화 제작년도"`
+	PageNo       int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows    int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"세밀화의 식물 국명 또는 학명"`
+	ReqMnfctYr   string `json:"reqMnfctYr,omitempty" jsonschema:"세밀화 제작년도"`
 }
 
 type plantMstnsListOutput struct {

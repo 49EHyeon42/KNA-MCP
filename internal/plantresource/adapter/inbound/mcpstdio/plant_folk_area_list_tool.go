@@ -10,9 +10,9 @@ import (
 )
 
 type plantFolkAreaListInput struct {
-	PageNo    int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	FlpltID   string `json:"flpltId" jsonschema:"민속식물 목록 검색 결과의 민속식물 ID"`
+	PageNo    int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	FlpltID   string `json:"flpltId" jsonschema:"검색할 민속식물ID (plantFolkSearch 결과의 flpltId)"`
 }
 
 type plantFolkAreaListOutput struct {

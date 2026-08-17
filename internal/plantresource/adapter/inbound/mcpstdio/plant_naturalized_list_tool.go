@@ -10,9 +10,9 @@ import (
 )
 
 type plantNaturalizedListInput struct {
-	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"외래식물의 국명 또는 학명 검색어"`
+	PageNo       int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows    int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"검색할 식물의 국명 또는 학명"`
 	// dateFrom and dateTo are disabled because the upstream API returns ORA-00908.
 }
 
@@ -24,8 +24,8 @@ type plantNaturalizedListOutput struct {
 }
 
 type plantNaturalizedListItem struct {
-	AgpFamilyNm        string `json:"agpFamilyNm" jsonschema:"APG과국명"`
-	APGFamilyKorNm     string `json:"apgFamilyKorNm" jsonschema:"APG과명"`
+	AgpFamilyNm        string `json:"agpFamilyNm" jsonschema:"APG과명"`
+	APGFamilyKorNm     string `json:"apgFamilyKorNm" jsonschema:"APG과국명"`
 	BlprdEnmnt         string `json:"blprdEnmnt" jsonschema:"개화기종료일"`
 	BlprdStmnt         string `json:"blprdStmnt" jsonschema:"개화기시작일"`
 	DistrAraDscrt      string `json:"distrAraDscrt" jsonschema:"분포지역"`

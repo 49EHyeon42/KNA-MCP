@@ -10,9 +10,9 @@ import (
 )
 
 type plantSeedGrmntListInput struct {
-	PageNo         int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows      int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSeedSpecsID string `json:"reqSeedSpecsId" jsonschema:"식물종자 기본정보 목록 검색 결과의 종자종 ID"`
+	PageNo         int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows      int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	ReqSeedSpecsID string `json:"reqSeedSpecsId" jsonschema:"검색할 종자종ID (plantSeedSearch 결과의 seedSpecsId)"`
 }
 
 type plantSeedGrmntListOutput struct {

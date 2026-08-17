@@ -10,9 +10,9 @@ import (
 )
 
 type plantRareListInput struct {
-	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"적색식물의 국명 또는 학명 검색어"`
+	PageNo       int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows    int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"검색할 식물의 학명 또는 국명"`
 }
 
 type plantRareListOutput struct {
@@ -23,8 +23,8 @@ type plantRareListOutput struct {
 }
 
 type plantRareListItem struct {
-	AgpFamilyNm      string `json:"agpFamilyNm" jsonschema:"APG과국명"`
-	APGFamilyKorNm   string `json:"apgFamilyKorNm" jsonschema:"APG과명"`
+	AgpFamilyNm      string `json:"agpFamilyNm" jsonschema:"APG과명"`
+	APGFamilyKorNm   string `json:"apgFamilyKorNm" jsonschema:"APG과국명"`
 	ExtrmCrssScls1Yn string `json:"extrmCrssScls1Yn" jsonschema:"멸종위기종1급 여부"`
 	ExtrmCrssScls2Yn string `json:"extrmCrssScls2Yn" jsonschema:"멸종위기종2급 여부"`
 	FamilyKorNm      string `json:"familyKorNm" jsonschema:"과국명"`
