@@ -59,6 +59,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 		"fungi_resource_fngs_pilbk_info",
 		"fungi_resource_fngs_pilbk_search",
 		"fungi_resource_fngs_smpl_search",
+		"fungi_resource_fngs_smpl_unit_list",
 		"insect_resource_insect_pilbk_info",
 		"insect_resource_insect_pilbk_search",
 		"insect_resource_insect_prtct_list",

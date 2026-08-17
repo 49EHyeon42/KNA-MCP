@@ -10,9 +10,10 @@ import (
 
 // UseCases contains the fungi resource use cases exposed as MCP tools.
 type UseCases struct {
-	FngsPilbkSearch inbound.FngsPilbkSearchUseCase
-	FngsPilbkInfo   inbound.FngsPilbkInfoUseCase
-	FngsSmplSearch  inbound.FngsSmplSearchUseCase
+	FngsPilbkSearch  inbound.FngsPilbkSearchUseCase
+	FngsPilbkInfo    inbound.FngsPilbkInfoUseCase
+	FngsSmplSearch   inbound.FngsSmplSearchUseCase
+	FngsSmplUnitList inbound.FngsSmplUnitListUseCase
 }
 
 // AddTools adds all fungi resource tools to an MCP server.
@@ -26,9 +27,13 @@ func AddTools(server *mcp.Server, useCases UseCases) error {
 	if useCases.FngsSmplSearch == nil {
 		return errors.New("fngsSmplSearch use case is required")
 	}
+	if useCases.FngsSmplUnitList == nil {
+		return errors.New("fngsSmplUnitList use case is required")
+	}
 
 	addFngsPilbkSearchTool(server, useCases.FngsPilbkSearch)
 	addFngsPilbkInfoTool(server, useCases.FngsPilbkInfo)
 	addFngsSmplSearchTool(server, useCases.FngsSmplSearch)
+	addFngsSmplUnitListTool(server, useCases.FngsSmplUnitList)
 	return nil
 }

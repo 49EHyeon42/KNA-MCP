@@ -15,8 +15,9 @@ func addFungiResourceTools(server *mcp.Server, serviceKey string) error {
 	}
 
 	return fungiresourcemcp.AddTools(server, fungiresourcemcp.UseCases{
-		FngsPilbkSearch: service.NewFngsPilbkSearchService(client),
-		FngsPilbkInfo:   service.NewFngsPilbkInfoService(client),
-		FngsSmplSearch:  service.NewFngsSmplSearchService(client),
+		FngsPilbkSearch:  service.NewFngsPilbkSearchService(client),
+		FngsPilbkInfo:    service.NewFngsPilbkInfoService(client),
+		FngsSmplSearch:   service.NewFngsSmplSearchService(client),
+		FngsSmplUnitList: service.NewFngsSmplUnitListService(client),
 	})
 }

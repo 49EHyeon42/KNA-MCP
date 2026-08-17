@@ -18,9 +18,10 @@ func TestAddToolsRegistersAllFungiResourceTools(t *testing.T) {
 
 	server := mcpserver.NewServer()
 	if err := AddTools(server, UseCases{
-		FngsPilbkSearch: &fngsPilbkSearchUseCaseStub{},
-		FngsPilbkInfo:   &fngsPilbkInfoUseCaseStub{},
-		FngsSmplSearch:  &fngsSmplSearchUseCaseStub{},
+		FngsPilbkSearch:  &fngsPilbkSearchUseCaseStub{},
+		FngsPilbkInfo:    &fngsPilbkInfoUseCaseStub{},
+		FngsSmplSearch:   &fngsSmplSearchUseCaseStub{},
+		FngsSmplUnitList: &fngsSmplUnitListUseCaseStub{},
 	}); err != nil {
 		t.Fatal(err)
 	}
@@ -55,9 +56,21 @@ func TestAddToolsRegistersAllFungiResourceTools(t *testing.T) {
 		"fungi_resource_fngs_pilbk_info",
 		"fungi_resource_fngs_pilbk_search",
 		"fungi_resource_fngs_smpl_search",
+		"fungi_resource_fngs_smpl_unit_list",
 	}
 	if !slices.Equal(got, want) {
 		t.Fatalf("tools = %#v, want %#v", got, want)
+	}
+}
+
+func TestAddToolsRequiresFngsSmplUnitListUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{
+		FngsPilbkSearch: &fngsPilbkSearchUseCaseStub{},
+		FngsPilbkInfo:   &fngsPilbkInfoUseCaseStub{},
+		FngsSmplSearch:  &fngsSmplSearchUseCaseStub{},
+	})
+	if err == nil || err.Error() != "fngsSmplUnitList use case is required" {
+		t.Errorf("error = %v, want fngsSmplUnitList use case is required", err)
 	}
 }
 
