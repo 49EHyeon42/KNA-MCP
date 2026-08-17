@@ -22,6 +22,9 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	if err := addKpniTools(server, "test-key"); err != nil {
 		t.Fatal(err)
 	}
+	if err := addInsectResourceTools(server, "test-key"); err != nil {
+		t.Fatal(err)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -50,6 +53,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	slices.Sort(got)
 
 	want := []string{
+		"insect_resource_insect_pilbk_search",
 		"kpni_gnrl_nm_ltrtr_search",
 		"kpni_scnm_info",
 		"kpni_scnm_search",
