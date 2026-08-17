@@ -60,7 +60,11 @@ func TestPlantSpcltListTool(t *testing.T) {
 	}
 	defer clientSession.Close()
 	checkToolInputSchema(t, ctx, clientSession, "plant_resource_plant_spclt_list",
-		[]string{"pageNo", "numOfRows", "reqSearchWrd"},
+		map[string]string{
+			"pageNo":       "페이지번호 (1 이상)",
+			"numOfRows":    "한 페이지 결과 수 (1 이상)",
+			"reqSearchWrd": "검색할 특산식물 학명 또는 국명",
+		},
 		[]string{"pageNo", "numOfRows"},
 	)
 
@@ -123,6 +127,8 @@ func TestPlantSpcltListTool(t *testing.T) {
 			t.Errorf("item %s = %#v, want %q", key, got, want)
 		}
 	}
+	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_spclt_list",
+		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem), nil)
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

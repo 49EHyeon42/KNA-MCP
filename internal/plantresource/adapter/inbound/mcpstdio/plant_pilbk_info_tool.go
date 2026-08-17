@@ -9,43 +9,41 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantPilbkInfoToolName = "plant_resource_plant_pilbk_info"
-
 type plantPilbkInfoInput struct {
-	ReqPlantPilbkNo string `json:"reqPlantPilbkNo" jsonschema:"식물도감 목록 검색 결과의 식물도감번호"`
+	ReqPlantPilbkNo string `json:"reqPlantPilbkNo" jsonschema:"검색할 식물도감번호 (plantPilbkSearch 결과의 plantPilbkNo)"`
 }
 
 type plantPilbkInfoOutput struct {
-	APGFamilyKorNm string `json:"apgFamilyKorNm"`
-	APGFamilyNm    string `json:"apgFamilyNm"`
-	BfofMthod      string `json:"bfofMthod"`
-	BrdMthdDesc    string `json:"brdMthdDesc"`
-	BugInfo        string `json:"bugInfo"`
-	Dstrb          string `json:"dstrb"`
-	EngNm          string `json:"engNm"`
-	FamilyKorNm    string `json:"familyKorNm"`
-	FamilyNm       string `json:"familyNm"`
-	FarmSpftDesc   string `json:"farmSpftDesc"`
-	GenusKorNm     string `json:"genusKorNm"`
-	GenusNm        string `json:"genusNm"`
-	GrwEvrntDesc   string `json:"grwEvrntDesc"`
-	InductionDesc  string `json:"inductionDesc"`
-	LastUpdtDtm    string `json:"lastUpdtDtm"`
-	NotRcmmGnrlNm  string `json:"notRcmmGnrlNm"`
-	Note           string `json:"note"`
-	OrplcNm        string `json:"orplcNm"`
-	OsDstrb        string `json:"osDstrb"`
-	PlantGnrlNm    string `json:"plantGnrlNm"`
-	PlantPilbkNo   string `json:"plantPilbkNo"`
-	PlantSpecsScnm string `json:"plantSpecsScnm"`
-	PrtcPlnDesc    string `json:"prtcPlnDesc"`
-	RrngGubun      string `json:"rrngGubun"`
-	RrngType       string `json:"rrngType"`
-	Shpe           string `json:"shpe"`
-	SmlrPlntDesc   string `json:"smlrPlntDesc"`
-	Spft           string `json:"spft"`
-	UseMthdDesc    string `json:"useMthdDesc"`
-	WoodDesc       string `json:"woodDesc"`
+	APGFamilyKorNm string `json:"apgFamilyKorNm" jsonschema:"APG과국명"`
+	APGFamilyNm    string `json:"apgFamilyNm" jsonschema:"APG과명"`
+	BfofMthod      string `json:"bfofMthod" jsonschema:"방제방법"`
+	BrdMthdDesc    string `json:"brdMthdDesc" jsonschema:"번식방법"`
+	BugInfo        string `json:"bugInfo" jsonschema:"병충해정보"`
+	Dstrb          string `json:"dstrb" jsonschema:"분포"`
+	EngNm          string `json:"engNm" jsonschema:"영문명"`
+	FamilyKorNm    string `json:"familyKorNm" jsonschema:"과국명"`
+	FamilyNm       string `json:"familyNm" jsonschema:"과명"`
+	FarmSpftDesc   string `json:"farmSpftDesc" jsonschema:"재배특성"`
+	GenusKorNm     string `json:"genusKorNm" jsonschema:"속국명"`
+	GenusNm        string `json:"genusNm" jsonschema:"속명"`
+	GrwEvrntDesc   string `json:"grwEvrntDesc" jsonschema:"생육환경"`
+	InductionDesc  string `json:"inductionDesc" jsonschema:"도입여부"`
+	LastUpdtDtm    string `json:"lastUpdtDtm" jsonschema:"최종수정일"`
+	NotRcmmGnrlNm  string `json:"notRcmmGnrlNm" jsonschema:"비추천국명"`
+	Note           string `json:"note" jsonschema:"비고"`
+	OrplcNm        string `json:"orplcNm" jsonschema:"원산지"`
+	OsDstrb        string `json:"osDstrb" jsonschema:"해외분포"`
+	PlantGnrlNm    string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	PlantPilbkNo   string `json:"plantPilbkNo" jsonschema:"식물도감번호"`
+	PlantSpecsScnm string `json:"plantSpecsScnm" jsonschema:"학명"`
+	PrtcPlnDesc    string `json:"prtcPlnDesc" jsonschema:"보호방안"`
+	RrngGubun      string `json:"rrngGubun" jsonschema:"생육상 구분"`
+	RrngType       string `json:"rrngType" jsonschema:"생육형"`
+	Shpe           string `json:"shpe" jsonschema:"형태"`
+	SmlrPlntDesc   string `json:"smlrPlntDesc" jsonschema:"유사종"`
+	Spft           string `json:"spft" jsonschema:"특징"`
+	UseMthdDesc    string `json:"useMthdDesc" jsonschema:"이용방안"`
+	WoodDesc       string `json:"woodDesc" jsonschema:"목재"`
 }
 
 type plantPilbkInfoHandler struct {
@@ -55,7 +53,7 @@ type plantPilbkInfoHandler struct {
 func addPlantPilbkInfoTool(server *mcp.Server, useCase inbound.PlantPilbkInfoUseCase) {
 	handler := plantPilbkInfoHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        plantResourcePlantPilbkInfoToolName,
+		Name:        "plant_resource_plant_pilbk_info",
 		Description: "산림청 국립수목원 식물도감 상세정보를 조회합니다.",
 	}, handler.handle)
 }

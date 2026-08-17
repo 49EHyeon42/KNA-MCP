@@ -9,31 +9,29 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantSpcltListToolName = "plant_resource_plant_spclt_list"
-
 type plantSpcltListInput struct {
-	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"특산식물의 국명 또는 학명 검색어"`
+	PageNo       int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows    int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"검색할 특산식물 학명 또는 국명"`
 }
 
 type plantSpcltListOutput struct {
-	Items      []plantSpcltListItem `json:"items"`
-	NumOfRows  int                  `json:"numOfRows"`
-	PageNo     int                  `json:"pageNo"`
-	TotalCount int                  `json:"totalCount"`
+	Items      []plantSpcltListItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                  `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                  `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                  `json:"totalCount" jsonschema:"전체 결과 수"`
 }
 
 type plantSpcltListItem struct {
-	AgpFamilyKorNm     string `json:"agpFamilyKorNm"`
-	AgpFamilyNm        string `json:"agpFamilyNm"`
-	ExtrmCrssScls1Yn   string `json:"extrmCrssScls1Yn"`
-	ExtrmCrssScls2Yn   string `json:"extrmCrssScls2Yn"`
-	FamilyKorNm        string `json:"familyKorNm"`
-	FamilyNm           string `json:"familyNm"`
-	PlantBrdgFomTpcdNm string `json:"plantBrdgFomTpcdNm"`
-	PlantGnrlNm        string `json:"plantGnrlNm"`
-	PlantSpecsScnm     string `json:"plantSpecsScnm"`
+	AgpFamilyKorNm     string `json:"agpFamilyKorNm" jsonschema:"APG과국명"`
+	AgpFamilyNm        string `json:"agpFamilyNm" jsonschema:"APG과명"`
+	ExtrmCrssScls1Yn   string `json:"extrmCrssScls1Yn" jsonschema:"멸종위기식물 1급 여부"`
+	ExtrmCrssScls2Yn   string `json:"extrmCrssScls2Yn" jsonschema:"멸종위기식물 2급 여부"`
+	FamilyKorNm        string `json:"familyKorNm" jsonschema:"과국명"`
+	FamilyNm           string `json:"familyNm" jsonschema:"과명"`
+	PlantBrdgFomTpcdNm string `json:"plantBrdgFomTpcdNm" jsonschema:"식물번식형태"`
+	PlantGnrlNm        string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	PlantSpecsScnm     string `json:"plantSpecsScnm" jsonschema:"학명"`
 }
 
 type plantSpcltListHandler struct {
@@ -43,7 +41,7 @@ type plantSpcltListHandler struct {
 func addPlantSpcltListTool(server *mcp.Server, useCase inbound.PlantSpcltListUseCase) {
 	handler := plantSpcltListHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        plantResourcePlantSpcltListToolName,
+		Name:        "plant_resource_plant_spclt_list",
 		Description: "산림청 국립수목원 특산식물 목록을 조회합니다.",
 	}, handler.handle)
 }

@@ -74,7 +74,11 @@ func TestPlantNaturalizedListTool(t *testing.T) {
 	}
 	defer clientSession.Close()
 	checkToolInputSchema(t, ctx, clientSession, "plant_resource_plant_naturalized_list",
-		[]string{"pageNo", "numOfRows", "reqSearchWrd"},
+		map[string]string{
+			"pageNo":       "페이지번호 (1 이상)",
+			"numOfRows":    "한 페이지 결과 수 (1 이상)",
+			"reqSearchWrd": "검색할 식물의 국명 또는 학명",
+		},
 		[]string{"pageNo", "numOfRows"},
 	)
 
@@ -151,6 +155,9 @@ func TestPlantNaturalizedListTool(t *testing.T) {
 			t.Errorf("item %s = %#v, want %q", key, got, want)
 		}
 	}
+	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_naturalized_list",
+		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem),
+		map[string]string{"agpFamilyNm": "APG과명", "apgFamilyKorNm": "APG과국명"})
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

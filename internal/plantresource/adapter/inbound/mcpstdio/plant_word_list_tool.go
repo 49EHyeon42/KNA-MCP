@@ -9,26 +9,24 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantWordListToolName = "plant_resource_plant_word_list"
-
 type plantWordListInput struct {
-	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"검색할 한글 식물 용어명"`
+	PageNo       int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows    int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"검색할 식물 용어명 (한글용어명 기준)"`
 }
 
 type plantWordListOutput struct {
-	Items      []plantWordListItem `json:"items"`
-	NumOfRows  int                 `json:"numOfRows"`
-	PageNo     int                 `json:"pageNo"`
-	TotalCount int                 `json:"totalCount"`
+	Items      []plantWordListItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                 `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                 `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                 `json:"totalCount" jsonschema:"전체 결과 수"`
 }
 
 type plantWordListItem struct {
-	EnglsWrdNm string `json:"englsWrdNm"`
-	KrnWrdNm   string `json:"krnWrdNm"`
-	PrfcnWrdNm string `json:"prfcnWrdNm"`
-	Wrddscrt   string `json:"wrddscrt"`
+	EnglsWrdNm string `json:"englsWrdNm" jsonschema:"영문용어명"`
+	KrnWrdNm   string `json:"krnWrdNm" jsonschema:"한글용어명"`
+	PrfcnWrdNm string `json:"prfcnWrdNm" jsonschema:"순화용어명"`
+	Wrddscrt   string `json:"wrddscrt" jsonschema:"용어서술"`
 }
 
 type plantWordListHandler struct {
@@ -38,7 +36,7 @@ type plantWordListHandler struct {
 func addPlantWordListTool(server *mcp.Server, useCase inbound.PlantWordListUseCase) {
 	handler := plantWordListHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        plantResourcePlantWordListToolName,
+		Name:        "plant_resource_plant_word_list",
 		Description: "산림청 국립수목원 식물 용어사전 목록을 조회합니다.",
 	}, handler.handle)
 }

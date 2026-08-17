@@ -9,28 +9,26 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantFolkSearchToolName = "plant_resource_plant_folk_search"
-
 type plantFolkSearchInput struct {
-	PageNo       int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows    int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"민속식물의 국명 또는 학명 검색어"`
+	PageNo       int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows    int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	ReqSearchWrd string `json:"reqSearchWrd,omitempty" jsonschema:"검색할 민속식물의 학명 또는 국명"`
 }
 
 type plantFolkSearchOutput struct {
-	Items      []plantFolkSearchItem `json:"items"`
-	NumOfRows  int                   `json:"numOfRows"`
-	PageNo     int                   `json:"pageNo"`
-	TotalCount int                   `json:"totalCount"`
+	Items      []plantFolkSearchItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                   `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                   `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                   `json:"totalCount" jsonschema:"전체 검색결과 수"`
 }
 
 type plantFolkSearchItem struct {
-	FlcstPlantIdntfDscrt string `json:"flcstPlantIdntfDscrt"`
-	FlpltID              string `json:"flpltId"`
-	PlantBrdgFomTpcdNm   string `json:"plantBrdgFomTpcdNm"`
-	PlantGnrlNm          string `json:"plantGnrlNm"`
-	PlantSpecsScnm       string `json:"plantSpecsScnm"`
-	Ptnt                 string `json:"ptnt"`
+	FlcstPlantIdntfDscrt string `json:"flcstPlantIdntfDscrt" jsonschema:"식별설명"`
+	FlpltID              string `json:"flpltId" jsonschema:"민속식물ID"`
+	PlantBrdgFomTpcdNm   string `json:"plantBrdgFomTpcdNm" jsonschema:"식물번식형태"`
+	PlantGnrlNm          string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	PlantSpecsScnm       string `json:"plantSpecsScnm" jsonschema:"학명"`
+	Ptnt                 string `json:"ptnt" jsonschema:"특허정보"`
 }
 
 type plantFolkSearchHandler struct {
@@ -40,7 +38,7 @@ type plantFolkSearchHandler struct {
 func addPlantFolkSearchTool(server *mcp.Server, useCase inbound.PlantFolkSearchUseCase) {
 	handler := plantFolkSearchHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        plantResourcePlantFolkSearchToolName,
+		Name:        "plant_resource_plant_folk_search",
 		Description: "산림청 국립수목원 민속식물 목록을 검색합니다.",
 	}, handler.handle)
 }

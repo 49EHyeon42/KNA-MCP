@@ -9,35 +9,33 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/plantresource/application/port/inbound"
 )
 
-const plantResourcePlantSeedUnitListToolName = "plant_resource_plant_seed_unit_list"
-
 type plantSeedUnitListInput struct {
-	PageNo         int    `json:"pageNo" jsonschema:"페이지 번호(1 이상)"`
-	NumOfRows      int    `json:"numOfRows" jsonschema:"페이지당 결과 수(1 이상)"`
-	ReqSeedSpecsID string `json:"reqSeedSpecsId" jsonschema:"식물종자 기본정보 목록 검색 결과의 종자종 ID"`
+	PageNo         int    `json:"pageNo" jsonschema:"페이지번호 (1 이상)"`
+	NumOfRows      int    `json:"numOfRows" jsonschema:"한 페이지 결과 수 (1 이상)"`
+	ReqSeedSpecsID string `json:"reqSeedSpecsId" jsonschema:"검색할 종자의 종자종ID (plantSeedSearch 결과의 seedSpecsId)"`
 }
 
 type plantSeedUnitListOutput struct {
-	Items      []plantSeedUnitListItem `json:"items"`
-	NumOfRows  int                     `json:"numOfRows"`
-	PageNo     int                     `json:"pageNo"`
-	TotalCount int                     `json:"totalCount"`
+	Items      []plantSeedUnitListItem `json:"items" jsonschema:"조회 결과 목록"`
+	NumOfRows  int                     `json:"numOfRows" jsonschema:"한 페이지 결과 수"`
+	PageNo     int                     `json:"pageNo" jsonschema:"페이지번호"`
+	TotalCount int                     `json:"totalCount" jsonschema:"전체 검색 결과 수"`
 }
 
 type plantSeedUnitListItem struct {
-	CllcnDate        string `json:"cllcnDate"`
-	PlantGnrlNm      string `json:"plantGnrlNm"`
-	QualtFllnsRt     string `json:"qualtFllnsRt"`
-	SdwghWeght       string `json:"sdwghWeght"`
-	SeedAdmcn        string `json:"seedAdmcn"`
-	SeedCllctPlace   string `json:"seedCllctPlace"`
-	SeedHoldGrainCnt string `json:"seedHoldGrainCnt"`
-	SeedHoldQntt     string `json:"seedHoldQntt"`
-	SeedNo           string `json:"seedNo"`
-	SeedSpecsID      string `json:"seedSpecsId"`
-	StoreChrcrTpcdNm string `json:"storeChrcrTpcdNm"`
-	Vtlfct           string `json:"vtlfct"`
-	VtlfctTestYr     string `json:"vtlfctTestYr"`
+	CllcnDate        string `json:"cllcnDate" jsonschema:"종자수집일"`
+	PlantGnrlNm      string `json:"plantGnrlNm" jsonschema:"국명(식물명)"`
+	QualtFllnsRt     string `json:"qualtFllnsRt" jsonschema:"품질충실율"`
+	SdwghWeght       string `json:"sdwghWeght" jsonschema:"천립중무게"`
+	SeedAdmcn        string `json:"seedAdmcn" jsonschema:"종자기건함수율"`
+	SeedCllctPlace   string `json:"seedCllctPlace" jsonschema:"종자수집장소"`
+	SeedHoldGrainCnt string `json:"seedHoldGrainCnt" jsonschema:"종자보유립수"`
+	SeedHoldQntt     string `json:"seedHoldQntt" jsonschema:"종자보유량"`
+	SeedNo           string `json:"seedNo" jsonschema:"종자번호"`
+	SeedSpecsID      string `json:"seedSpecsId" jsonschema:"종자종ID"`
+	StoreChrcrTpcdNm string `json:"storeChrcrTpcdNm" jsonschema:"저장특성"`
+	Vtlfct           string `json:"vtlfct" jsonschema:"활력률"`
+	VtlfctTestYr     string `json:"vtlfctTestYr" jsonschema:"활력률테스트년도"`
 }
 
 type plantSeedUnitListHandler struct {
@@ -47,7 +45,7 @@ type plantSeedUnitListHandler struct {
 func addPlantSeedUnitListTool(server *mcp.Server, useCase inbound.PlantSeedUnitListUseCase) {
 	handler := plantSeedUnitListHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        plantResourcePlantSeedUnitListToolName,
+		Name:        "plant_resource_plant_seed_unit_list",
 		Description: "산림청 국립수목원 종자 점정보 목록을 조회합니다.",
 	}, handler.handle)
 }
