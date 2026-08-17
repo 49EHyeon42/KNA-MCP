@@ -13,7 +13,21 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/insectresource/application/port/outbound"
 )
 
-const insectPilbkSearchPath = insectResourceBasePath + "/insectPilbkSearch"
+const (
+	insectPilbkSearchPath        = insectResourceBasePath + "/insectPilbkSearch"
+	insectPilbkSearchSuccessCode = "00"
+)
+
+var insectPilbkSearchResultMessages = map[string]string{
+	"00": "NORMAL_SERVICE",
+	"02": "DB_ERROR",
+	"03": "NODATA_ERROR",
+	"05": "SERVICETIME_OUT",
+	"10": "INVALID_REQUEST_PARAMETER_ERROR",
+	"11": "NO_MANDATORY_REQUEST_PARAMETERS_ERROR",
+	"21": "TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR",
+	"33": "UNSIGNED_CALL_ERROR",
+}
 
 var _ outbound.InsectPilbkSearchPort = (*Client)(nil)
 
@@ -76,9 +90,15 @@ func (c *Client) InsectPilbkSearch(ctx context.Context, query application.Insect
 	values.Set("serviceKey", c.serviceKey)
 	values.Set("pageNo", strconv.Itoa(query.PageNo))
 	values.Set("numOfRows", strconv.Itoa(query.NumOfRows))
-	setQueryValue(values, "reqSearchWrd", query.ReqSearchWrd)
-	setQueryValue(values, "dateFrom", query.DateFrom)
-	setQueryValue(values, "dateTo", query.DateTo)
+	if query.ReqSearchWrd != "" {
+		values.Set("reqSearchWrd", query.ReqSearchWrd)
+	}
+	if query.DateFrom != "" {
+		values.Set("dateFrom", query.DateFrom)
+	}
+	if query.DateTo != "" {
+		values.Set("dateTo", query.DateTo)
+	}
 	requestURL.RawQuery = values.Encode()
 
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL.String(), nil)
@@ -115,10 +135,10 @@ func (c *Client) InsectPilbkSearch(ctx context.Context, query application.Insect
 	if payload.Header.ResultCode == "" {
 		return application.InsectPilbkSearchResult{}, errors.New("insectPilbkSearch: response missing resultCode")
 	}
-	if payload.Header.ResultCode != insectResourceSuccessCode {
+	if payload.Header.ResultCode != insectPilbkSearchSuccessCode {
 		message := payload.Header.ResultMsg
 		if message == "" {
-			message = insectResourceResultMessages[payload.Header.ResultCode]
+			message = insectPilbkSearchResultMessages[payload.Header.ResultCode]
 		}
 		return application.InsectPilbkSearchResult{}, &InsectPilbkSearchError{
 			HTTPStatus: response.StatusCode,

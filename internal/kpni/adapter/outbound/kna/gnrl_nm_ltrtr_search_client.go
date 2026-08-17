@@ -13,7 +13,21 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/kpni/application/port/outbound"
 )
 
-const gnrlNmLtrtrSearchPath = kpniBasePath + "/gnrlNmLtrtrSearch"
+const (
+	gnrlNmLtrtrSearchPath        = kpniBasePath + "/gnrlNmLtrtrSearch"
+	gnrlNmLtrtrSearchSuccessCode = "00"
+)
+
+var gnrlNmLtrtrSearchResultMessages = map[string]string{
+	"00": "NORMAL_SERVICE",
+	"02": "DB_ERROR",
+	"03": "NODATA_ERROR",
+	"05": "SERVICETIME_OUT",
+	"10": "INVALID_REQUEST_PARAMETER_ERROR",
+	"11": "NO_MANDATORY_REQUEST_PARAMETERS_ERROR",
+	"21": "TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR",
+	"33": "UNSIGNED_CALL_ERROR",
+}
 
 var _ outbound.GnrlNmLtrtrSearchPort = (*Client)(nil)
 
@@ -112,10 +126,10 @@ func (c *Client) GnrlNmLtrtrSearch(ctx context.Context, query application.GnrlNm
 	if payload.Header.ResultCode == "" {
 		return application.GnrlNmLtrtrSearchResult{}, errors.New("gnrlNmLtrtrSearch: response missing resultCode")
 	}
-	if payload.Header.ResultCode != kpniSuccessCode {
+	if payload.Header.ResultCode != gnrlNmLtrtrSearchSuccessCode {
 		message := payload.Header.ResultMsg
 		if message == "" {
-			message = kpniResultMessages[payload.Header.ResultCode]
+			message = gnrlNmLtrtrSearchResultMessages[payload.Header.ResultCode]
 		}
 		return application.GnrlNmLtrtrSearchResult{}, &GnrlNmLtrtrSearchError{
 			HTTPStatus: response.StatusCode,
