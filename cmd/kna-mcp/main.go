@@ -17,6 +17,9 @@ func main() {
 	if err := addPlantMstnsTools(server, serviceKey); err != nil {
 		log.Fatal(err)
 	}
+	if err := addKpniTools(server, serviceKey); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := mcpstdio.Run(context.Background(), server); err != nil {
 		log.Fatal(err)
