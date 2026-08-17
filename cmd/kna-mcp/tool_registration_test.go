@@ -50,6 +50,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	slices.Sort(got)
 
 	want := []string{
+		"kpni_scnm_info",
 		"kpni_scnm_search",
 		"plant_mstns_plant_mstns_list",
 		"plant_resource_plant_folk_area_list",
