@@ -70,6 +70,7 @@ func TestPlantMstnsListTool(t *testing.T) {
 		},
 		[]string{"pageNo", "numOfRows"},
 	)
+	checkToolDescription(t, ctx, clientSession, "plant_mstns_plant_mstns_list", "산림청 국립수목원 식물세밀화 목록을 조회합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_mstns_plant_mstns_list",
@@ -126,6 +127,19 @@ func TestPlantMstnsListTool(t *testing.T) {
 		"rrnssPlantYn":          "rarity plant yes or no",
 		"spcltPlantYn":          "specialty plant yes or no",
 	}
+	itemDescriptions := map[string]string{
+		"distrAraDscrt":         "분포정보",
+		"minitrTpcdNm":          "세밀화구분",
+		"plantBrdgFomTpcdNm":    "식물번식형태",
+		"plantGnrlNm":           "국명",
+		"plantMinitrAthrNm":     "작가명",
+		"plantMinitrMnfctMonth": "제작월",
+		"plantMinitrMnfctYr":    "제작년도",
+		"plantMinitrPsinsNm":    "보유기관",
+		"plantSpecsScnm":        "학명",
+		"rrnssPlantYn":          "희귀식물여부",
+		"spcltPlantYn":          "특산식물여부",
+	}
 	if len(item) != len(wantItem) {
 		t.Errorf("item key count = %d, want %d", len(item), len(wantItem))
 	}
@@ -135,7 +149,12 @@ func TestPlantMstnsListTool(t *testing.T) {
 		}
 	}
 	checkToolOutputSchema(t, ctx, clientSession, "plant_mstns_plant_mstns_list",
-		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem))
+		map[string]string{
+			"items":      "조회 결과 목록",
+			"numOfRows":  "한 페이지 결과 수",
+			"pageNo":     "페이지번호",
+			"totalCount": "전체 결과 수",
+		}, itemDescriptions)
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
@@ -191,6 +210,23 @@ func checkPropertyDescriptions(t *testing.T, toolName string, properties map[str
 	}
 }
 
+func checkToolDescription(t *testing.T, ctx context.Context, session *mcp.ClientSession, toolName, want string) {
+	t.Helper()
+	result, err := session.ListTools(ctx, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tool := range result.Tools {
+		if tool.Name == toolName {
+			if tool.Description != want {
+				t.Errorf("tool %s description = %q, want %q", toolName, tool.Description, want)
+			}
+			return
+		}
+	}
+	t.Fatalf("tool %s not found", toolName)
+}
+
 func checkToolInputSchema(t *testing.T, ctx context.Context, session *mcp.ClientSession, toolName string, wantDescriptions map[string]string, wantRequired []string) {
 	t.Helper()
 	result, err := session.ListTools(ctx, nil)
@@ -230,7 +266,7 @@ func checkToolInputSchema(t *testing.T, ctx context.Context, session *mcp.Client
 	t.Fatalf("tool %s not found", toolName)
 }
 
-func checkToolOutputSchema(t *testing.T, ctx context.Context, session *mcp.ClientSession, toolName string, wantProperties, wantItemProperties []string) {
+func checkToolOutputSchema(t *testing.T, ctx context.Context, session *mcp.ClientSession, toolName string, wantDescriptions, wantItemDescriptions map[string]string) {
 	t.Helper()
 	result, err := session.ListTools(ctx, nil)
 	if err != nil {
@@ -248,9 +284,9 @@ func checkToolOutputSchema(t *testing.T, ctx context.Context, session *mcp.Clien
 		if !ok {
 			t.Fatalf("tool %s output schema properties = %#v", toolName, schema["properties"])
 		}
-		checkKeys(t, properties, wantProperties...)
-		checkPropertyDescriptions(t, toolName, properties, nil)
-		if wantItemProperties == nil {
+		checkKeys(t, properties, mapKeys(wantDescriptions)...)
+		checkPropertyDescriptions(t, toolName, properties, wantDescriptions)
+		if wantItemDescriptions == nil {
 			return
 		}
 
@@ -266,8 +302,8 @@ func checkToolOutputSchema(t *testing.T, ctx context.Context, session *mcp.Clien
 		if !ok {
 			t.Fatalf("tool %s item schema properties = %#v", toolName, itemSchema["properties"])
 		}
-		checkKeys(t, itemProperties, wantItemProperties...)
-		checkPropertyDescriptions(t, toolName, itemProperties, nil)
+		checkKeys(t, itemProperties, mapKeys(wantItemDescriptions)...)
+		checkPropertyDescriptions(t, toolName, itemProperties, wantItemDescriptions)
 		return
 	}
 	t.Fatalf("tool %s not found", toolName)

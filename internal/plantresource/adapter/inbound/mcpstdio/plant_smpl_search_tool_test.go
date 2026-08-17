@@ -64,6 +64,7 @@ func TestPlantSmplSearchTool(t *testing.T) {
 		},
 		[]string{"pageNo", "numOfRows"},
 	)
+	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_smpl_search", "산림청 국립수목원 식물표본 목록을 검색합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_smpl_search",
@@ -117,7 +118,19 @@ func TestPlantSmplSearchTool(t *testing.T) {
 		t.Errorf("item = %#v, want %#v", item, wantItem)
 	}
 	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_smpl_search",
-		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem), nil)
+		map[string]string{
+			"items":      "조회 결과 목록",
+			"numOfRows":  "한 페이지 결과 수",
+			"pageNo":     "페이지번호",
+			"totalCount": "전체 검색 결과 수",
+		}, map[string]string{
+			"cnt":            "표본수",
+			"familyKorNm":    "과국명",
+			"familyNm":       "과명",
+			"plantGnrlNm":    "국명(식물명)",
+			"plantSpecsId":   "식물 종ID",
+			"plantSpecsScnm": "학명",
+		})
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

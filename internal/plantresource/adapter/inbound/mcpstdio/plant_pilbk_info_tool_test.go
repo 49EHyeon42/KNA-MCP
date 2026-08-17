@@ -81,6 +81,7 @@ func TestPlantPilbkInfoTool(t *testing.T) {
 		},
 		[]string{"reqPlantPilbkNo"},
 	)
+	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_pilbk_info", "산림청 국립수목원 식물도감 상세정보를 조회합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_pilbk_info",
@@ -144,7 +145,38 @@ func TestPlantPilbkInfoTool(t *testing.T) {
 			t.Errorf("output %s = %#v, want %q", key, got, want)
 		}
 	}
-	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_pilbk_info", mapKeys(wantOutput), nil, nil)
+	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_pilbk_info", map[string]string{
+		"apgFamilyKorNm": "APG과국명",
+		"apgFamilyNm":    "APG과명",
+		"bfofMthod":      "방제방법",
+		"brdMthdDesc":    "번식방법",
+		"bugInfo":        "병충해정보",
+		"dstrb":          "분포",
+		"engNm":          "영문명",
+		"familyKorNm":    "과국명",
+		"familyNm":       "과명",
+		"farmSpftDesc":   "재배특성",
+		"genusKorNm":     "속국명",
+		"genusNm":        "속명",
+		"grwEvrntDesc":   "생육환경",
+		"inductionDesc":  "도입여부",
+		"lastUpdtDtm":    "최종수정일",
+		"notRcmmGnrlNm":  "비추천국명",
+		"note":           "비고",
+		"orplcNm":        "원산지",
+		"osDstrb":        "해외분포",
+		"plantGnrlNm":    "국명(식물명)",
+		"plantPilbkNo":   "식물도감번호",
+		"plantSpecsScnm": "학명",
+		"prtcPlnDesc":    "보호방안",
+		"rrngGubun":      "생육상 구분",
+		"rrngType":       "생육형",
+		"shpe":           "형태",
+		"smlrPlntDesc":   "유사종",
+		"spft":           "특징",
+		"useMthdDesc":    "이용방안",
+		"woodDesc":       "목재",
+	}, nil)
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

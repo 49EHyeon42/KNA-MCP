@@ -71,6 +71,7 @@ func TestPlantSeedUnitListTool(t *testing.T) {
 		},
 		[]string{"pageNo", "numOfRows", "reqSeedSpecsId"},
 	)
+	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_seed_unit_list", "산림청 국립수목원 종자 점정보 목록을 조회합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_seed_unit_list",
@@ -136,7 +137,26 @@ func TestPlantSeedUnitListTool(t *testing.T) {
 		}
 	}
 	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_seed_unit_list",
-		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem), nil)
+		map[string]string{
+			"items":      "조회 결과 목록",
+			"numOfRows":  "한 페이지 결과 수",
+			"pageNo":     "페이지번호",
+			"totalCount": "전체 검색 결과 수",
+		}, map[string]string{
+			"cllcnDate":        "종자수집일",
+			"plantGnrlNm":      "국명(식물명)",
+			"qualtFllnsRt":     "품질충실율",
+			"sdwghWeght":       "천립중무게",
+			"seedAdmcn":        "종자기건함수율",
+			"seedCllctPlace":   "종자수집장소",
+			"seedHoldGrainCnt": "종자보유립수",
+			"seedHoldQntt":     "종자보유량",
+			"seedNo":           "종자번호",
+			"seedSpecsId":      "종자종ID",
+			"storeChrcrTpcdNm": "저장특성",
+			"vtlfct":           "활력률",
+			"vtlfctTestYr":     "활력률테스트년도",
+		})
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{

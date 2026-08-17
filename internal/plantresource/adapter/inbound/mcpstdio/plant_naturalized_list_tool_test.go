@@ -81,6 +81,7 @@ func TestPlantNaturalizedListTool(t *testing.T) {
 		},
 		[]string{"pageNo", "numOfRows"},
 	)
+	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_naturalized_list", "산림청 국립수목원 외래식물정보 목록을 조회합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_naturalized_list",
@@ -156,8 +157,36 @@ func TestPlantNaturalizedListTool(t *testing.T) {
 		}
 	}
 	checkToolOutputSchema(t, ctx, clientSession, "plant_resource_plant_naturalized_list",
-		[]string{"items", "numOfRows", "pageNo", "totalCount"}, mapKeys(wantItem),
-		map[string]string{"agpFamilyNm": "APG과명", "apgFamilyKorNm": "APG과국명"})
+		map[string]string{
+			"items":      "조회 결과 목록",
+			"numOfRows":  "한 페이지 결과 수",
+			"pageNo":     "페이지번호",
+			"totalCount": "전체 검색 결과 수",
+		}, map[string]string{
+			"agpFamilyNm":        "APG과명",
+			"apgFamilyKorNm":     "APG과국명",
+			"blprdEnmnt":         "개화기종료일",
+			"blprdStmnt":         "개화기시작일",
+			"distrAraDscrt":      "분포지역",
+			"eclgDstrbYn":        "생태계교란종여부",
+			"extcPlantCdNm":      "외래식물구분",
+			"familyKorNm":        "과국명",
+			"familyNm":           "과명",
+			"frtTpcdNm":          "열매구분",
+			"lastUpdtDtm":        "최종수정일",
+			"ntldgTpcdNm":        "귀화도구분",
+			"ntrlzEraTpcdNm":     "유입시기구분",
+			"orplcNm":            "원산지",
+			"plantBrdgFomTpcdNm": "식물번식형태",
+			"plantDistrGrcd":     "외래식물확산등급",
+			"plantDistrQntt":     "식물분포지역수량",
+			"plantDistrQnttGrcd": "식물분포지역수량등급",
+			"plantEngNm":         "영문명",
+			"plantGnrlNm":        "국명(식물명)",
+			"plantJpnNm":         "일본명",
+			"plantLfcclTpcdNm":   "식물생활사",
+			"plantSpecsScnm":     "학명",
+		})
 
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
