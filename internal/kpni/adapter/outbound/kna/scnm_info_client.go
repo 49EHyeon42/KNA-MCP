@@ -12,7 +12,21 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/kpni/application/port/outbound"
 )
 
-const scnmInfoPath = kpniBasePath + "/scnmInfo"
+const (
+	scnmInfoPath        = kpniBasePath + "/scnmInfo"
+	scnmInfoSuccessCode = "00"
+)
+
+var scnmInfoResultMessages = map[string]string{
+	"00": "NORMAL_SERVICE",
+	"02": "DB_ERROR",
+	"03": "NODATA_ERROR",
+	"05": "SERVICETIME_OUT",
+	"10": "INVALID_REQUEST_PARAMETER_ERROR",
+	"11": "NO_MANDATORY_REQUEST_PARAMETERS_ERROR",
+	"21": "TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR",
+	"33": "UNSIGNED_CALL_ERROR",
+}
 
 var _ outbound.ScnmInfoPort = (*Client)(nil)
 
@@ -126,10 +140,10 @@ func (c *Client) ScnmInfo(ctx context.Context, query application.ScnmInfoQuery) 
 	if payload.Header.ResultCode == "" {
 		return application.ScnmInfoResult{}, errors.New("scnmInfo: response missing resultCode")
 	}
-	if payload.Header.ResultCode != kpniSuccessCode {
+	if payload.Header.ResultCode != scnmInfoSuccessCode {
 		message := payload.Header.ResultMsg
 		if message == "" {
-			message = kpniResultMessages[payload.Header.ResultCode]
+			message = scnmInfoResultMessages[payload.Header.ResultCode]
 		}
 		return application.ScnmInfoResult{}, &ScnmInfoError{
 			HTTPStatus: response.StatusCode,

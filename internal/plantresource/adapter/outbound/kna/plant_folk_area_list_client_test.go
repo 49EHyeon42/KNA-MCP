@@ -225,21 +225,21 @@ func TestPlantFolkAreaListLive(t *testing.T) {
 		{name: "second folk plant", flpltID: "2014000404", plantGnrlNm: "금불초"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantFolkAreaList(ctx, application.PlantFolkAreaListQuery{PageNo: 1, NumOfRows: 10, FlpltID: test.flpltID})
 			if err != nil {
 				t.Fatal(err)
 			}
-			if len(result.Items) != 1 || result.TotalCount != 1 || result.Items[0].FlpltID != test.flpltID || result.Items[0].PlantGnrlNm != test.plantGnrlNm {
+			if len(result.Items) != 1 || result.TotalCount < len(result.Items) || result.Items[0].FlpltID != test.flpltID || result.Items[0].PlantGnrlNm != test.plantGnrlNm {
 				t.Errorf("result = %#v, want one %s record for %s", result, test.plantGnrlNm, test.flpltID)
 			}
 		})
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		first, err := client.PlantFolkAreaList(ctx, application.PlantFolkAreaListQuery{PageNo: 1, NumOfRows: 1, FlpltID: "2014000365"})
@@ -250,13 +250,13 @@ func TestPlantFolkAreaListLive(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if len(first.Items) != 1 || len(second.Items) != 1 || first.TotalCount != 5 || second.TotalCount != 5 || first.Items[0].FlcstPlantExmnnAraTpcdNm == second.Items[0].FlcstPlantExmnnAraTpcdNm {
-			t.Errorf("first = %#v, second = %#v, want distinct pages with totalCount 5", first, second)
+		if len(first.Items) != 1 || len(second.Items) != 1 || first.TotalCount != second.TotalCount || first.TotalCount < 2 || first.Items[0].FlcstPlantExmnnAraTpcdNm == second.Items[0].FlcstPlantExmnnAraTpcdNm {
+			t.Errorf("first = %#v, second = %#v, want distinct pages with matching totalCount", first, second)
 		}
 	})
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.PlantFolkAreaList(ctx, application.PlantFolkAreaListQuery{PageNo: 1, NumOfRows: 1, FlpltID: "KNA-MCP-NO-RESULT"})

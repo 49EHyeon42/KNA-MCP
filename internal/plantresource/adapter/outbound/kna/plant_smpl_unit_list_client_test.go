@@ -241,7 +241,7 @@ func TestPlantSmplUnitListLive(t *testing.T) {
 		{name: "second plant species and changed pagination", pageNo: 2, numOfRows: 2, reqPlantSpecsID: "P000004954"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantSmplUnitList(ctx, application.PlantSmplUnitListQuery{
@@ -259,7 +259,7 @@ func TestPlantSmplUnitListLive(t *testing.T) {
 	}
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.PlantSmplUnitList(ctx, application.PlantSmplUnitListQuery{

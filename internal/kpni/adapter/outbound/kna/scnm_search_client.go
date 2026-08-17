@@ -13,7 +13,21 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/kpni/application/port/outbound"
 )
 
-const scnmSearchPath = kpniBasePath + "/scnmSearch"
+const (
+	scnmSearchPath        = kpniBasePath + "/scnmSearch"
+	scnmSearchSuccessCode = "00"
+)
+
+var scnmSearchResultMessages = map[string]string{
+	"00": "NORMAL_SERVICE",
+	"02": "DB_ERROR",
+	"03": "NODATA_ERROR",
+	"05": "SERVICETIME_OUT",
+	"10": "INVALID_REQUEST_PARAMETER_ERROR",
+	"11": "NO_MANDATORY_REQUEST_PARAMETERS_ERROR",
+	"21": "TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR",
+	"33": "UNSIGNED_CALL_ERROR",
+}
 
 var _ outbound.ScnmSearchPort = (*Client)(nil)
 
@@ -134,10 +148,10 @@ func (c *Client) ScnmSearch(ctx context.Context, query application.ScnmSearchQue
 	if payload.Header.ResultCode == "" {
 		return application.ScnmSearchResult{}, errors.New("scnmSearch: response missing resultCode")
 	}
-	if payload.Header.ResultCode != kpniSuccessCode {
+	if payload.Header.ResultCode != scnmSearchSuccessCode {
 		message := payload.Header.ResultMsg
 		if message == "" {
-			message = kpniResultMessages[payload.Header.ResultCode]
+			message = scnmSearchResultMessages[payload.Header.ResultCode]
 		}
 		return application.ScnmSearchResult{}, &ScnmSearchError{
 			HTTPStatus: response.StatusCode,

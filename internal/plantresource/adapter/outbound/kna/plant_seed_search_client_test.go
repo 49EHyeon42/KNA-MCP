@@ -259,7 +259,7 @@ func TestPlantSeedSearchLive(t *testing.T) {
 		{name: "lowercase scientific name", pageNo: 1, numOfRows: 10, reqSearchWrd: "pinus", plantSpecsScnm: "pinus"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantSeedSearch(ctx, application.PlantSeedSearchQuery{
@@ -294,7 +294,7 @@ func TestPlantSeedSearchLive(t *testing.T) {
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		first, err := client.PlantSeedSearch(ctx, application.PlantSeedSearchQuery{PageNo: 1, NumOfRows: 1})
@@ -311,7 +311,7 @@ func TestPlantSeedSearchLive(t *testing.T) {
 	})
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.PlantSeedSearch(ctx, application.PlantSeedSearchQuery{

@@ -282,7 +282,7 @@ func TestPlantNaturalizedListLive(t *testing.T) {
 		{name: "lowercase scientific name", reqSearchWrd: "silene", plantSpecsScnm: "silene"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantNaturalizedList(ctx, application.PlantNaturalizedListQuery{PageNo: 1, NumOfRows: 10, ReqSearchWrd: test.reqSearchWrd})
@@ -310,7 +310,7 @@ func TestPlantNaturalizedListLive(t *testing.T) {
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		first, err := client.PlantNaturalizedList(ctx, application.PlantNaturalizedListQuery{PageNo: 1, NumOfRows: 1})
@@ -327,7 +327,7 @@ func TestPlantNaturalizedListLive(t *testing.T) {
 	})
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.PlantNaturalizedList(ctx, application.PlantNaturalizedListQuery{PageNo: 1, NumOfRows: 1, ReqSearchWrd: "KNA-MCP-NO-RESULT"})

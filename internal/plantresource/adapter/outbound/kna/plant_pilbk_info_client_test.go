@@ -233,7 +233,7 @@ func TestPlantPilbkInfoLive(t *testing.T) {
 
 	for _, number := range []string{"31662", "31665"} {
 		t.Run(number, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantPilbkInfo(ctx, application.PlantPilbkInfoQuery{ReqPlantPilbkNo: number})
@@ -246,7 +246,10 @@ func TestPlantPilbkInfoLive(t *testing.T) {
 		})
 	}
 
-	result, err := client.PlantPilbkInfo(context.Background(), application.PlantPilbkInfoQuery{ReqPlantPilbkNo: "999999999"})
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+
+	result, err := client.PlantPilbkInfo(ctx, application.PlantPilbkInfoQuery{ReqPlantPilbkNo: "999999999"})
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -235,7 +235,7 @@ func TestPlantSpcltListLive(t *testing.T) {
 		{name: "endangered class one", reqSearchWrd: "제주고사리삼", plantGnrlNm: "제주고사리삼", extrmCrssScls1Yn: "Y"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 			defer cancel()
 
 			result, err := client.PlantSpcltList(ctx, application.PlantSpcltListQuery{PageNo: 1, NumOfRows: 10, ReqSearchWrd: test.reqSearchWrd})
@@ -261,7 +261,7 @@ func TestPlantSpcltListLive(t *testing.T) {
 	}
 
 	t.Run("changed page", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		first, err := client.PlantSpcltList(ctx, application.PlantSpcltListQuery{PageNo: 1, NumOfRows: 1})
@@ -278,7 +278,7 @@ func TestPlantSpcltListLive(t *testing.T) {
 	})
 
 	t.Run("without result", func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 		defer cancel()
 
 		result, err := client.PlantSpcltList(ctx, application.PlantSpcltListQuery{PageNo: 1, NumOfRows: 1, ReqSearchWrd: "KNA-MCP-NO-RESULT"})
