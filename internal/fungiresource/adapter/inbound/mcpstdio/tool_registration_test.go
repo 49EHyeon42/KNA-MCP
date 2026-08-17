@@ -17,7 +17,10 @@ func TestAddToolsRegistersAllFungiResourceTools(t *testing.T) {
 	defer cancel()
 
 	server := mcpserver.NewServer()
-	if err := AddTools(server, UseCases{FngsPilbkSearch: &fngsPilbkSearchUseCaseStub{}}); err != nil {
+	if err := AddTools(server, UseCases{
+		FngsPilbkSearch: &fngsPilbkSearchUseCaseStub{},
+		FngsPilbkInfo:   &fngsPilbkInfoUseCaseStub{},
+	}); err != nil {
 		t.Fatal(err)
 	}
 
@@ -47,9 +50,21 @@ func TestAddToolsRegistersAllFungiResourceTools(t *testing.T) {
 		}
 	}
 	slices.Sort(got)
-	want := []string{"fungi_resource_fngs_pilbk_search"}
+	want := []string{
+		"fungi_resource_fngs_pilbk_info",
+		"fungi_resource_fngs_pilbk_search",
+	}
 	if !slices.Equal(got, want) {
 		t.Fatalf("tools = %#v, want %#v", got, want)
+	}
+}
+
+func TestAddToolsRequiresFngsPilbkInfoUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{
+		FngsPilbkSearch: &fngsPilbkSearchUseCaseStub{},
+	})
+	if err == nil || err.Error() != "fngsPilbkInfo use case is required" {
+		t.Errorf("error = %v, want fngsPilbkInfo use case is required", err)
 	}
 }
 
