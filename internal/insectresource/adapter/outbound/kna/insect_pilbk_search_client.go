@@ -13,21 +13,7 @@ import (
 	"github.com/49EHyeon42/KNA-MCP/internal/insectresource/application/port/outbound"
 )
 
-const (
-	insectPilbkSearchPath        = insectResourceBasePath + "/insectPilbkSearch"
-	insectPilbkSearchSuccessCode = "00"
-)
-
-var insectPilbkSearchResultMessages = map[string]string{
-	"00": "NORMAL_SERVICE",
-	"02": "DB_ERROR",
-	"03": "NODATA_ERROR",
-	"05": "SERVICETIME_OUT",
-	"10": "INVALID_REQUEST_PARAMETER_ERROR",
-	"11": "NO_MANDATORY_REQUEST_PARAMETERS_ERROR",
-	"21": "TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR",
-	"33": "UNSIGNED_CALL_ERROR",
-}
+const insectPilbkSearchPath = insectResourceBasePath + "/insectPilbkSearch"
 
 var _ outbound.InsectPilbkSearchPort = (*Client)(nil)
 
@@ -129,10 +115,10 @@ func (c *Client) InsectPilbkSearch(ctx context.Context, query application.Insect
 	if payload.Header.ResultCode == "" {
 		return application.InsectPilbkSearchResult{}, errors.New("insectPilbkSearch: response missing resultCode")
 	}
-	if payload.Header.ResultCode != insectPilbkSearchSuccessCode {
+	if payload.Header.ResultCode != insectResourceSuccessCode {
 		message := payload.Header.ResultMsg
 		if message == "" {
-			message = insectPilbkSearchResultMessages[payload.Header.ResultCode]
+			message = insectResourceResultMessages[payload.Header.ResultCode]
 		}
 		return application.InsectPilbkSearchResult{}, &InsectPilbkSearchError{
 			HTTPStatus: response.StatusCode,

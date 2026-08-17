@@ -9,10 +9,22 @@ import (
 )
 
 const (
-	defaultBaseURL         = "https://apis.data.go.kr"
-	defaultRequestTimeout  = 60 * time.Second
-	insectResourceBasePath = "/1400119/InsectService"
+	defaultBaseURL            = "https://apis.data.go.kr"
+	defaultRequestTimeout     = 60 * time.Second
+	insectResourceBasePath    = "/1400119/InsectService"
+	insectResourceSuccessCode = "00"
 )
+
+var insectResourceResultMessages = map[string]string{
+	"00": "NORMAL_SERVICE",
+	"02": "DB_ERROR",
+	"03": "NODATA_ERROR",
+	"05": "SERVICETIME_OUT",
+	"10": "INVALID_REQUEST_PARAMETER_ERROR",
+	"11": "NO_MANDATORY_REQUEST_PARAMETERS_ERROR",
+	"21": "TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR",
+	"33": "UNSIGNED_CALL_ERROR",
+}
 
 // Client calls the Korea National Arboretum insect resource API through the Public Data Portal.
 type Client struct {

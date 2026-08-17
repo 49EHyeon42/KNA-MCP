@@ -3,6 +3,7 @@ package mcpstdio
 import (
 	"context"
 	"regexp"
+	"slices"
 	"testing"
 	"time"
 
@@ -16,7 +17,10 @@ func TestAddToolsRegistersAllInsectResourceTools(t *testing.T) {
 	defer cancel()
 
 	server := mcpserver.NewServer()
-	if err := AddTools(server, UseCases{InsectPilbkSearch: &insectPilbkSearchUseCaseStub{}}); err != nil {
+	if err := AddTools(server, UseCases{
+		InsectPilbkSearch: &insectPilbkSearchUseCaseStub{},
+		InsectPilbkInfo:   &insectPilbkInfoUseCaseStub{},
+	}); err != nil {
 		t.Fatal(err)
 	}
 
@@ -38,11 +42,17 @@ func TestAddToolsRegistersAllInsectResourceTools(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(result.Tools) != 1 || result.Tools[0].Name != "insect_resource_insect_pilbk_search" {
-		t.Fatalf("tools = %#v, want insect_resource_insect_pilbk_search", result.Tools)
+	got := make([]string, 0, len(result.Tools))
+	for _, tool := range result.Tools {
+		got = append(got, tool.Name)
+		if !regexp.MustCompile(`^[A-Za-z0-9_.-]{1,128}$`).MatchString(tool.Name) {
+			t.Errorf("tool name = %q, want 1 to 128 allowed characters", tool.Name)
+		}
 	}
-	if !regexp.MustCompile(`^[A-Za-z0-9_.-]{1,128}$`).MatchString(result.Tools[0].Name) {
-		t.Errorf("tool name = %q, want 1 to 128 allowed characters", result.Tools[0].Name)
+	slices.Sort(got)
+	want := []string{"insect_resource_insect_pilbk_info", "insect_resource_insect_pilbk_search"}
+	if !slices.Equal(got, want) {
+		t.Fatalf("tools = %#v, want %#v", got, want)
 	}
 }
 
@@ -50,5 +60,12 @@ func TestAddToolsRequiresInsectPilbkSearchUseCase(t *testing.T) {
 	err := AddTools(mcpserver.NewServer(), UseCases{})
 	if err == nil || err.Error() != "insectPilbkSearch use case is required" {
 		t.Errorf("error = %v, want insectPilbkSearch use case is required", err)
+	}
+}
+
+func TestAddToolsRequiresInsectPilbkInfoUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{InsectPilbkSearch: &insectPilbkSearchUseCaseStub{}})
+	if err == nil || err.Error() != "insectPilbkInfo use case is required" {
+		t.Errorf("error = %v, want insectPilbkInfo use case is required", err)
 	}
 }
