@@ -18,9 +18,10 @@ func TestAddToolsRegistersAllInsectResourceTools(t *testing.T) {
 
 	server := mcpserver.NewServer()
 	if err := AddTools(server, UseCases{
-		InsectPilbkSearch: &insectPilbkSearchUseCaseStub{},
-		InsectPilbkInfo:   &insectPilbkInfoUseCaseStub{},
-		InsectSmplSearch:  &insectSmplSearchUseCaseStub{},
+		InsectPilbkSearch:  &insectPilbkSearchUseCaseStub{},
+		InsectPilbkInfo:    &insectPilbkInfoUseCaseStub{},
+		InsectSmplSearch:   &insectSmplSearchUseCaseStub{},
+		InsectSmplUnitList: &insectSmplUnitListUseCaseStub{},
 	}); err != nil {
 		t.Fatal(err)
 	}
@@ -51,7 +52,7 @@ func TestAddToolsRegistersAllInsectResourceTools(t *testing.T) {
 		}
 	}
 	slices.Sort(got)
-	want := []string{"insect_resource_insect_pilbk_info", "insect_resource_insect_pilbk_search", "insect_resource_insect_smpl_search"}
+	want := []string{"insect_resource_insect_pilbk_info", "insect_resource_insect_pilbk_search", "insect_resource_insect_smpl_search", "insect_resource_insect_smpl_unit_list"}
 	if !slices.Equal(got, want) {
 		t.Fatalf("tools = %#v, want %#v", got, want)
 	}
@@ -78,5 +79,16 @@ func TestAddToolsRequiresInsectSmplSearchUseCase(t *testing.T) {
 	})
 	if err == nil || err.Error() != "insectSmplSearch use case is required" {
 		t.Errorf("error = %v, want insectSmplSearch use case is required", err)
+	}
+}
+
+func TestAddToolsRequiresInsectSmplUnitListUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{
+		InsectPilbkSearch: &insectPilbkSearchUseCaseStub{},
+		InsectPilbkInfo:   &insectPilbkInfoUseCaseStub{},
+		InsectSmplSearch:  &insectSmplSearchUseCaseStub{},
+	})
+	if err == nil || err.Error() != "insectSmplUnitList use case is required" {
+		t.Errorf("error = %v, want insectSmplUnitList use case is required", err)
 	}
 }
