@@ -9,7 +9,7 @@ import (
 
 // NewServer creates the KNA MCP server.
 func NewServer() *mcp.Server {
-	return mcp.NewServer(&mcp.Implementation{Name: "kna-mcp", Version: "0.1.0"}, nil)
+	return mcp.NewServer(&mcp.Implementation{Name: "kna-mcp", Version: "0.2.0"}, nil)
 }
 
 // Run serves MCP over standard input and output.
