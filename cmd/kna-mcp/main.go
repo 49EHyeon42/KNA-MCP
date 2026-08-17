@@ -23,6 +23,9 @@ func main() {
 	if err := addInsectResourceTools(server, serviceKey); err != nil {
 		log.Fatal(err)
 	}
+	if err := addFungiResourceTools(server, serviceKey); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := mcpstdio.Run(context.Background(), server); err != nil {
 		log.Fatal(err)
