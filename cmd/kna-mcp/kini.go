@@ -16,5 +16,6 @@ func addKiniTools(server *mcp.Server, serviceKey string) error {
 
 	return kinimcp.AddTools(server, kinimcp.UseCases{
 		ScnmSearch: service.NewScnmSearchService(client),
+		ScnmInfo:   service.NewScnmInfoService(client),
 	})
 }

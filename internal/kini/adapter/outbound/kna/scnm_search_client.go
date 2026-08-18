@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	scnmSearchPath        = "/1400119/KiniService/scnmSearch"
+	scnmSearchPath        = kiniBasePath + "/scnmSearch"
 	scnmSearchSuccessCode = "00"
 )
 

@@ -3,6 +3,7 @@ package mcpstdio
 import (
 	"context"
 	"regexp"
+	"slices"
 	"testing"
 	"time"
 
@@ -16,7 +17,10 @@ func TestAddToolsRegistersAllKiniTools(t *testing.T) {
 	defer cancel()
 
 	server := mcpserver.NewServer()
-	if err := AddTools(server, UseCases{ScnmSearch: &scnmSearchUseCaseStub{}}); err != nil {
+	if err := AddTools(server, UseCases{
+		ScnmSearch: &scnmSearchUseCaseStub{},
+		ScnmInfo:   &scnmInfoUseCaseStub{},
+	}); err != nil {
 		t.Fatal(err)
 	}
 
@@ -38,11 +42,24 @@ func TestAddToolsRegistersAllKiniTools(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(result.Tools) != 1 || result.Tools[0].Name != "kini_scnm_search" {
-		t.Fatalf("tools = %#v, want kini_scnm_search", result.Tools)
+	got := make([]string, 0, len(result.Tools))
+	for _, tool := range result.Tools {
+		got = append(got, tool.Name)
+		if !regexp.MustCompile(`^[A-Za-z0-9_.-]{1,128}$`).MatchString(tool.Name) {
+			t.Errorf("tool name = %q, want 1 to 128 allowed characters", tool.Name)
+		}
 	}
-	if !regexp.MustCompile(`^[A-Za-z0-9_.-]{1,128}$`).MatchString(result.Tools[0].Name) {
-		t.Errorf("tool name = %q, want 1 to 128 allowed characters", result.Tools[0].Name)
+	slices.Sort(got)
+	want := []string{"kini_scnm_info", "kini_scnm_search"}
+	if !slices.Equal(got, want) {
+		t.Fatalf("tools = %#v, want %#v", got, want)
+	}
+}
+
+func TestAddToolsRequiresScnmInfoUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{ScnmSearch: &scnmSearchUseCaseStub{}})
+	if err == nil || err.Error() != "scnmInfo use case is required" {
+		t.Errorf("error = %v, want scnmInfo use case is required", err)
 	}
 }
 

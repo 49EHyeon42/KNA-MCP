@@ -79,6 +79,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 		"insect_resource_insect_prtct_list",
 		"insect_resource_insect_smpl_search",
 		"insect_resource_insect_smpl_unit_list",
+		"kini_scnm_info",
 		"kini_scnm_search",
 		"kpni_gnrl_nm_ltrtr_search",
 		"kpni_scnm_info",

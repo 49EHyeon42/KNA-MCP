@@ -11,6 +11,7 @@ import (
 const (
 	defaultBaseURL        = "https://apis.data.go.kr"
 	defaultRequestTimeout = 60 * time.Second
+	kiniBasePath          = "/1400119/KiniService"
 )
 
 // Client calls the Korea National Arboretum national standard insect list API through the Public Data Portal.
