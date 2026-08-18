@@ -18,5 +18,6 @@ func addLchnServiceTools(server *mcp.Server, serviceKey string) error {
 		AlchnIlstrSearch: service.NewAlchnIlstrSearchService(client),
 		AlchnIlstrInfo:   service.NewAlchnIlstrInfoService(client),
 		AlchnSpcmSearch:  service.NewAlchnSpcmSearchService(client),
+		AlchnSpcmInfo:    service.NewAlchnSpcmInfoService(client),
 	})
 }
