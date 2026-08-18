@@ -11,6 +11,7 @@ import (
 const (
 	defaultBaseURL        = "https://apis.data.go.kr"
 	defaultRequestTimeout = 60 * time.Second
+	lchnServiceBasePath   = "/1400119/LchnService"
 )
 
 // Client calls the Korea National Arboretum lichen service API through the Public Data Portal.

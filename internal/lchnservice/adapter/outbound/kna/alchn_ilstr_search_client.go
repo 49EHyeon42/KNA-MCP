@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	alchnIlstrSearchPath        = "/1400119/LchnService/alchnIlstrSearch"
+	alchnIlstrSearchPath        = lchnServiceBasePath + "/alchnIlstrSearch"
 	alchnIlstrSearchSuccessCode = "00"
 )
 

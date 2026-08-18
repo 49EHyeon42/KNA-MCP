@@ -3,6 +3,7 @@ package mcpstdio
 import (
 	"context"
 	"regexp"
+	"slices"
 	"testing"
 	"time"
 
@@ -16,7 +17,10 @@ func TestAddToolsRegistersAllLchnServiceTools(t *testing.T) {
 	defer cancel()
 
 	server := mcpserver.NewServer()
-	if err := AddTools(server, UseCases{AlchnIlstrSearch: &alchnIlstrSearchUseCaseStub{}}); err != nil {
+	if err := AddTools(server, UseCases{
+		AlchnIlstrSearch: &alchnIlstrSearchUseCaseStub{},
+		AlchnIlstrInfo:   &alchnIlstrInfoUseCaseStub{},
+	}); err != nil {
 		t.Fatal(err)
 	}
 
@@ -38,17 +42,30 @@ func TestAddToolsRegistersAllLchnServiceTools(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(result.Tools) != 1 || result.Tools[0].Name != "lchn_service_alchn_ilstr_search" {
-		t.Fatalf("tools = %#v, want lchn_service_alchn_ilstr_search", result.Tools)
+	names := make([]string, len(result.Tools))
+	for i, tool := range result.Tools {
+		names[i] = tool.Name
+		if !regexp.MustCompile(`^[A-Za-z0-9_.-]{1,128}$`).MatchString(tool.Name) {
+			t.Errorf("tool name = %q, want 1 to 128 allowed characters", tool.Name)
+		}
 	}
-	if !regexp.MustCompile(`^[A-Za-z0-9_.-]{1,128}$`).MatchString(result.Tools[0].Name) {
-		t.Errorf("tool name = %q, want 1 to 128 allowed characters", result.Tools[0].Name)
+	slices.Sort(names)
+	want := []string{"lchn_service_alchn_ilstr_info", "lchn_service_alchn_ilstr_search"}
+	if !slices.Equal(names, want) {
+		t.Fatalf("tools = %#v, want %#v", names, want)
 	}
 }
 
 func TestAddToolsRequiresAlchnIlstrSearchUseCase(t *testing.T) {
-	err := AddTools(mcpserver.NewServer(), UseCases{})
+	err := AddTools(mcpserver.NewServer(), UseCases{AlchnIlstrInfo: &alchnIlstrInfoUseCaseStub{}})
 	if err == nil || err.Error() != "alchnIlstrSearch use case is required" {
 		t.Errorf("error = %v, want alchnIlstrSearch use case is required", err)
+	}
+}
+
+func TestAddToolsRequiresAlchnIlstrInfoUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{AlchnIlstrSearch: &alchnIlstrSearchUseCaseStub{}})
+	if err == nil || err.Error() != "alchnIlstrInfo use case is required" {
+		t.Errorf("error = %v, want alchnIlstrInfo use case is required", err)
 	}
 }
