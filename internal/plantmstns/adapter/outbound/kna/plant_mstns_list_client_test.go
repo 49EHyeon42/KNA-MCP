@@ -17,8 +17,8 @@ import (
 
 func TestPlantMstnsList(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		if request.URL.Path != plantMstnsListPath {
-			t.Errorf("path = %q, want %q", request.URL.Path, plantMstnsListPath)
+		if request.URL.Path != "/1400119/PlantMstnsService/plantMstnsList" {
+			t.Errorf("path = %q, want %q", request.URL.Path, "/1400119/PlantMstnsService/plantMstnsList")
 		}
 		if got := request.Header.Get("Accept"); got != "application/xml" {
 			t.Errorf("Accept = %q, want application/xml", got)

@@ -18,8 +18,8 @@ import (
 
 func TestFngsSmplUnitList(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		if request.URL.Path != fngsSmplUnitListPath {
-			t.Errorf("path = %q, want %q", request.URL.Path, fngsSmplUnitListPath)
+		if request.URL.Path != "/1400119/FungiService/fngsSmplUnitList" {
+			t.Errorf("path = %q, want %q", request.URL.Path, "/1400119/FungiService/fngsSmplUnitList")
 		}
 		if got := request.Header.Get("Accept"); got != "application/xml" {
 			t.Errorf("Accept = %q, want application/xml", got)

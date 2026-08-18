@@ -17,8 +17,8 @@ import (
 
 func TestPlantSmplSearch(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		if request.URL.Path != plantSmplSearchPath {
-			t.Errorf("path = %q, want %q", request.URL.Path, plantSmplSearchPath)
+		if request.URL.Path != "/1400119/PlantResource/plantSmplSearch" {
+			t.Errorf("path = %q, want %q", request.URL.Path, "/1400119/PlantResource/plantSmplSearch")
 		}
 
 		query := request.URL.Query()

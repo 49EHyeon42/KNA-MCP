@@ -19,7 +19,7 @@ const (
 )
 
 var plantFolkAreaListResultMessages = map[string]string{
-	"00": "NORMAL SERVICE.",
+	"00": "NORMAL_SERVICE",
 	"02": "DB_ERROR",
 	"03": "NODATA_ERROR",
 	"05": "SERVICETIME_OUT",

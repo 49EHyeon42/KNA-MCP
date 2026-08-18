@@ -17,8 +17,8 @@ import (
 
 func TestScnmSearch(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		if request.URL.Path != scnmSearchPath {
-			t.Errorf("path = %q, want %q", request.URL.Path, scnmSearchPath)
+		if request.URL.Path != "/1400119/KpniService/scnmSearch" {
+			t.Errorf("path = %q, want %q", request.URL.Path, "/1400119/KpniService/scnmSearch")
 		}
 		if got := request.Header.Get("Accept"); got != "application/xml" {
 			t.Errorf("Accept = %q, want application/xml", got)

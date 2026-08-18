@@ -17,8 +17,8 @@ import (
 
 func TestInsectPilbkSearch(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		if request.URL.Path != insectPilbkSearchPath {
-			t.Errorf("path = %q, want %q", request.URL.Path, insectPilbkSearchPath)
+		if request.URL.Path != "/1400119/InsectService/insectPilbkSearch" {
+			t.Errorf("path = %q, want %q", request.URL.Path, "/1400119/InsectService/insectPilbkSearch")
 		}
 
 		query := request.URL.Query()

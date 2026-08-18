@@ -17,8 +17,8 @@ import (
 
 func TestPlantFolkAreaList(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		if request.URL.Path != plantFolkAreaListPath {
-			t.Errorf("path = %q, want %q", request.URL.Path, plantFolkAreaListPath)
+		if request.URL.Path != "/1400119/PlantResource/plantFolkAreaList" {
+			t.Errorf("path = %q, want %q", request.URL.Path, "/1400119/PlantResource/plantFolkAreaList")
 		}
 
 		query := request.URL.Query()

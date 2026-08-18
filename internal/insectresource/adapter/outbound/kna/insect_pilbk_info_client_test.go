@@ -17,8 +17,8 @@ import (
 
 func TestInsectPilbkInfo(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		if request.URL.Path != insectPilbkInfoPath {
-			t.Errorf("path = %q, want %q", request.URL.Path, insectPilbkInfoPath)
+		if request.URL.Path != "/1400119/InsectService/insectPilbkInfo" {
+			t.Errorf("path = %q, want %q", request.URL.Path, "/1400119/InsectService/insectPilbkInfo")
 		}
 		if got := request.Header.Get("Accept"); got != "application/xml" {
 			t.Errorf("Accept = %q, want application/xml", got)
