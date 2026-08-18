@@ -34,6 +34,9 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	if err := addLvbngServiceTools(server, "test-key"); err != nil {
 		t.Fatal(err)
 	}
+	if err := addLchnServiceTools(server, "test-key"); err != nil {
+		t.Fatal(err)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -76,6 +79,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 		"kpni_gnrl_nm_ltrtr_search",
 		"kpni_scnm_info",
 		"kpni_scnm_search",
+		"lchn_service_alchn_ilstr_search",
 		"lvbng_service_related_site_list",
 		"plant_mstns_plant_mstns_list",
 		"plant_resource_plant_folk_area_list",
