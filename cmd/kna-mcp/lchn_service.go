@@ -17,5 +17,6 @@ func addLchnServiceTools(server *mcp.Server, serviceKey string) error {
 	return lchnservicemcp.AddTools(server, lchnservicemcp.UseCases{
 		AlchnIlstrSearch: service.NewAlchnIlstrSearchService(client),
 		AlchnIlstrInfo:   service.NewAlchnIlstrInfoService(client),
+		AlchnSpcmSearch:  service.NewAlchnSpcmSearchService(client),
 	})
 }

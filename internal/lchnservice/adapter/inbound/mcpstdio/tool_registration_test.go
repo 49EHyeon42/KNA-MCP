@@ -20,6 +20,7 @@ func TestAddToolsRegistersAllLchnServiceTools(t *testing.T) {
 	if err := AddTools(server, UseCases{
 		AlchnIlstrSearch: &alchnIlstrSearchUseCaseStub{},
 		AlchnIlstrInfo:   &alchnIlstrInfoUseCaseStub{},
+		AlchnSpcmSearch:  &alchnSpcmSearchUseCaseStub{},
 	}); err != nil {
 		t.Fatal(err)
 	}
@@ -50,22 +51,38 @@ func TestAddToolsRegistersAllLchnServiceTools(t *testing.T) {
 		}
 	}
 	slices.Sort(names)
-	want := []string{"lchn_service_alchn_ilstr_info", "lchn_service_alchn_ilstr_search"}
+	want := []string{"lchn_service_alchn_ilstr_info", "lchn_service_alchn_ilstr_search", "lchn_service_alchn_spcm_search"}
 	if !slices.Equal(names, want) {
 		t.Fatalf("tools = %#v, want %#v", names, want)
 	}
 }
 
 func TestAddToolsRequiresAlchnIlstrSearchUseCase(t *testing.T) {
-	err := AddTools(mcpserver.NewServer(), UseCases{AlchnIlstrInfo: &alchnIlstrInfoUseCaseStub{}})
+	err := AddTools(mcpserver.NewServer(), UseCases{
+		AlchnIlstrInfo:  &alchnIlstrInfoUseCaseStub{},
+		AlchnSpcmSearch: &alchnSpcmSearchUseCaseStub{},
+	})
 	if err == nil || err.Error() != "alchnIlstrSearch use case is required" {
 		t.Errorf("error = %v, want alchnIlstrSearch use case is required", err)
 	}
 }
 
 func TestAddToolsRequiresAlchnIlstrInfoUseCase(t *testing.T) {
-	err := AddTools(mcpserver.NewServer(), UseCases{AlchnIlstrSearch: &alchnIlstrSearchUseCaseStub{}})
+	err := AddTools(mcpserver.NewServer(), UseCases{
+		AlchnIlstrSearch: &alchnIlstrSearchUseCaseStub{},
+		AlchnSpcmSearch:  &alchnSpcmSearchUseCaseStub{},
+	})
 	if err == nil || err.Error() != "alchnIlstrInfo use case is required" {
 		t.Errorf("error = %v, want alchnIlstrInfo use case is required", err)
+	}
+}
+
+func TestAddToolsRequiresAlchnSpcmSearchUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{
+		AlchnIlstrSearch: &alchnIlstrSearchUseCaseStub{},
+		AlchnIlstrInfo:   &alchnIlstrInfoUseCaseStub{},
+	})
+	if err == nil || err.Error() != "alchnSpcmSearch use case is required" {
+		t.Errorf("error = %v, want alchnSpcmSearch use case is required", err)
 	}
 }
