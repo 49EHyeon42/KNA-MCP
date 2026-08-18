@@ -37,7 +37,7 @@ func TestAlchnSpcmSearchTool(t *testing.T) {
 			LastUpdtDtm: "lastUpdtDtm", LchnGnrlNm: "lchnGnrlNm", LchnScnmID: "lchnScnmId",
 			LchnSmplNo: "lchnSmplNo", PrkNm: "prkNm",
 		}},
-		NumOfRows: 10, PageNo: 2, TotalCount: 1068,
+		NumOfRows: 10, PageNo: 2, TotalCount: 21,
 	}}
 	clientTransport, serverTransport := mcp.NewInMemoryTransports()
 	server := mcpserver.NewServer()
@@ -89,7 +89,7 @@ func TestAlchnSpcmSearchTool(t *testing.T) {
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: tool.Name,
 		Arguments: map[string]any{
-			"st": "2", "sw": "Cladonia", "dateGbn": "1", "dateFrom": "20240101", "dateTo": "20241231", "numOfRows": 10, "pageNo": 2,
+			"st": "2", "sw": "test-search-word", "dateGbn": "1", "dateFrom": "20240101", "dateTo": "20241231", "numOfRows": 10, "pageNo": 2,
 		},
 	})
 	if err != nil {
@@ -98,13 +98,13 @@ func TestAlchnSpcmSearchTool(t *testing.T) {
 	if result.IsError {
 		t.Fatalf("tool error: %#v", result.Content)
 	}
-	wantQuery := application.AlchnSpcmSearchQuery{St: "2", Sw: "Cladonia", DateGbn: "1", DateFrom: "20240101", DateTo: "20241231", NumOfRows: 10, PageNo: 2}
+	wantQuery := application.AlchnSpcmSearchQuery{St: "2", Sw: "test-search-word", DateGbn: "1", DateFrom: "20240101", DateTo: "20241231", NumOfRows: 10, PageNo: 2}
 	if !reflect.DeepEqual(useCase.query, wantQuery) {
 		t.Errorf("query = %#v, want %#v", useCase.query, wantQuery)
 	}
 
 	output := result.StructuredContent.(map[string]any)
-	if output["numOfRows"] != float64(10) || output["pageNo"] != float64(2) || output["totalCount"] != float64(1068) {
+	if output["numOfRows"] != float64(10) || output["pageNo"] != float64(2) || output["totalCount"] != float64(21) {
 		t.Errorf("pagination = %#v", output)
 	}
 	item := output["items"].([]any)[0].(map[string]any)
@@ -136,7 +136,7 @@ func TestAlchnSpcmSearchTool(t *testing.T) {
 	})
 
 	useCase.err = errors.New("upstream unavailable")
-	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{Name: tool.Name, Arguments: map[string]any{"st": "2", "sw": "Cladonia", "numOfRows": 1, "pageNo": 1}})
+	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{Name: tool.Name, Arguments: map[string]any{"st": "2", "sw": "test-search-word", "numOfRows": 1, "pageNo": 1}})
 	if err != nil {
 		t.Fatal(err)
 	}

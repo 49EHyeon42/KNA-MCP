@@ -22,7 +22,7 @@ func TestAlchnSpcmSearch(t *testing.T) {
 		}
 		query := request.URL.Query()
 		wantQuery := map[string]string{
-			"serviceKey": "test+/=", "st": "2", "sw": "Cladonia", "dateGbn": "1",
+			"serviceKey": "test+/=", "st": "2", "sw": "test-search-word", "dateGbn": "1",
 			"dateFrom": "20240101", "dateTo": "20241231", "numOfRows": "1", "pageNo": "2",
 		}
 		if len(query) != len(wantQuery) {
@@ -35,12 +35,12 @@ func TestAlchnSpcmSearch(t *testing.T) {
 		}
 
 		xmlBody := `<response><header><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header><body><items><item>
-<btnc>Cladonia digitata (L.) Hoffm.</btnc><cltrNm> </cltrNm><cprtCtnt>copyright</cprtCtnt><detailYn>Y</detailYn>
-<engNm> </engNm><familyKorNm> </familyKorNm><familyNm>Cladoniaceae</familyNm><frstRgstnDtm>2017-02-16 13:00:00</frstRgstnDtm>
-<genusKorNm>사슴지의속</genusKorNm><genusNm>Cladonia</genusNm><imgUrl>http://example.com/2022_B/` + "\t" + `KHL0023100.jpg</imgUrl>
-<japNm> </japNm><lastUpdtDtm>2017-02-16 13:00:00</lastUpdtDtm><lchnGnrlNm>가락붉은열매지의</lchnGnrlNm>
-<lchnScnmId>LS2017000190</lchnScnmId><lchnSmplNo>KNKL201702169020</lchnSmplNo><prkNm> </prkNm>
-</item></items><numOfRows>1</numOfRows><pageNo>2</pageNo><totalCount>1068</totalCount></body></response>`
+<btnc>lichen scientific name</btnc><cltrNm> </cltrNm><cprtCtnt>copyright</cprtCtnt><detailYn>Y</detailYn>
+<engNm> </engNm><familyKorNm> </familyKorNm><familyNm>family name</familyNm><frstRgstnDtm>first registration date time</frstRgstnDtm>
+<genusKorNm>genus Korean name</genusKorNm><genusNm>genus name</genusNm><imgUrl>http://example.com/specimens/` + "\t" + `image.jpg</imgUrl>
+<japNm> </japNm><lastUpdtDtm>last update date time</lastUpdtDtm><lchnGnrlNm>lichen general name</lchnGnrlNm>
+<lchnScnmId>lichen scientific name ID</lchnScnmId><lchnSmplNo>lichen specimen number</lchnSmplNo><prkNm> </prkNm>
+</item></items><numOfRows>1</numOfRows><pageNo>2</pageNo><totalCount>7</totalCount></body></response>`
 		_, _ = io.WriteString(response, xmlBody)
 	}))
 	defer server.Close()
@@ -52,20 +52,20 @@ func TestAlchnSpcmSearch(t *testing.T) {
 	client.baseURL = server.URL
 
 	got, err := client.AlchnSpcmSearch(context.Background(), application.AlchnSpcmSearchQuery{
-		St: "2", Sw: "Cladonia", DateGbn: "1", DateFrom: "20240101", DateTo: "20241231", NumOfRows: 1, PageNo: 2,
+		St: "2", Sw: "test-search-word", DateGbn: "1", DateFrom: "20240101", DateTo: "20241231", NumOfRows: 1, PageNo: 2,
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
 	want := application.AlchnSpcmSearchResult{
 		Items: []application.AlchnSpcmSearchItem{{
-			Btnc: "Cladonia digitata (L.) Hoffm.", CltrNm: " ", CprtCtnt: "copyright", DetailYn: "Y", EngNm: " ",
-			FamilyKorNm: " ", FamilyNm: "Cladoniaceae", FrstRgstnDtm: "2017-02-16 13:00:00",
-			GenusKorNm: "사슴지의속", GenusNm: "Cladonia", ImgURL: "http://example.com/2022_B/\tKHL0023100.jpg",
-			JapNm: " ", LastUpdtDtm: "2017-02-16 13:00:00", LchnGnrlNm: "가락붉은열매지의",
-			LchnScnmID: "LS2017000190", LchnSmplNo: "KNKL201702169020", PrkNm: " ",
+			Btnc: "lichen scientific name", CltrNm: " ", CprtCtnt: "copyright", DetailYn: "Y", EngNm: " ",
+			FamilyKorNm: " ", FamilyNm: "family name", FrstRgstnDtm: "first registration date time",
+			GenusKorNm: "genus Korean name", GenusNm: "genus name", ImgURL: "http://example.com/specimens/\timage.jpg",
+			JapNm: " ", LastUpdtDtm: "last update date time", LchnGnrlNm: "lichen general name",
+			LchnScnmID: "lichen scientific name ID", LchnSmplNo: "lichen specimen number", PrkNm: " ",
 		}},
-		NumOfRows: 1, PageNo: 2, TotalCount: 1068,
+		NumOfRows: 1, PageNo: 2, TotalCount: 7,
 	}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("result = %#v, want %#v", got, want)
@@ -134,7 +134,7 @@ func TestAlchnSpcmSearchReturnsDocumentedAPIErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.AlchnSpcmSearch(context.Background(), application.AlchnSpcmSearchQuery{St: "2", Sw: "Cladonia", PageNo: 1, NumOfRows: 1})
+			_, err = client.AlchnSpcmSearch(context.Background(), application.AlchnSpcmSearchQuery{St: "2", Sw: "test-search-word", PageNo: 1, NumOfRows: 1})
 			var apiError *AlchnSpcmSearchError
 			if !errors.As(err, &apiError) {
 				t.Fatalf("error = %v, want *AlchnSpcmSearchError", err)
@@ -157,7 +157,7 @@ func TestAlchnSpcmSearchReturnsObservedAPIError(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	_, err = client.AlchnSpcmSearch(context.Background(), application.AlchnSpcmSearchQuery{St: "2", Sw: "Cladonia", PageNo: 1, NumOfRows: 1, DateGbn: "1", DateFrom: "20241301", DateTo: "20241231"})
+	_, err = client.AlchnSpcmSearch(context.Background(), application.AlchnSpcmSearchQuery{St: "2", Sw: "test-search-word", PageNo: 1, NumOfRows: 1, DateGbn: "1", DateFrom: "20241301", DateTo: "20241231"})
 	var apiError *AlchnSpcmSearchError
 	if !errors.As(err, &apiError) || apiError.Code != "99" || apiError.Message != "ORA-01843: not a valid month" {
 		t.Errorf("error = %#v", apiError)
@@ -176,7 +176,7 @@ func TestAlchnSpcmSearchReturnsGatewayError(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	_, err = client.AlchnSpcmSearch(context.Background(), application.AlchnSpcmSearchQuery{St: "2", Sw: "Cladonia", PageNo: 1, NumOfRows: 1})
+	_, err = client.AlchnSpcmSearch(context.Background(), application.AlchnSpcmSearchQuery{St: "2", Sw: "test-search-word", PageNo: 1, NumOfRows: 1})
 	var apiError *AlchnSpcmSearchError
 	if !errors.As(err, &apiError) || apiError.HTTPStatus != http.StatusForbidden || apiError.Code != "30" || apiError.Message != "SERVICE_KEY_IS_NOT_REGISTERED_ERROR: 등록되지 않은 서비스키" {
 		t.Errorf("error = %#v", apiError)
@@ -206,7 +206,7 @@ func TestAlchnSpcmSearchReturnsResponseErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.AlchnSpcmSearch(context.Background(), application.AlchnSpcmSearchQuery{St: "2", Sw: "Cladonia", PageNo: 1, NumOfRows: 1})
+			_, err = client.AlchnSpcmSearch(context.Background(), application.AlchnSpcmSearchQuery{St: "2", Sw: "test-search-word", PageNo: 1, NumOfRows: 1})
 			if err == nil || !strings.Contains(err.Error(), test.wantError) {
 				t.Errorf("error = %v, want containing %q", err, test.wantError)
 			}

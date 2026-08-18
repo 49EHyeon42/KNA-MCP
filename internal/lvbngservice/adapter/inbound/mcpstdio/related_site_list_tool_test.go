@@ -30,14 +30,14 @@ func TestRelatedSiteListTool(t *testing.T) {
 
 	useCase := &relatedSiteListUseCaseStub{result: application.RelatedSiteListResult{
 		Items: []application.RelatedSiteListItem{{
-			LvbngTpcdNm: "식물",
+			LvbngTpcdNm: "living thing type code name",
 			SiteCtgryNm: " ",
-			SiteNm:      "관련 사이트",
+			SiteNm:      "site name",
 			SiteURL:     "http://example.com",
 		}},
 		NumOfRows:  10,
 		PageNo:     2,
-		TotalCount: 51,
+		TotalCount: 21,
 	}}
 	clientTransport, serverTransport := mcp.NewInMemoryTransports()
 	server := mcpserver.NewServer()
@@ -87,7 +87,7 @@ func TestRelatedSiteListTool(t *testing.T) {
 		t.Fatalf("structured content = %#v", result.StructuredContent)
 	}
 	checkKeys(t, output, "items", "numOfRows", "pageNo", "totalCount")
-	if output["numOfRows"] != float64(10) || output["pageNo"] != float64(2) || output["totalCount"] != float64(51) {
+	if output["numOfRows"] != float64(10) || output["pageNo"] != float64(2) || output["totalCount"] != float64(21) {
 		t.Errorf("pagination = %#v", output)
 	}
 	items, ok := output["items"].([]any)
@@ -99,9 +99,9 @@ func TestRelatedSiteListTool(t *testing.T) {
 		t.Fatalf("item = %#v", items[0])
 	}
 	wantItem := map[string]string{
-		"lvbngTpcdNm": "식물",
+		"lvbngTpcdNm": "living thing type code name",
 		"siteCtgryNm": " ",
-		"siteNm":      "관련 사이트",
+		"siteNm":      "site name",
 		"siteUrl":     "http://example.com",
 	}
 	if len(item) != len(wantItem) {

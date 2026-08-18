@@ -69,14 +69,14 @@ func TestAlchnIlstrInfoTool(t *testing.T) {
 		t.Errorf("required = %#v, want q1", required)
 	}
 
-	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{Name: tool.Name, Arguments: map[string]any{"q1": "LC10000061"}})
+	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{Name: tool.Name, Arguments: map[string]any{"q1": "test-lichen-pictorial-book-number"}})
 	if err != nil {
 		t.Fatal(err)
 	}
 	if result.IsError {
 		t.Fatalf("tool error: %#v", result.Content)
 	}
-	if useCase.query != (application.AlchnIlstrInfoQuery{Q1: "LC10000061"}) {
+	if useCase.query != (application.AlchnIlstrInfoQuery{Q1: "test-lichen-pictorial-book-number"}) {
 		t.Errorf("query = %#v", useCase.query)
 	}
 
@@ -102,7 +102,7 @@ func TestAlchnIlstrInfoTool(t *testing.T) {
 	checkAlchnIlstrInfoOutputSchema(t, tool.OutputSchema)
 
 	useCase.result = application.AlchnIlstrInfoResult{}
-	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{Name: tool.Name, Arguments: map[string]any{"q1": "LC99999999"}})
+	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{Name: tool.Name, Arguments: map[string]any{"q1": "test-missing-lichen-pictorial-book-number"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -112,7 +112,7 @@ func TestAlchnIlstrInfoTool(t *testing.T) {
 	}
 
 	useCase.err = errors.New("upstream unavailable")
-	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{Name: tool.Name, Arguments: map[string]any{"q1": "LC10000061"}})
+	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{Name: tool.Name, Arguments: map[string]any{"q1": "test-lichen-pictorial-book-number"}})
 	if err != nil {
 		t.Fatal(err)
 	}

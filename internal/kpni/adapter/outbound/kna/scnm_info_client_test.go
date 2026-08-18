@@ -27,7 +27,7 @@ func TestScnmInfo(t *testing.T) {
 		query := request.URL.Query()
 		wantQuery := map[string]string{
 			"serviceKey":     "test+/=",
-			"reqPlantScnmId": "1004701",
+			"reqPlantScnmId": "test-plant-scientific-name-id",
 		}
 		if len(query) != len(wantQuery) {
 			t.Errorf("query key count = %d, want %d", len(query), len(wantQuery))
@@ -62,7 +62,7 @@ func TestScnmInfo(t *testing.T) {
     <plantGnrlNm>plant general name</plantGnrlNm>
     <plantGnrlNm2>plant general name 2</plantGnrlNm2>
     <plantJpnNm>plant Japanese name</plantJpnNm>
-    <plantScnmId>1004701</plantScnmId>
+    <plantScnmId>test-plant-scientific-name-id</plantScnmId>
     <plantSpecsScnm>plant species scientific name</plantSpecsScnm>
     <rareTpcdNm>rare type code name</rareTpcdNm>
     <relPlantSpecsScnm>related plant species scientific name</relPlantSpecsScnm>
@@ -81,7 +81,7 @@ func TestScnmInfo(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	got, err := client.ScnmInfo(context.Background(), application.ScnmInfoQuery{ReqPlantScnmID: "1004701"})
+	got, err := client.ScnmInfo(context.Background(), application.ScnmInfoQuery{ReqPlantScnmID: "test-plant-scientific-name-id"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -106,7 +106,7 @@ func TestScnmInfo(t *testing.T) {
 		PlantGnrlNm:        "plant general name",
 		PlantGnrlNm2:       "plant general name 2",
 		PlantJpnNm:         "plant Japanese name",
-		PlantScnmID:        "1004701",
+		PlantScnmID:        "test-plant-scientific-name-id",
 		PlantSpecsScnm:     "plant species scientific name",
 		RareTpcdNm:         "rare type code name",
 		RelPlantSpecsScnm:  "related plant species scientific name",
@@ -166,7 +166,7 @@ func TestScnmInfoReturnsDocumentedAPIErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.ScnmInfo(context.Background(), application.ScnmInfoQuery{ReqPlantScnmID: "1004701"})
+			_, err = client.ScnmInfo(context.Background(), application.ScnmInfoQuery{ReqPlantScnmID: "test-plant-scientific-name-id"})
 			var apiError *ScnmInfoError
 			if !errors.As(err, &apiError) {
 				t.Fatalf("error = %v, want *ScnmInfoError", err)
@@ -191,7 +191,7 @@ func TestScnmInfoReturnsGatewayError(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	_, err = client.ScnmInfo(context.Background(), application.ScnmInfoQuery{ReqPlantScnmID: "1004701"})
+	_, err = client.ScnmInfo(context.Background(), application.ScnmInfoQuery{ReqPlantScnmID: "test-plant-scientific-name-id"})
 	var apiError *ScnmInfoError
 	if !errors.As(err, &apiError) {
 		t.Fatalf("error = %v, want *ScnmInfoError", err)
@@ -225,7 +225,7 @@ func TestScnmInfoReturnsResponseErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.ScnmInfo(context.Background(), application.ScnmInfoQuery{ReqPlantScnmID: "1004701"})
+			_, err = client.ScnmInfo(context.Background(), application.ScnmInfoQuery{ReqPlantScnmID: "test-plant-scientific-name-id"})
 			if err == nil || !strings.Contains(err.Error(), test.wantError) {
 				t.Errorf("error = %v, want containing %q", err, test.wantError)
 			}

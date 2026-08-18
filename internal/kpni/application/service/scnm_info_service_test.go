@@ -27,7 +27,7 @@ func TestScnmInfoService(t *testing.T) {
 	}{
 		{name: "missing scientific name ID", wantError: "reqPlantScnmId is required"},
 		{name: "blank scientific name ID", query: application.ScnmInfoQuery{ReqPlantScnmID: " \t"}, wantError: "reqPlantScnmId is required"},
-		{name: "valid condition", query: application.ScnmInfoQuery{ReqPlantScnmID: "1004701"}, wantCall: true},
+		{name: "valid condition", query: application.ScnmInfoQuery{ReqPlantScnmID: "test-plant-scientific-name-id"}, wantCall: true},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			port := &scnmInfoPortStub{}

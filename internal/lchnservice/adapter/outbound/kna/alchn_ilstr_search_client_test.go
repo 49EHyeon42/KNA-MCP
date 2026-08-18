@@ -25,7 +25,7 @@ func TestAlchnIlstrSearch(t *testing.T) {
 		wantQuery := map[string]string{
 			"serviceKey": "test+/=",
 			"st":         "2",
-			"sw":         "Cladonia",
+			"sw":         "test-search-word",
 			"dateGbn":    "1",
 			"dateFrom":   "20240101",
 			"dateTo":     "20241231",
@@ -47,16 +47,16 @@ func TestAlchnIlstrSearch(t *testing.T) {
   <header><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header>
   <body>
     <items><item>
-      <btnc>Cladonia digitata (L.) Hoffm.</btnc>
+      <btnc>lichen scientific name</btnc>
       <cprtCtnt>copyright</cprtCtnt><detailYn>Y</detailYn><engNm> </engNm>
-      <familyKorNm> </familyKorNm><familyNm>Cladoniaceae</familyNm>
-      <frstRgstnDtm>2017-02-15 13:00:00</frstRgstnDtm><genusKorNm>사슴지의속</genusKorNm>
-      <genusNm>Cladonia</genusNm><imgUrl>http://example.com/lichen.jpg</imgUrl><japNm> </japNm>
-      <lastUpdtDtm>2017-02-15 13:00:00</lastUpdtDtm><lchnGnrlNm>가락붉은열매지의</lchnGnrlNm>
-      <lchnInfrpNm> </lchnInfrpNm><lchnPilbkNo>LC10000061</lchnPilbkNo>
-      <lchnScnmId>LS2017000190</lchnScnmId><lchnTtnm>digitata</lchnTtnm><prkNm> </prkNm>
+      <familyKorNm> </familyKorNm><familyNm>family name</familyNm>
+      <frstRgstnDtm>first registration date time</frstRgstnDtm><genusKorNm>genus Korean name</genusKorNm>
+      <genusNm>genus name</genusNm><imgUrl>http://example.com/lichen.jpg</imgUrl><japNm> </japNm>
+      <lastUpdtDtm>last update date time</lastUpdtDtm><lchnGnrlNm>lichen general name</lchnGnrlNm>
+      <lchnInfrpNm> </lchnInfrpNm><lchnPilbkNo>test-lichen-pictorial-book-number</lchnPilbkNo>
+      <lchnScnmId>lichen scientific name ID</lchnScnmId><lchnTtnm>lichen species epithet</lchnTtnm><prkNm> </prkNm>
     </item></items>
-    <numOfRows>1</numOfRows><pageNo>2</pageNo><totalCount>45</totalCount>
+    <numOfRows>1</numOfRows><pageNo>2</pageNo><totalCount>7</totalCount>
   </body>
 </response>`)
 	}))
@@ -70,7 +70,7 @@ func TestAlchnIlstrSearch(t *testing.T) {
 
 	got, err := client.AlchnIlstrSearch(context.Background(), application.AlchnIlstrSearchQuery{
 		St:        "2",
-		Sw:        "Cladonia",
+		Sw:        "test-search-word",
 		DateGbn:   "1",
 		DateFrom:  "20240101",
 		DateTo:    "20241231",
@@ -83,28 +83,28 @@ func TestAlchnIlstrSearch(t *testing.T) {
 
 	want := application.AlchnIlstrSearchResult{
 		Items: []application.AlchnIlstrSearchItem{{
-			Btnc:         "Cladonia digitata (L.) Hoffm.",
+			Btnc:         "lichen scientific name",
 			CprtCtnt:     "copyright",
 			DetailYn:     "Y",
 			EngNm:        " ",
 			FamilyKorNm:  " ",
-			FamilyNm:     "Cladoniaceae",
-			FrstRgstnDtm: "2017-02-15 13:00:00",
-			GenusKorNm:   "사슴지의속",
-			GenusNm:      "Cladonia",
+			FamilyNm:     "family name",
+			FrstRgstnDtm: "first registration date time",
+			GenusKorNm:   "genus Korean name",
+			GenusNm:      "genus name",
 			ImgURL:       "http://example.com/lichen.jpg",
 			JapNm:        " ",
-			LastUpdtDtm:  "2017-02-15 13:00:00",
-			LchnGnrlNm:   "가락붉은열매지의",
+			LastUpdtDtm:  "last update date time",
+			LchnGnrlNm:   "lichen general name",
 			LchnInfrpNm:  " ",
-			LchnPilbkNo:  "LC10000061",
-			LchnScnmID:   "LS2017000190",
-			LchnTtnm:     "digitata",
+			LchnPilbkNo:  "test-lichen-pictorial-book-number",
+			LchnScnmID:   "lichen scientific name ID",
+			LchnTtnm:     "lichen species epithet",
 			PrkNm:        " ",
 		}},
 		NumOfRows:  1,
 		PageNo:     2,
-		TotalCount: 45,
+		TotalCount: 7,
 	}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("result = %#v, want %#v", got, want)
@@ -173,7 +173,7 @@ func TestAlchnIlstrSearchReturnsDocumentedAPIErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.AlchnIlstrSearch(context.Background(), application.AlchnIlstrSearchQuery{St: "2", Sw: "Cladonia", PageNo: 1, NumOfRows: 1})
+			_, err = client.AlchnIlstrSearch(context.Background(), application.AlchnIlstrSearchQuery{St: "2", Sw: "test-search-word", PageNo: 1, NumOfRows: 1})
 			var apiError *AlchnIlstrSearchError
 			if !errors.As(err, &apiError) {
 				t.Fatalf("error = %v, want *AlchnIlstrSearchError", err)
@@ -197,7 +197,7 @@ func TestAlchnIlstrSearchReturnsObservedAPIError(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	_, err = client.AlchnIlstrSearch(context.Background(), application.AlchnIlstrSearchQuery{St: "2", Sw: "Cladonia", PageNo: 1, NumOfRows: 1, DateGbn: "1", DateFrom: "20241301", DateTo: "20241231"})
+	_, err = client.AlchnIlstrSearch(context.Background(), application.AlchnIlstrSearchQuery{St: "2", Sw: "test-search-word", PageNo: 1, NumOfRows: 1, DateGbn: "1", DateFrom: "20241301", DateTo: "20241231"})
 	var apiError *AlchnIlstrSearchError
 	if !errors.As(err, &apiError) {
 		t.Fatalf("error = %v, want *AlchnIlstrSearchError", err)
@@ -220,7 +220,7 @@ func TestAlchnIlstrSearchReturnsGatewayError(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	_, err = client.AlchnIlstrSearch(context.Background(), application.AlchnIlstrSearchQuery{St: "2", Sw: "Cladonia", PageNo: 1, NumOfRows: 1})
+	_, err = client.AlchnIlstrSearch(context.Background(), application.AlchnIlstrSearchQuery{St: "2", Sw: "test-search-word", PageNo: 1, NumOfRows: 1})
 	var apiError *AlchnIlstrSearchError
 	if !errors.As(err, &apiError) {
 		t.Fatalf("error = %v, want *AlchnIlstrSearchError", err)
@@ -256,7 +256,7 @@ func TestAlchnIlstrSearchReturnsResponseErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.AlchnIlstrSearch(context.Background(), application.AlchnIlstrSearchQuery{St: "2", Sw: "Cladonia", PageNo: 1, NumOfRows: 1})
+			_, err = client.AlchnIlstrSearch(context.Background(), application.AlchnIlstrSearchQuery{St: "2", Sw: "test-search-word", PageNo: 1, NumOfRows: 1})
 			if err == nil || !strings.Contains(err.Error(), test.wantError) {
 				t.Errorf("error = %v, want containing %q", err, test.wantError)
 			}

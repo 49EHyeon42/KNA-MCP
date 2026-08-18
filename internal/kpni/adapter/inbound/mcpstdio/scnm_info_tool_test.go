@@ -48,7 +48,7 @@ func TestScnmInfoTool(t *testing.T) {
 		PlantGnrlNm:        "plant general name",
 		PlantGnrlNm2:       "plant general name 2",
 		PlantJpnNm:         "plant Japanese name",
-		PlantScnmID:        "1004701",
+		PlantScnmID:        "test-plant-scientific-name-id",
 		PlantSpecsScnm:     "plant species scientific name",
 		RareTpcdNm:         "rare type code name",
 		RelPlantSpecsScnm:  "related plant species scientific name",
@@ -80,7 +80,7 @@ func TestScnmInfoTool(t *testing.T) {
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name:      "kpni_scnm_info",
-		Arguments: map[string]any{"reqPlantScnmId": "1004701"},
+		Arguments: map[string]any{"reqPlantScnmId": "test-plant-scientific-name-id"},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -88,7 +88,7 @@ func TestScnmInfoTool(t *testing.T) {
 	if result.IsError {
 		t.Fatalf("tool error: %#v", result.Content)
 	}
-	if want := (application.ScnmInfoQuery{ReqPlantScnmID: "1004701"}); useCase.query != want {
+	if want := (application.ScnmInfoQuery{ReqPlantScnmID: "test-plant-scientific-name-id"}); useCase.query != want {
 		t.Errorf("query = %#v, want %#v", useCase.query, want)
 	}
 
@@ -121,7 +121,7 @@ func TestScnmInfoTool(t *testing.T) {
 		"plantGnrlNm":        "plant general name",
 		"plantGnrlNm2":       "plant general name 2",
 		"plantJpnNm":         "plant Japanese name",
-		"plantScnmId":        "1004701",
+		"plantScnmId":        "test-plant-scientific-name-id",
 		"plantSpecsScnm":     "plant species scientific name",
 		"rareTpcdNm":         "rare type code name",
 		"relPlantSpecsScnm":  "related plant species scientific name",
@@ -159,7 +159,7 @@ func TestScnmInfoTool(t *testing.T) {
 	useCase.err = errors.New("upstream unavailable")
 	result, err = clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name:      "kpni_scnm_info",
-		Arguments: map[string]any{"reqPlantScnmId": "1004701"},
+		Arguments: map[string]any{"reqPlantScnmId": "test-plant-scientific-name-id"},
 	})
 	if err != nil {
 		t.Fatal(err)

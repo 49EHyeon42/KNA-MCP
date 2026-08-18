@@ -20,7 +20,7 @@ func TestAlchnIlstrInfo(t *testing.T) {
 		if request.URL.Path != "/1400119/LchnService/alchnIlstrInfo" {
 			t.Errorf("path = %q, want %q", request.URL.Path, "/1400119/LchnService/alchnIlstrInfo")
 		}
-		wantQuery := map[string]string{"serviceKey": "test+/=", "q1": "LC10000061"}
+		wantQuery := map[string]string{"serviceKey": "test+/=", "q1": "test-lichen-pictorial-book-number"}
 		query := request.URL.Query()
 		if len(query) != len(wantQuery) {
 			t.Errorf("query key count = %d, want %d", len(query), len(wantQuery))
@@ -32,13 +32,13 @@ func TestAlchnIlstrInfo(t *testing.T) {
 		}
 
 		_, _ = io.WriteString(response, `<response><header><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header><body><item>
-<btnc>Cladonia digitata (L.) Hoffm.</btnc><cont1> </cont1><cont2>cont2</cont2><cont3>cont3</cont3><cont4>cont4</cont4>
+<btnc>lichen scientific name</btnc><cont1> </cont1><cont2>cont2</cont2><cont3>cont3</cont3><cont4>cont4</cont4>
 <cont5>cont5</cont5><cont6>cont6</cont6><cont7>cont7</cont7><cont8>cont8</cont8><cont9>cont9</cont9>
 <cont10>cont10</cont10><cont11>cont11</cont11><cont12>cont12</cont12><cprtCtnt>copyright</cprtCtnt>
-<engNm> </engNm><familyKorNm> </familyKorNm><familyNm>Cladoniaceae</familyNm><frstRgstnDtm>2017-02-15 13:00:00</frstRgstnDtm>
-<genusKorNm>사슴지의속</genusKorNm><genusNm>Cladonia</genusNm><imgUrl>http://example.com/lichen.jpg</imgUrl><japNm> </japNm>
-<lastUpdtDtm>2017-02-15 13:00:00</lastUpdtDtm><lchnGnrlNm>가락붉은열매지의</lchnGnrlNm><lchnInfrpNm> </lchnInfrpNm>
-<lchnPilbkNo>LC10000061</lchnPilbkNo><lchnScnmId>LS2017000190</lchnScnmId><lchnTtnm>digitata</lchnTtnm><prkNm> </prkNm>
+<engNm> </engNm><familyKorNm> </familyKorNm><familyNm>family name</familyNm><frstRgstnDtm>first registration date time</frstRgstnDtm>
+<genusKorNm>genus Korean name</genusKorNm><genusNm>genus name</genusNm><imgUrl>http://example.com/lichen.jpg</imgUrl><japNm> </japNm>
+<lastUpdtDtm>last update date time</lastUpdtDtm><lchnGnrlNm>lichen general name</lchnGnrlNm><lchnInfrpNm> </lchnInfrpNm>
+<lchnPilbkNo>test-lichen-pictorial-book-number</lchnPilbkNo><lchnScnmId>lichen scientific name ID</lchnScnmId><lchnTtnm>lichen species epithet</lchnTtnm><prkNm> </prkNm>
 </item></body></response>`)
 	}))
 	defer server.Close()
@@ -49,18 +49,18 @@ func TestAlchnIlstrInfo(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	got, err := client.AlchnIlstrInfo(context.Background(), application.AlchnIlstrInfoQuery{Q1: "LC10000061"})
+	got, err := client.AlchnIlstrInfo(context.Background(), application.AlchnIlstrInfoQuery{Q1: "test-lichen-pictorial-book-number"})
 	if err != nil {
 		t.Fatal(err)
 	}
 	want := application.AlchnIlstrInfoResult{Item: &application.AlchnIlstrInfoItem{
-		Btnc: "Cladonia digitata (L.) Hoffm.", Cont1: " ", Cont2: "cont2", Cont3: "cont3", Cont4: "cont4",
+		Btnc: "lichen scientific name", Cont1: " ", Cont2: "cont2", Cont3: "cont3", Cont4: "cont4",
 		Cont5: "cont5", Cont6: "cont6", Cont7: "cont7", Cont8: "cont8", Cont9: "cont9", Cont10: "cont10",
-		Cont11: "cont11", Cont12: "cont12", CprtCtnt: "copyright", EngNm: " ", FamilyKorNm: " ", FamilyNm: "Cladoniaceae",
-		FrstRgstnDtm: "2017-02-15 13:00:00", GenusKorNm: "사슴지의속", GenusNm: "Cladonia",
-		ImgURL: "http://example.com/lichen.jpg", JapNm: " ", LastUpdtDtm: "2017-02-15 13:00:00",
-		LchnGnrlNm: "가락붉은열매지의", LchnInfrpNm: " ", LchnPilbkNo: "LC10000061", LchnScnmID: "LS2017000190",
-		LchnTtnm: "digitata", PrkNm: " ",
+		Cont11: "cont11", Cont12: "cont12", CprtCtnt: "copyright", EngNm: " ", FamilyKorNm: " ", FamilyNm: "family name",
+		FrstRgstnDtm: "first registration date time", GenusKorNm: "genus Korean name", GenusNm: "genus name",
+		ImgURL: "http://example.com/lichen.jpg", JapNm: " ", LastUpdtDtm: "last update date time",
+		LchnGnrlNm: "lichen general name", LchnInfrpNm: " ", LchnPilbkNo: "test-lichen-pictorial-book-number", LchnScnmID: "lichen scientific name ID",
+		LchnTtnm: "lichen species epithet", PrkNm: " ",
 	}}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("result = %#v, want %#v", got, want)
@@ -79,7 +79,7 @@ func TestAlchnIlstrInfoReturnsNilItem(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	result, err := client.AlchnIlstrInfo(context.Background(), application.AlchnIlstrInfoQuery{Q1: "LC99999999"})
+	result, err := client.AlchnIlstrInfo(context.Background(), application.AlchnIlstrInfoQuery{Q1: "test-missing-lichen-pictorial-book-number"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -124,7 +124,7 @@ func TestAlchnIlstrInfoReturnsDocumentedAPIErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.AlchnIlstrInfo(context.Background(), application.AlchnIlstrInfoQuery{Q1: "LC10000061"})
+			_, err = client.AlchnIlstrInfo(context.Background(), application.AlchnIlstrInfoQuery{Q1: "test-lichen-pictorial-book-number"})
 			var apiError *AlchnIlstrInfoError
 			if !errors.As(err, &apiError) {
 				t.Fatalf("error = %v, want *AlchnIlstrInfoError", err)
@@ -149,7 +149,7 @@ func TestAlchnIlstrInfoReturnsGatewayError(t *testing.T) {
 	}
 	client.baseURL = server.URL
 
-	_, err = client.AlchnIlstrInfo(context.Background(), application.AlchnIlstrInfoQuery{Q1: "LC10000061"})
+	_, err = client.AlchnIlstrInfo(context.Background(), application.AlchnIlstrInfoQuery{Q1: "test-lichen-pictorial-book-number"})
 	var apiError *AlchnIlstrInfoError
 	if !errors.As(err, &apiError) {
 		t.Fatalf("error = %v, want *AlchnIlstrInfoError", err)
@@ -185,7 +185,7 @@ func TestAlchnIlstrInfoReturnsResponseErrors(t *testing.T) {
 			}
 			client.baseURL = server.URL
 
-			_, err = client.AlchnIlstrInfo(context.Background(), application.AlchnIlstrInfoQuery{Q1: "LC10000061"})
+			_, err = client.AlchnIlstrInfo(context.Background(), application.AlchnIlstrInfoQuery{Q1: "test-lichen-pictorial-book-number"})
 			if err == nil || !strings.Contains(err.Error(), test.wantError) {
 				t.Errorf("error = %v, want containing %q", err, test.wantError)
 			}

@@ -55,7 +55,7 @@ func TestScnmSearch(t *testing.T) {
       <falmNm>family name</falmNm>
       <genusKorNm>genus Korean name</genusKorNm>
       <genusNm>genus name</genusNm>
-      <lastUpdtDtm>2024/11/12</lastUpdtDtm>
+      <lastUpdtDtm>last update date time</lastUpdtDtm>
       <ordKorNm>order Korean name</ordKorNm>
       <ordNm>order name</ordNm>
       <phylumKorNm>phylum Korean name</phylumKorNm>
@@ -100,7 +100,7 @@ func TestScnmSearch(t *testing.T) {
 			FalmNm:              "family name",
 			GenusKorNm:          "genus Korean name",
 			GenusNm:             "genus name",
-			LastUpdtDtm:         "2024/11/12",
+			LastUpdtDtm:         "last update date time",
 			OrdKorNm:            "order Korean name",
 			OrdNm:               "order name",
 			PhylumKorNm:         "phylum Korean name",

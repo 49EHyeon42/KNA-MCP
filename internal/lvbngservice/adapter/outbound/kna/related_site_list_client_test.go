@@ -45,12 +45,12 @@ func TestRelatedSiteList(t *testing.T) {
   <header><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header>
   <body>
     <items><item>
-      <lvbngTpcdNm>식물</lvbngTpcdNm>
+      <lvbngTpcdNm>living thing type code name</lvbngTpcdNm>
       <siteCtgryNm> </siteCtgryNm>
-      <siteNm>관련 사이트</siteNm>
+      <siteNm>site name</siteNm>
       <siteUrl>http://example.com</siteUrl>
     </item></items>
-    <numOfRows>1</numOfRows><pageNo>2</pageNo><totalCount>51</totalCount>
+    <numOfRows>1</numOfRows><pageNo>2</pageNo><totalCount>7</totalCount>
   </body>
 </response>`)
 	}))
@@ -69,14 +69,14 @@ func TestRelatedSiteList(t *testing.T) {
 
 	want := application.RelatedSiteListResult{
 		Items: []application.RelatedSiteListItem{{
-			LvbngTpcdNm: "식물",
+			LvbngTpcdNm: "living thing type code name",
 			SiteCtgryNm: " ",
-			SiteNm:      "관련 사이트",
+			SiteNm:      "site name",
 			SiteURL:     "http://example.com",
 		}},
 		NumOfRows:  1,
 		PageNo:     2,
-		TotalCount: 51,
+		TotalCount: 7,
 	}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("result = %#v, want %#v", got, want)
@@ -85,7 +85,7 @@ func TestRelatedSiteList(t *testing.T) {
 
 func TestRelatedSiteListReturnsEmptyItems(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
-		_, _ = io.WriteString(response, `<response><header><resultCode>00</resultCode></header><body><items/><numOfRows>10</numOfRows><pageNo>999</pageNo><totalCount>51</totalCount></body></response>`)
+		_, _ = io.WriteString(response, `<response><header><resultCode>00</resultCode></header><body><items/><numOfRows>10</numOfRows><pageNo>999</pageNo><totalCount>7</totalCount></body></response>`)
 	}))
 	defer server.Close()
 
@@ -99,8 +99,8 @@ func TestRelatedSiteListReturnsEmptyItems(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(result.Items) != 0 || result.TotalCount != 51 {
-		t.Errorf("result = %#v, want empty page with totalCount 51", result)
+	if len(result.Items) != 0 || result.TotalCount != 7 {
+		t.Errorf("result = %#v, want empty page with totalCount 7", result)
 	}
 }
 

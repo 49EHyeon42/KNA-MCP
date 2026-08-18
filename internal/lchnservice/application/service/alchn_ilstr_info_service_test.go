@@ -25,7 +25,7 @@ func TestAlchnIlstrInfoService(t *testing.T) {
 	}{
 		{name: "missing q1", wantError: "q1 is required"},
 		{name: "blank q1", q1: " ", wantError: "q1 is required"},
-		{name: "valid q1", q1: "LC10000061", wantCall: true},
+		{name: "valid q1", q1: "test-lichen-pictorial-book-number", wantCall: true},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			port := &alchnIlstrInfoPortStub{}
