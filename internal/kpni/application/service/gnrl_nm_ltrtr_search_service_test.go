@@ -27,7 +27,7 @@ func TestGnrlNmLtrtrSearchService(t *testing.T) {
 	}{
 		{name: "invalid page number", query: application.GnrlNmLtrtrSearchQuery{NumOfRows: 1}, wantError: "pageNo must be greater than zero"},
 		{name: "invalid number of rows", query: application.GnrlNmLtrtrSearchQuery{PageNo: 1}, wantError: "numOfRows must be greater than zero"},
-		{name: "valid conditions", query: application.GnrlNmLtrtrSearchQuery{PageNo: 1, NumOfRows: 10, ReqPlantGnrlNm: "소나무"}, wantCall: true},
+		{name: "valid conditions", query: application.GnrlNmLtrtrSearchQuery{PageNo: 1, NumOfRows: 10, ReqPlantGnrlNm: "test-search-word"}, wantCall: true},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			port := &gnrlNmLtrtrSearchPortStub{}

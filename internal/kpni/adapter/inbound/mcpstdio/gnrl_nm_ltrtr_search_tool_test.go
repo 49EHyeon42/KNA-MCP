@@ -69,7 +69,7 @@ func TestGnrlNmLtrtrSearchTool(t *testing.T) {
 		Arguments: map[string]any{
 			"pageNo":         2,
 			"numOfRows":      10,
-			"reqPlantGnrlNm": "소나무",
+			"reqPlantGnrlNm": "test-search-word",
 		},
 	})
 	if err != nil {
@@ -79,7 +79,7 @@ func TestGnrlNmLtrtrSearchTool(t *testing.T) {
 		t.Fatalf("tool error: %#v", result.Content)
 	}
 
-	wantQuery := application.GnrlNmLtrtrSearchQuery{PageNo: 2, NumOfRows: 10, ReqPlantGnrlNm: "소나무"}
+	wantQuery := application.GnrlNmLtrtrSearchQuery{PageNo: 2, NumOfRows: 10, ReqPlantGnrlNm: "test-search-word"}
 	if !reflect.DeepEqual(useCase.query, wantQuery) {
 		t.Errorf("query = %#v, want %#v", useCase.query, wantQuery)
 	}

@@ -27,7 +27,7 @@ func TestNewServerImplementation(t *testing.T) {
 	defer clientSession.Close()
 
 	got := clientSession.InitializeResult().ServerInfo
-	if got.Name != "kna-mcp" || got.Version != "0.6.0" {
-		t.Errorf("server info = %#v, want kna-mcp 0.6.0", got)
+	if got.Name != "kna-mcp" || got.Version != "0.7.0" {
+		t.Errorf("server info = %#v, want kna-mcp 0.7.0", got)
 	}
 }
