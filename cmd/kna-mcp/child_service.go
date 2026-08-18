@@ -16,5 +16,6 @@ func addChildServiceTools(server *mcp.Server, serviceKey string) error {
 
 	return childservicemcp.AddTools(server, childservicemcp.UseCases{
 		ChildPilbkSearch: service.NewChildPilbkSearchService(client),
+		ChildPilbkInfo:   service.NewChildPilbkInfoService(client),
 	})
 }

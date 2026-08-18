@@ -3,6 +3,7 @@ package mcpstdio
 import (
 	"context"
 	"regexp"
+	"slices"
 	"testing"
 	"time"
 
@@ -16,7 +17,10 @@ func TestAddToolsRegistersAllChildServiceTools(t *testing.T) {
 	defer cancel()
 
 	server := mcpserver.NewServer()
-	if err := AddTools(server, UseCases{ChildPilbkSearch: &childPilbkSearchUseCaseStub{}}); err != nil {
+	if err := AddTools(server, UseCases{
+		ChildPilbkSearch: &childPilbkSearchUseCaseStub{},
+		ChildPilbkInfo:   &childPilbkInfoUseCaseStub{},
+	}); err != nil {
 		t.Fatal(err)
 	}
 
@@ -38,11 +42,24 @@ func TestAddToolsRegistersAllChildServiceTools(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(result.Tools) != 1 || result.Tools[0].Name != "child_service_child_pilbk_search" {
-		t.Fatalf("tools = %#v, want child_service_child_pilbk_search", result.Tools)
+	got := make([]string, 0, len(result.Tools))
+	for _, tool := range result.Tools {
+		got = append(got, tool.Name)
+		if !regexp.MustCompile(`^[A-Za-z0-9_.-]{1,128}$`).MatchString(tool.Name) {
+			t.Errorf("tool name = %q, want 1 to 128 allowed characters", tool.Name)
+		}
 	}
-	if !regexp.MustCompile(`^[A-Za-z0-9_.-]{1,128}$`).MatchString(result.Tools[0].Name) {
-		t.Errorf("tool name = %q, want 1 to 128 allowed characters", result.Tools[0].Name)
+	slices.Sort(got)
+	want := []string{"child_service_child_pilbk_info", "child_service_child_pilbk_search"}
+	if !slices.Equal(got, want) {
+		t.Fatalf("tools = %#v, want %#v", got, want)
+	}
+}
+
+func TestAddToolsRequiresChildPilbkInfoUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{ChildPilbkSearch: &childPilbkSearchUseCaseStub{}})
+	if err == nil || err.Error() != "childPilbkInfo use case is required" {
+		t.Errorf("error = %v, want childPilbkInfo use case is required", err)
 	}
 }
 
