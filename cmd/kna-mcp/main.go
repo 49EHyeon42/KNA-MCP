@@ -29,6 +29,9 @@ func main() {
 	if err := addChildServiceTools(server, serviceKey); err != nil {
 		log.Fatal(err)
 	}
+	if err := addLvbngServiceTools(server, serviceKey); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := mcpstdio.Run(context.Background(), server); err != nil {
 		log.Fatal(err)
