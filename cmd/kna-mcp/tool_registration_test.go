@@ -25,6 +25,9 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	if err := addInsectResourceTools(server, "test-key"); err != nil {
 		t.Fatal(err)
 	}
+	if err := addFungiResourceTools(server, "test-key"); err != nil {
+		t.Fatal(err)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -53,6 +56,10 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	slices.Sort(got)
 
 	want := []string{
+		"fungi_resource_fngs_pilbk_info",
+		"fungi_resource_fngs_pilbk_search",
+		"fungi_resource_fngs_smpl_search",
+		"fungi_resource_fngs_smpl_unit_list",
 		"insect_resource_insect_pilbk_info",
 		"insect_resource_insect_pilbk_search",
 		"insect_resource_insect_prtct_list",

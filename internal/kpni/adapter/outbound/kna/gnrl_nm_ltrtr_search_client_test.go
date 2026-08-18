@@ -17,8 +17,8 @@ import (
 
 func TestGnrlNmLtrtrSearch(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		if request.URL.Path != gnrlNmLtrtrSearchPath {
-			t.Errorf("path = %q, want %q", request.URL.Path, gnrlNmLtrtrSearchPath)
+		if request.URL.Path != "/1400119/KpniService/gnrlNmLtrtrSearch" {
+			t.Errorf("path = %q, want %q", request.URL.Path, "/1400119/KpniService/gnrlNmLtrtrSearch")
 		}
 		if got := request.Header.Get("Accept"); got != "application/xml" {
 			t.Errorf("Accept = %q, want application/xml", got)

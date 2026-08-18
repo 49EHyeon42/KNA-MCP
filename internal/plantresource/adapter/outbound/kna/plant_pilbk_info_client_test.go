@@ -17,8 +17,8 @@ import (
 
 func TestPlantPilbkInfo(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		if request.URL.Path != plantPilbkInfoPath {
-			t.Errorf("path = %q, want %q", request.URL.Path, plantPilbkInfoPath)
+		if request.URL.Path != "/1400119/PlantResource/plantPilbkInfo" {
+			t.Errorf("path = %q, want %q", request.URL.Path, "/1400119/PlantResource/plantPilbkInfo")
 		}
 
 		query := request.URL.Query()
