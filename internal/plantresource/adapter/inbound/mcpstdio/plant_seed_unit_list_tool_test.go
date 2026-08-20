@@ -71,7 +71,7 @@ func TestPlantSeedUnitListTool(t *testing.T) {
 		},
 		[]string{"pageNo", "numOfRows", "reqSeedSpecsId"},
 	)
-	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_seed_unit_list", "산림청 국립수목원 종자 점정보 목록을 조회합니다.")
+	checkToolDescription(t, ctx, clientSession, "plant_resource_plant_seed_unit_list", "산림청 국립수목원 식물종자 상세정보 목록을 조회합니다.")
 
 	result, err := clientSession.CallTool(ctx, &mcp.CallToolParams{
 		Name: "plant_resource_plant_seed_unit_list",
