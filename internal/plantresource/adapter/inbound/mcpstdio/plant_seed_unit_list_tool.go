@@ -46,7 +46,7 @@ func addPlantSeedUnitListTool(server *mcp.Server, useCase inbound.PlantSeedUnitL
 	handler := plantSeedUnitListHandler{useCase: useCase}
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "plant_resource_plant_seed_unit_list",
-		Description: "산림청 국립수목원 종자 점정보 목록을 조회합니다.",
+		Description: "산림청 국립수목원 식물종자 상세정보 목록을 조회합니다.",
 	}, handler.handle)
 }
 

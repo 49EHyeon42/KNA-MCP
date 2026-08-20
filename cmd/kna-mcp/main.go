@@ -23,6 +23,9 @@ func main() {
 	if err := addKiniTools(server, serviceKey); err != nil {
 		log.Fatal(err)
 	}
+	if err := addKfniTools(server, serviceKey); err != nil {
+		log.Fatal(err)
+	}
 	if err := addInsectResourceTools(server, serviceKey); err != nil {
 		log.Fatal(err)
 	}
