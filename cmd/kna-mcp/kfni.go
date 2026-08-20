@@ -16,5 +16,6 @@ func addKfniTools(server *mcp.Server, serviceKey string) error {
 
 	return kfnimcp.AddTools(server, kfnimcp.UseCases{
 		ScnmSearch: service.NewScnmSearchService(client),
+		ScnmInfo:   service.NewScnmInfoService(client),
 	})
 }
