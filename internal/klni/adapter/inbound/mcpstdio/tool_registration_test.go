@@ -17,7 +17,10 @@ func TestAddToolsRegistersAllKlniTools(t *testing.T) {
 	defer cancel()
 
 	server := mcpserver.NewServer()
-	if err := AddTools(server, UseCases{ScnmSearch: &scnmSearchUseCaseStub{}}); err != nil {
+	if err := AddTools(server, UseCases{
+		ScnmSearch: &scnmSearchUseCaseStub{},
+		ScnmInfo:   &scnmInfoUseCaseStub{},
+	}); err != nil {
 		t.Fatal(err)
 	}
 
@@ -47,9 +50,16 @@ func TestAddToolsRegistersAllKlniTools(t *testing.T) {
 		}
 	}
 	slices.Sort(got)
-	want := []string{"klni_scnm_search"}
+	want := []string{"klni_scnm_info", "klni_scnm_search"}
 	if !slices.Equal(got, want) {
 		t.Fatalf("tools = %#v, want %#v", got, want)
+	}
+}
+
+func TestAddToolsRequiresScnmInfoUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{ScnmSearch: &scnmSearchUseCaseStub{}})
+	if err == nil || err.Error() != "scnmInfo use case is required" {
+		t.Errorf("error = %v, want scnmInfo use case is required", err)
 	}
 }
 

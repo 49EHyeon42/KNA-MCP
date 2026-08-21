@@ -89,6 +89,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 		"kfni_scnm_search",
 		"kini_scnm_info",
 		"kini_scnm_search",
+		"klni_scnm_info",
 		"klni_scnm_search",
 		"kpni_gnrl_nm_ltrtr_search",
 		"kpni_scnm_info",
