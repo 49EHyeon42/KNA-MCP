@@ -28,6 +28,9 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	if err := addKfniTools(server, "test-key"); err != nil {
 		t.Fatal(err)
 	}
+	if err := addKlniTools(server, "test-key"); err != nil {
+		t.Fatal(err)
+	}
 	if err := addInsectResourceTools(server, "test-key"); err != nil {
 		t.Fatal(err)
 	}
@@ -86,6 +89,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 		"kfni_scnm_search",
 		"kini_scnm_info",
 		"kini_scnm_search",
+		"klni_scnm_search",
 		"kpni_gnrl_nm_ltrtr_search",
 		"kpni_scnm_info",
 		"kpni_scnm_search",
