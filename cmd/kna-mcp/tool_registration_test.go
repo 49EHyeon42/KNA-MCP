@@ -46,6 +46,9 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	if err := addLchnServiceTools(server, "test-key"); err != nil {
 		t.Fatal(err)
 	}
+	if err := addOldPlantServiceTools(server, "test-key"); err != nil {
+		t.Fatal(err)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -99,6 +102,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 		"lchn_service_alchn_spcm_info",
 		"lchn_service_alchn_spcm_search",
 		"lvbng_service_related_site_list",
+		"old_plant_service_old_spcm_search",
 		"plant_mstns_plant_mstns_list",
 		"plant_resource_plant_folk_area_list",
 		"plant_resource_plant_folk_search",
