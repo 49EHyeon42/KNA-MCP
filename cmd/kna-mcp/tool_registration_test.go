@@ -84,6 +84,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 		"child_service_child_pilbk_search",
 		"entog_service_entog_ilstr_info",
 		"entog_service_entog_ilstr_search",
+		"entog_service_entog_spcm_info",
 		"entog_service_entog_spcm_search",
 		"fungi_resource_fngs_pilbk_info",
 		"fungi_resource_fngs_pilbk_search",
