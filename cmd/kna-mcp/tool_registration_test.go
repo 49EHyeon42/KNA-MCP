@@ -49,6 +49,9 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	if err := addOldPlantServiceTools(server, "test-key"); err != nil {
 		t.Fatal(err)
 	}
+	if err := addEntogServiceTools(server, "test-key"); err != nil {
+		t.Fatal(err)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -79,6 +82,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	want := []string{
 		"child_service_child_pilbk_info",
 		"child_service_child_pilbk_search",
+		"entog_service_entog_ilstr_search",
 		"fungi_resource_fngs_pilbk_info",
 		"fungi_resource_fngs_pilbk_search",
 		"fungi_resource_fngs_smpl_search",

@@ -47,6 +47,9 @@ func main() {
 	if err := addOldPlantServiceTools(server, serviceKey); err != nil {
 		log.Fatal(err)
 	}
+	if err := addEntogServiceTools(server, serviceKey); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := mcpstdio.Run(context.Background(), server); err != nil {
 		log.Fatal(err)
