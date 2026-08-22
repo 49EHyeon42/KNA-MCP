@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"strings"
 
 	"github.com/49EHyeon42/KNA-MCP/internal/entogservice/application"
 	"github.com/49EHyeon42/KNA-MCP/internal/entogservice/application/port/inbound"
@@ -26,7 +27,7 @@ func (s *EntogSpcmSearchService) EntogSpcmSearch(ctx context.Context, query appl
 	if query.St != "1" && query.St != "2" && query.St != "3" && query.St != "4" {
 		return application.EntogSpcmSearchResult{}, errors.New("st must be one of 1, 2, 3, or 4")
 	}
-	if query.Sw == "" {
+	if strings.TrimSpace(query.Sw) == "" {
 		return application.EntogSpcmSearchResult{}, errors.New("sw is required")
 	}
 	if query.PageNo < 1 {

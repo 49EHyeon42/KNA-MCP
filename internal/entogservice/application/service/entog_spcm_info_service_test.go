@@ -24,6 +24,7 @@ func TestEntogSpcmInfoService(t *testing.T) {
 		wantCall  bool
 	}{
 		{name: "missing q1", wantError: "q1 is required"},
+		{name: "blank q1", query: application.EntogSpcmInfoQuery{Q1: " "}, wantError: "q1 is required"},
 		{name: "provided q1", query: application.EntogSpcmInfoQuery{Q1: "test-specimen-number"}, wantCall: true},
 	}
 

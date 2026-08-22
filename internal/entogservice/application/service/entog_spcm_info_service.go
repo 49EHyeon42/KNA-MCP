@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"strings"
 
 	"github.com/49EHyeon42/KNA-MCP/internal/entogservice/application"
 	"github.com/49EHyeon42/KNA-MCP/internal/entogservice/application/port/inbound"
@@ -23,7 +24,7 @@ func NewEntogSpcmInfoService(port outbound.EntogSpcmInfoPort) *EntogSpcmInfoServ
 
 // EntogSpcmInfo gets entognath specimen detail information.
 func (s *EntogSpcmInfoService) EntogSpcmInfo(ctx context.Context, query application.EntogSpcmInfoQuery) (application.EntogSpcmInfoResult, error) {
-	if query.Q1 == "" {
+	if strings.TrimSpace(query.Q1) == "" {
 		return application.EntogSpcmInfoResult{}, errors.New("q1 is required")
 	}
 

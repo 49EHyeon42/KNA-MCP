@@ -25,6 +25,7 @@ func TestEntogIlstrSearchService(t *testing.T) {
 	}{
 		{name: "invalid st", query: application.EntogIlstrSearchQuery{St: "5"}, wantError: "st must be one of 1, 2, 3, or 4"},
 		{name: "missing sw", query: application.EntogIlstrSearchQuery{St: "1"}, wantError: "sw is required"},
+		{name: "blank sw", query: application.EntogIlstrSearchQuery{St: "1", Sw: " "}, wantError: "sw is required"},
 		{name: "invalid page number", query: application.EntogIlstrSearchQuery{St: "1", Sw: "test-search-word", NumOfRows: 1}, wantError: "pageNo must be greater than zero"},
 		{name: "invalid number of rows", query: application.EntogIlstrSearchQuery{St: "1", Sw: "test-search-word", PageNo: 1}, wantError: "numOfRows must be greater than zero"},
 		{name: "partial Korean name", query: application.EntogIlstrSearchQuery{St: "1", Sw: "test-search-word", PageNo: 1, NumOfRows: 1}, wantCall: true},
