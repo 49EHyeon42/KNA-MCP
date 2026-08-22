@@ -20,6 +20,7 @@ func TestAddToolsRegistersAllEntogServiceTools(t *testing.T) {
 	if err := AddTools(server, UseCases{
 		EntogIlstrSearch: &entogIlstrSearchUseCaseStub{},
 		EntogIlstrInfo:   &entogIlstrInfoUseCaseStub{},
+		EntogSpcmSearch:  &entogSpcmSearchUseCaseStub{},
 	}); err != nil {
 		t.Fatal(err)
 	}
@@ -50,16 +51,29 @@ func TestAddToolsRegistersAllEntogServiceTools(t *testing.T) {
 		}
 	}
 	slices.Sort(names)
-	want := []string{"entog_service_entog_ilstr_info", "entog_service_entog_ilstr_search"}
+	want := []string{"entog_service_entog_ilstr_info", "entog_service_entog_ilstr_search", "entog_service_entog_spcm_search"}
 	if !slices.Equal(names, want) {
 		t.Fatalf("tools = %#v, want %#v", names, want)
 	}
 }
 
 func TestAddToolsRequiresEntogIlstrInfoUseCase(t *testing.T) {
-	err := AddTools(mcpserver.NewServer(), UseCases{EntogIlstrSearch: &entogIlstrSearchUseCaseStub{}})
+	err := AddTools(mcpserver.NewServer(), UseCases{
+		EntogIlstrSearch: &entogIlstrSearchUseCaseStub{},
+		EntogSpcmSearch:  &entogSpcmSearchUseCaseStub{},
+	})
 	if err == nil || err.Error() != "entogIlstrInfo use case is required" {
 		t.Errorf("error = %v, want entogIlstrInfo use case is required", err)
+	}
+}
+
+func TestAddToolsRequiresEntogSpcmSearchUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{
+		EntogIlstrSearch: &entogIlstrSearchUseCaseStub{},
+		EntogIlstrInfo:   &entogIlstrInfoUseCaseStub{},
+	})
+	if err == nil || err.Error() != "entogSpcmSearch use case is required" {
+		t.Errorf("error = %v, want entogSpcmSearch use case is required", err)
 	}
 }
 

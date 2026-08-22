@@ -12,6 +12,7 @@ import (
 type UseCases struct {
 	EntogIlstrSearch inbound.EntogIlstrSearchUseCase
 	EntogIlstrInfo   inbound.EntogIlstrInfoUseCase
+	EntogSpcmSearch  inbound.EntogSpcmSearchUseCase
 }
 
 // AddTools adds all entognath service tools to an MCP server.
@@ -22,8 +23,12 @@ func AddTools(server *mcp.Server, useCases UseCases) error {
 	if useCases.EntogIlstrInfo == nil {
 		return errors.New("entogIlstrInfo use case is required")
 	}
+	if useCases.EntogSpcmSearch == nil {
+		return errors.New("entogSpcmSearch use case is required")
+	}
 
 	addEntogIlstrSearchTool(server, useCases.EntogIlstrSearch)
 	addEntogIlstrInfoTool(server, useCases.EntogIlstrInfo)
+	addEntogSpcmSearchTool(server, useCases.EntogSpcmSearch)
 	return nil
 }

@@ -17,5 +17,6 @@ func addEntogServiceTools(server *mcp.Server, serviceKey string) error {
 	return entogservicemcp.AddTools(server, entogservicemcp.UseCases{
 		EntogIlstrSearch: service.NewEntogIlstrSearchService(client),
 		EntogIlstrInfo:   service.NewEntogIlstrInfoService(client),
+		EntogSpcmSearch:  service.NewEntogSpcmSearchService(client),
 	})
 }
