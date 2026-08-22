@@ -3,6 +3,7 @@ package mcpstdio
 import (
 	"context"
 	"regexp"
+	"slices"
 	"testing"
 	"time"
 
@@ -16,7 +17,10 @@ func TestAddToolsRegistersAllEntogServiceTools(t *testing.T) {
 	defer cancel()
 
 	server := mcpserver.NewServer()
-	if err := AddTools(server, UseCases{EntogIlstrSearch: &entogIlstrSearchUseCaseStub{}}); err != nil {
+	if err := AddTools(server, UseCases{
+		EntogIlstrSearch: &entogIlstrSearchUseCaseStub{},
+		EntogIlstrInfo:   &entogIlstrInfoUseCaseStub{},
+	}); err != nil {
 		t.Fatal(err)
 	}
 
@@ -38,13 +42,24 @@ func TestAddToolsRegistersAllEntogServiceTools(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(result.Tools) != 1 {
-		t.Fatalf("tools = %#v, want one tool", result.Tools)
+	names := make([]string, len(result.Tools))
+	for i, tool := range result.Tools {
+		names[i] = tool.Name
+		if !regexp.MustCompile(`^[A-Za-z0-9_.-]{1,128}$`).MatchString(tool.Name) {
+			t.Errorf("tool name = %q, want 1 to 128 allowed characters", tool.Name)
+		}
 	}
-	if name := result.Tools[0].Name; name != "entog_service_entog_ilstr_search" {
-		t.Errorf("tool name = %q", name)
-	} else if !regexp.MustCompile(`^[A-Za-z0-9_.-]{1,128}$`).MatchString(name) {
-		t.Errorf("tool name = %q, want 1 to 128 allowed characters", name)
+	slices.Sort(names)
+	want := []string{"entog_service_entog_ilstr_info", "entog_service_entog_ilstr_search"}
+	if !slices.Equal(names, want) {
+		t.Fatalf("tools = %#v, want %#v", names, want)
+	}
+}
+
+func TestAddToolsRequiresEntogIlstrInfoUseCase(t *testing.T) {
+	err := AddTools(mcpserver.NewServer(), UseCases{EntogIlstrSearch: &entogIlstrSearchUseCaseStub{}})
+	if err == nil || err.Error() != "entogIlstrInfo use case is required" {
+		t.Errorf("error = %v, want entogIlstrInfo use case is required", err)
 	}
 }
 

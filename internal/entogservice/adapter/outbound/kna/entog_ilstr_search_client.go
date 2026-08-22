@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	entogIlstrSearchPath        = "/1400119/EntogService/entogIlstrSearch"
+	entogIlstrSearchPath        = entogServiceBasePath + "/entogIlstrSearch"
 	entogIlstrSearchSuccessCode = "00"
 )
 

@@ -82,6 +82,7 @@ func TestCompositionRegistersAllTools(t *testing.T) {
 	want := []string{
 		"child_service_child_pilbk_info",
 		"child_service_child_pilbk_search",
+		"entog_service_entog_ilstr_info",
 		"entog_service_entog_ilstr_search",
 		"fungi_resource_fngs_pilbk_info",
 		"fungi_resource_fngs_pilbk_search",

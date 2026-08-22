@@ -11,6 +11,7 @@ import (
 const (
 	defaultBaseURL        = "https://apis.data.go.kr"
 	defaultRequestTimeout = 60 * time.Second
+	entogServiceBasePath  = "/1400119/EntogService"
 )
 
 // Client calls the Korea National Arboretum entognath service API through the Public Data Portal.
